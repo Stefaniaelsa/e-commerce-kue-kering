@@ -36,24 +36,16 @@
         <div class="md:w-1/2 p-8">
           <h3 class="text-center text-2xl font-semibold text-dark mb-2">Selamat Datang di IniKue</h3>
           <p class="text-center text-sm text-muted mb-4">Silakan masuk untuk mulai memesan kue kering favoritmu!</p>
+        @if (session('success'))
+            <div class="bg-green-500 text-white p-2 mb-4 rounded">{{ session('success') }}</div>
+        @endif
 
-          <?php
-            // Tangani pengiriman form
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                $email = $_POST['email'];
-                $password = $_POST['password'];
+        @if (session('error'))
+            <div class="bg-red-500 text-white p-2 mb-4 rounded">{{ session('error') }}</div>
+        @endif
 
-                // Contoh validasi sederhana
-                if ($email === "admin@inikue.com" && $password === "password123") {
-                    echo '<div class="alert alert-success bg-green-500 text-white p-2 mb-4 rounded">Login berhasil!</div>';
-                    // Redirect atau set session bisa dilakukan di sini
-                } else {
-                    echo '<div class="alert alert-danger bg-red-500 text-white p-2 mb-4 rounded">Email atau password salah!</div>';
-                }
-            }
-          ?>
-
-          <form method="POST" action="">
+          <form method="POST" action="{{ route('user.auth') }}">
+            @csrf
             <div class="mb-4">
               <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
               <div class="relative mt-1">
