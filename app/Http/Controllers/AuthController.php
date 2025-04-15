@@ -26,4 +26,29 @@ class AuthController extends Controller
             return redirect()->back();
         }
     }
+
+    // Tampilkan halaman register
+    public function showFormRegister()
+    {
+        return view('register');
+    }
+
+    // Proses register (dummy/while testing)
+    public function register(Request $request)
+    {
+        $name = $request->input('name');
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $confirmPassword = $request->input('password_confirmation');
+
+        // Contoh validasi manual
+        if ($password !== $confirmPassword) {
+            Session::flash('error', 'Konfirmasi password tidak cocok!');
+            return redirect()->back();
+        }
+
+        // Simulasi proses registrasi berhasil
+        Session::flash('success', 'Registrasi berhasil! Silakan login.');
+        return redirect()->route('login');
+    }
 }

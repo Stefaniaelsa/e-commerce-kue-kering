@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - Toko Kue Kering</title>
+    <title>Register - Toko Kue Kering</title>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -13,15 +13,14 @@
 
     <!-- CSS Internal (Optional, for specific styling) -->
     <style>
-        /* Custom Tailwind Styles */
-        .btn-pink {
-            background-color: #ff69b4;
-            border: none;
-        }
+      .btn-pink {
+        background-color: #ff69b4;
+        border: none;
+      }
 
-        .btn-pink:hover {
-            background-color: #ff4fa1;
-        }
+      .btn-pink:hover {
+        background-color: #ff4fa1;
+      }
     </style>
   </head>
   <body class="bg-[#fff7f4] font-sans text-[#4e3d3a]">
@@ -32,20 +31,31 @@
           <img src="../assets/image/logo.png" alt="Kue Kering" class="object-cover w-full h-full" />
         </div>
 
-        <!-- Form Login -->
+        <!-- Form Register -->
         <div class="md:w-1/2 p-8">
-          <h3 class="text-center text-2xl font-semibold text-dark mb-2">Selamat Datang di IniKue</h3>
-          <p class="text-center text-sm text-muted mb-4">Silakan masuk untuk mulai memesan kue kering favoritmu!</p>
-        @if (session('success'))
-            <div class="bg-green-500 text-white p-2 mb-4 rounded">{{ session('success') }}</div>
-        @endif
+          <h3 class="text-center text-2xl font-semibold text-dark mb-2">Buat Akun Baru</h3>
+          <p class="text-center text-sm text-muted mb-4">Isi form di bawah untuk mulai bergabung!</p>
 
-        @if (session('error'))
-            <div class="bg-red-500 text-white p-2 mb-4 rounded">{{ session('error') }}</div>
-        @endif
+          @if (session('success'))
+              <div class="bg-green-500 text-white p-2 mb-4 rounded">{{ session('success') }}</div>
+          @endif
 
-          <form method="POST" action="{{ route('user.auth') }}">
+          @if (session('error'))
+              <div class="bg-red-500 text-white p-2 mb-4 rounded">{{ session('error') }}</div>
+          @endif
+
+          <form method="POST" action="{{ route('user.register') }}">
             @csrf
+            <div class="mb-4">
+              <label for="name" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+              <div class="relative mt-1">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
+                  <i class="fas fa-user"></i>
+                </span>
+                <input type="text" class="form-control w-full px-10 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-pink-500" id="name" name="name" placeholder="Nama lengkap" required />
+              </div>
+            </div>
+
             <div class="mb-4">
               <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
               <div class="relative mt-1">
@@ -66,25 +76,26 @@
               </div>
             </div>
 
-            <div class="mb-4 flex justify-between items-center">
-              <div class="flex items-center">
-                <input type="checkbox" class="mr-2" id="remember" />
-                <label for="remember" class="text-sm text-gray-700">Remember me</label>
+            <div class="mb-4">
+              <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Konfirmasi Password</label>
+              <div class="relative mt-1">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
+                  <i class="fas fa-lock"></i>
+                </span>
+                <input type="password" class="form-control w-full px-10 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-pink-500" id="password_confirmation" name="password_confirmation" placeholder="••••••••" required />
               </div>
-              <a href="#" class="text-sm text-red-500">Forgot Password?</a>
             </div>
 
             <div class="mb-4">
-              <button type="submit" class="btn-pink w-full py-2 rounded-md text-white">Login</button>
+              <button type="submit" class="btn-pink w-full py-2 rounded-md text-white">Daftar</button>
             </div>
 
             <p class="mt-4 text-center text-sm text-muted">
-              Belum punya akun? <a href="{{ route('register') }}" class="text-red-500">Daftar</a>
+              Sudah punya akun? <a href="../pages/login.php" class="text-red-500">Login di sini</a>
             </p>
           </form>
         </div>
       </div>
     </div>
-
   </body>
 </html>
