@@ -1,9 +1,11 @@
+
 @extends('layouts.app')
 
 @section('title', 'Dashboard')
 
 @section('content')
     <!-- Navbar (kalau mau tetap pakai) -->
+
     <nav>
         <div class="nav-wrapper">
             <a href="#" class="brand-logo center">Dashboard</a>
@@ -34,4 +36,6 @@
             </div>
         </div>
     </div>
+
 @endsection
+

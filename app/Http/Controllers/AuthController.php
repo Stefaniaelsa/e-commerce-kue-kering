@@ -16,6 +16,7 @@ public function showLoginForm()
     }
 
     public function login(Request $request)
+
     {
         $request->validate([
             'email' => 'required|email',
