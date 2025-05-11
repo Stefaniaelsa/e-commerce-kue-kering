@@ -16,22 +16,24 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+{
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
-        // Mencari user berdasarkan email
-        $user = User::where('email', $request->email)->first();
+    // Mencari user berdasarkan email
+    $user = User::where('email', $request->email)->first();
 
-        // Cek apakah user ada dan password cocok
-        if ($user && Hash::check($request->password, $user->password)) {
-            Auth::login($user);
-            return redirect()->intended('/beranda');  // Arahkan ke halaman beranda
-        }
-
-        // Jika gagal login
-        return back()->with('error', 'Email atau password salah');
+    // Cek apakah user ada dan password cocok
+    if ($user && Hash::check($request->password, $user->password)) {
+        Auth::login($user);
+        return redirect()->intended('/dashboard');  // Arahkan ke halaman dashboard
     }
+
+    // Jika gagal login
+    return back()->with('error', 'Email atau password salah');
+}
+
+>>>>>>>>> Temporary merge branch 2
 }

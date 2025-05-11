@@ -3,17 +3,29 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\ProductsController;
-use App\Http\Controllers\OrdersController;
-use App\Http\Controllers\Order_DetailsController;
 
 
 Route::get('/', function () {
     return view('login');
 });
 
+<<<<<<<<< Temporary merge branch 1
+Route::get('login', [AuthController::class, 'showFormLogin']);
+Route::post('login', [AuthController::class, 'auth'])->name('user.auth');
+
+
+Route::get('/register', [AuthController::class, 'showFormRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('user.register');
+=========
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');  // Form login
 Route::post('/login', [AuthController::class, 'login'])->name('login.proses');
+
+Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.process');
+
+
+Route::get('/admin/dashboard_admin', [DashboardController::class, 'index'])->middleware('auth');
+
 
 
 Route::get('/beranda', function () {
@@ -54,3 +66,4 @@ Route::post('/order/store', [OrdersController::class, 'store'])->name('order.sto
 
 Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register'])->name('register.process');
+>>>>>>>>> Temporary merge branch 2
