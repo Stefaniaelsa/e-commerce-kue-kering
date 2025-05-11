@@ -3,52 +3,35 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;  // Import Hash
+use App\Models\User;
 
 class AuthController extends Controller
 {
-    public function showFormLogin()
+
+    public function showLoginForm()
     {
         return view('login');
     }
 
-    public function auth(Request $request)
+    public function login(Request $request)
     {
-        $email = $request->input('email');
-        $password = $request->input('password');
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-        if ($email === "admin@inikue.com" && $password === "password123") {
-            Session::flash('success', 'Login berhasil!');
-            // redirect ke halaman dashboard, misalnya:
-            return redirect()->route('dashboard');
-        } else {
-            Session::flash('error', 'Email atau password salah!');
-            return redirect()->back();
-        }
-    }
+        // Mencari user berdasarkan email
+        $user = User::where('email', $request->email)->first();
 
-    // Tampilkan halaman register
-    public function showFormRegister()
-    {
-        return view('register');
-    }
-
-    // Proses register (dummy/while testing)
-    public function register(Request $request)
-    {
-        $name = $request->input('name');
-        $email = $request->input('email');
-        $password = $request->input('password');
-        $confirmPassword = $request->input('password_confirmation');
-
-        // Contoh validasi manual
-        if ($password !== $confirmPassword) {
-            Session::flash('error', 'Konfirmasi password tidak cocok!');
-            return redirect()->back();
+        // Cek apakah user ada dan password cocok
+        if ($user && Hash::check($request->password, $user->password)) {
+            Auth::login($user);
+            return redirect()->intended('/beranda');  // Arahkan ke halaman beranda
         }
 
-        // Simulasi proses registrasi berhasil
-        Session::flash('success', 'Registrasi berhasil! Silakan login.');
-        return redirect()->route('login');
+        // Jika gagal login
+        return back()->with('error', 'Email atau password salah');
     }
 }
