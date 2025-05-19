@@ -22,6 +22,14 @@
             <label for="stok">Stok</label>
             <input type="number" id="stok" name="stok" class="form-control" value="{{ $product->stok }}" required>
         </div>
+        <div class="mb-6">
+            <label class="block text-sm font-medium mb-1">Ukuran:</label>
+            <select id="ukuran" class="w-full border rounded p-2">
+                <option value="{{ $product->ukuran }}">Kecil</option>
+                <option value="{{ $product->ukuran }}">Sedang</option>
+                <option value="{{ $product->ukuran }}">Besar</option>
+            </select>
+        </div>
         <div class="form-group">
             <label for="gambar">Gambar Produk</label>
             <input type="file" id="gambar" name="gambar" class="form-control">

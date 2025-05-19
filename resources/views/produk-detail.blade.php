@@ -15,7 +15,7 @@
     <nav class="space-x-4 text-sm">
       <a href="{{ url('/beranda') }}" class="hover:text-pink-700 font-medium">Beranda</a>
       <a href="{{ url('/produk') }}" class="hover:text-pink-700 font-medium">Produk</a>
-      <a href="#" class="hover:text-pink-700 font-medium">Pesanan</a>
+      <a href="{{ url('/keranjang') }}" class="hover:text-pink-700 font-medium">Keranjang</a>
       <a href="#" class="hover:text-pink-700 font-medium">Akun</a>
       <a href="#" class="text-red-500 hover:text-red-700 font-medium"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </nav>
@@ -52,22 +52,19 @@
         </div>
 
         <!-- Form Pesanan -->
-        <form action="{{ route('order.store') }}" method="POST">
-          @csrf
-          <input type="hidden" name="product_id" value="{{ $produk->id }}">
-          <input type="hidden" name="variant_id" value="1"> <!-- Assuming variant_id is 1, change it as needed -->
-          <input type="number" name="quantity" id="quantity" value="1" min="1" class="w-full border rounded p-2 mb-4" />
+        <form action="{{ route('cart.store') }}" method="POST">
+    @csrf
+    <input type="hidden" name="id_produk" value="{{ $produk->id }}">  <!-- Produk ID -->
+    <input type="number" name="jumlah" value="1" min="1" class="w-full border rounded p-2 mb-4" />
 
-          <!-- Tombol Aksi -->
-          <div class="flex gap-3">
-            <a href="{{ url('/produk') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded text-sm">
-              ← Kembali
-            </a>
-            <a href="{{ url('/pesanan') }}" class="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded text-sm">
-            Pesan Sekarang
-              </a>
-          </div>
-        </form>
+    <!-- Tombol untuk tambah ke keranjang -->
+    <div class="flex gap-3">
+        <a href="{{ url('/produk') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded text-sm">← Kembali</a>
+        <button type="submit" class="bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded text-sm">Tambah Keranjang</button>
+    </div>
+</form>
+
+
       </div>
     </div>
   </section>

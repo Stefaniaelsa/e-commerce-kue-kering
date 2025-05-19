@@ -14,7 +14,7 @@
         <nav class="space-x-4 text-sm">
             <a href="{{ url('/beranda') }}" class="hover:text-pink-700 font-medium">Beranda</a>
             <a href="{{ url('/produk') }}" class="hover:text-pink-700 font-medium">Produk</a>
-            <a href="{{ url('/pesanan') }}" class="hover:text-pink-700 font-medium">Pesanan</a>
+            <a href="{{ url('/keranjang') }}" class="hover:text-pink-700 font-medium">Keranjang</a>
             <a href="#" class="hover:text-pink-700 font-medium">Akun</a>
             <a href="#" class="text-red-500 hover:text-red-700 font-medium"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </nav>

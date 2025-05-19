@@ -18,7 +18,6 @@ return new class extends Migration
             $table->decimal('harga', 10, 2); // Harga produk
             $table->integer('stok'); // Stok produk
             $table->string('gambar')->nullable(); // Gambar produk
-           
         });
     }
 

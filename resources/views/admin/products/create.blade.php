@@ -3,6 +3,9 @@
 @section('content')
 <div class="p-8">
     <h1 class="text-3xl font-bold mb-6">Tambah Produk</h1>
+    @if (session('errors'))
+        {{ session('errors') }}
+    @endif
     <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
@@ -33,7 +36,8 @@
 
         <div class="mb-4">
             <label class="block text-lg font-medium mb-2">Produk Memiliki Varian?</label>
-            <input type="checkbox" id="has_variants" name="has_variants" class="mr-2"> Ya
+            <input type="hidden" name="has_variants" id="has_variants_hidden" value="0">
+            <input type="checkbox" id="has_variants_checkbox" class="mr-2"> Ya
         </div>
 
         <div id="variant-section" class="hidden">
@@ -62,11 +66,15 @@
 </div>
 
 <script>
-    document.getElementById('has_variants').addEventListener('change', function () {
+    document.getElementById('has_variants_checkbox').addEventListener('change', function () {
         const variantSection = document.getElementById('variant-section');
+        const hiddenInput = document.getElementById('has_variants_hidden');
+
         if (this.checked) {
+            hiddenInput.value = '1';
             variantSection.classList.remove('hidden');
         } else {
+            hiddenInput.value = '0';
             variantSection.classList.add('hidden');
         }
     });

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Orders;
+use App\Models\Order;
 use App\Models\Order_Details;
-use App\Models\Product_Variants;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 
 class Order_DetailsController extends Controller
@@ -14,7 +14,7 @@ class Order_DetailsController extends Controller
      */
     public function show($orderId)
     {
-        $order = Orders::with('details.variant')->findOrFail($orderId);
+        $order = Order::with('details.variant')->findOrFail($orderId);
         return view('orders.details', compact('order'));
     }
 
@@ -28,7 +28,7 @@ class Order_DetailsController extends Controller
             'jumlah' => 'required|integer|min:1',
         ]);
 
-        $variant = Product_Variants::findOrFail($validated['variant_id']);
+        $variant = ProductVariant::findOrFail($validated['variant_id']);
         $harga = $variant->product->harga + $variant->harga_tambahan;
         $subTotal = $harga * $validated['jumlah'];
 
@@ -42,7 +42,7 @@ class Order_DetailsController extends Controller
         ]);
 
         // Update total harga di tabel order
-        $order = Orders::findOrFail($orderId);
+        $order = Order::findOrFail($orderId);
         $order->total_harga += $subTotal;
         $order->save();
 

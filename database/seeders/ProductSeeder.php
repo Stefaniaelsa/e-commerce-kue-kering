@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Products;
+use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,7 +14,7 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        $produk1 = Products::create([
+        $produk1 = Product::create([
             'nama' => 'Kue Nastar',
             'deskripsi' => 'Kue Nastar dengan rasa manis nan lezat',
             'harga' => 75000,

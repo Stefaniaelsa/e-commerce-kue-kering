@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -35,7 +37,7 @@ class ProductController extends Controller
             'variant_harga' => 'nullable|numeric',
             'variant_stok' => 'nullable|integer',
         ]);
-    
+
         // Simpan produk umum
         $product = Product::create([
             'nama' => $request->nama,
@@ -45,7 +47,7 @@ class ProductController extends Controller
             // Simpan gambar ke folder public/images jika ada
             'gambar' => $request->hasFile('gambar') ? $request->file('gambar')->store('images', 'public') : null,
         ]);
-    
+
         // Jika produk memiliki varian
         if ($request->has('has_variants')) {
             ProductVariant::create([
@@ -55,10 +57,16 @@ class ProductController extends Controller
                 'stok' => $request->variant_stok,
             ]);
         }
-    
+
         return redirect()->route('admin.products.index')->with('success', 'Produk berhasil ditambahkan!');
     }
-    
+
+    public function edit($id){
+        $product = Product::findOrFail($id);
+        // die($produk);
+        return view('admin.products.edit', compact('product'));
+    }
+
     // Mengupdate produk
     public function update(Request $request, $id)
     {
@@ -67,6 +75,7 @@ class ProductController extends Controller
             'deskripsi' => 'nullable|string',
             'harga' => 'required|numeric',
             'stok' => 'required|integer',
+            'ukuran' => 'nullable|in:kecil,sedang,besar',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -75,6 +84,7 @@ class ProductController extends Controller
         $product->deskripsi = $request->deskripsi;
         $product->harga = $request->harga;
         $product->stok = $request->stok;
+        $product->ukuran = $request->ukuran;
 
         // Update gambar jika ada
         if ($request->hasFile('gambar')) {

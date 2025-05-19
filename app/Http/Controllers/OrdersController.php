@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Orders;
+use App\Models\Order;
 use App\Models\Order_Details;
-use App\Models\Product_Variants;
-use App\Models\Products;
+use App\Models\ProductVariant;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class OrdersController extends Controller
@@ -20,15 +20,15 @@ class OrdersController extends Controller
         ]);
 
         // Cari data produk dan varian
-        $produk = Products::findOrFail($validated['product_id']);
-        $variant = Product_Variants::findOrFail($validated['variant_id']);
+        $produk = Product::findOrFail($validated['product_id']);
+        $variant = ProductVariant::findOrFail($validated['variant_id']);
 
         // Hitung subtotal
         $hargaPerItem = $produk->harga + $variant->harga_tambahan;
         $subTotal = $hargaPerItem * $validated['quantity'];
 
         // Buat data pesanan (order)
-        $order = Orders::create([  // Use the correct model here
+        $order = Order::create([  // Use the correct model here
             'user_id' => auth()->id(),
             'total_harga' => $subTotal,
             'status' => 'pending',
@@ -60,14 +60,14 @@ class OrdersController extends Controller
         }
 
         $userId = auth()->id();  // cek apakah nilainya muncul
-        $orders = Orders::where('user_id', $userId)->get();
+        $orders = Order::where('user_id', $userId)->get();
 
         return view('pesanan-detail', compact('orders'));
     }
 
     public function show($id)
     {
-        $order = Orders::with(['orderDetails.variant.product'])->findOrFail($id);
+        $order = Order::with(['orderDetails.variant.product'])->findOrFail($id);
         return view('pesanan-detail', compact('order'));
     }
 }

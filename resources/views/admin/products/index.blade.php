@@ -31,7 +31,7 @@
                 @forelse($products as $product)
                     <tr class="hover:bg-gray-50">
                         <td class="py-2 px-4 border-b">{{ $loop->iteration }}</td>
-            
+
                         <!-- Kolom Gambar -->
                         <td class="py-2 px-4 border-b">
                             @if($product->gambar)
@@ -40,10 +40,10 @@
                                 <span class="text-gray-400 italic">No Image</span>
                             @endif
                         </td>
-            
+
                         <!-- Kolom Nama -->
                         <td class="py-2 px-4 border-b">{{ $product->nama }}</td>
-            
+
                         <td class="py-2 px-4 border-b">{{ $product->deskripsi }}</td>
                         <td class="py-2 px-4 border-b">Rp {{ number_format($product->harga, 2, ',', '.') }}</td>
                         <td class="py-2 px-4 border-b">{{ $product->stok }}</td>
@@ -71,8 +71,8 @@
                     </tr>
                 @endforelse
             </tbody>
-            
-            
+
+
         </table>
     </div>
 </div>

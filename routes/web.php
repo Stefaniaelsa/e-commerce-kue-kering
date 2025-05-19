@@ -2,68 +2,95 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\RegisterController;
 
 
+// Halaman login awal (jika langsung ke "/")
 Route::get('/', function () {
     return view('login');
 });
 
-<<<<<<<<< Temporary merge branch 1
-Route::get('login', [AuthController::class, 'showFormLogin']);
-Route::post('login', [AuthController::class, 'auth'])->name('user.auth');
-
-
-Route::get('/register', [AuthController::class, 'showFormRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('user.register');
-=========
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');  // Form login
+// Form login
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.proses');
 
+// Form register
 Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register'])->name('register.process');
 
 
-Route::get('/admin/dashboard_admin', [DashboardController::class, 'index'])->middleware('auth');
+Route::middleware('auth')->group(function () {
+
+    // Dashboard Admin
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
+    // Halaman beranda umum (bisa diubah sesuai role juga nanti)
+    Route::get('/beranda', function () {
+        return view('beranda');
+    })->name('beranda');
+
+    // Halaman produk umum (untuk user)
+    // Route::get('/produk', function () {
+    //     return view('produk');
+    // });
+
+    Route::get('/produk', [ProductsController::class, 'index'])->name('produk.index');
+
+    // Detail produk (untuk user)
+    Route::get('/produk/{id}', [ProductsController::class, 'show'])->name('produk.detail');
 
 
+    // Detail pesanan (untuk user)
+    Route::get('/pesanan/{id}', [OrdersController::class, 'show'])->name('pesanan.show');
 
-Route::get('/beranda', function () {
-    return view('beranda');
-})->middleware('auth');
+    // Menyimpan pesanan (untuk user)
+    Route::post('/order/store', [OrdersController::class, 'store'])->name('order.store');
 
-Route::get('/produk', function () {
-    return view('produk');
-})->middleware('auth');
+    /*
+    |--------------------------------------------------------------------------
+    | Routes Admin - Manajemen Produk (Prefix: /admin)
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('admin')->group(function () {
 
+        // Menampilkan semua produk (admin)
+        Route::get('/products', [ProductController::class, 'index'])->name('admin.products.index');
 
-//Route::get('/produk/detail/{id}', function ($id) {
-// Contoh: ambil produk berdasarkan ID
-//   $produk = App\Models\Products::find($id);
-//   return view('produk-detail', compact('produk'));
-//})->name('produk.detail');
+        // Form tambah produk (admin)
+        Route::get('/products/create', [ProductController::class, 'create'])->name('admin.products.create');
 
-//Route::get('/produk-detail/{nama}', [ProductsController ::class, 'showByNama']);
+        // Simpan produk baru (admin)
+        Route::post('/products', [ProductController::class, 'store'])->name('admin.products.store');
 
-//Route::get('/produk/detail/{id}', [ProductsController::class, 'detail'])->name('produk.detail');
+        // Form edit produk (admin)
+        Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
 
-// routes/web.php
-Route::get('/produk/{id}', [ProductsController::class, 'show'])->name('produk.detail');
+        // Update produk (admin)
+        Route::put('/products/{id}', [ProductController::class, 'update'])->name('admin.products.update');
 
-// Routes for pesanan (orders)
-//Route::get('/pesanan', [OrdersController::class, 'show'])->name('pesanan.detail');
-
-
-Route::get('/pesanan/{id}', [OrdersController::class, 'show'])->name('pesanan.show');
-//Route::get('/pesanan', [OrdersController::class, 'index'])->name('pesanan.index');
-//Route::post('/pesanan', [OrdersController::class, 'store'])->name('pesanan.store');
-
-Route::post('/order/store', [OrdersController::class, 'store'])->name('order.store');
-//Route::get('/order/confirm/{order}', [OrdersController::class, 'confirm'])->name('order.confirm');
-//Route::get('/pesanan/{order}', [OrdersController::class, 'show'])->name('order.details');
+        // Hapus produk (admin)
+        Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
+    });
+});
 
 
+Route::middleware(['auth'])->group(function () {
+    // Route untuk menampilkan keranjang
+    Route::get('/keranjang', [CartController::class, 'index'])->name('cart.index');
 
-Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register'])->name('register.process');
->>>>>>>>> Temporary merge branch 2
+    // Route untuk menambahkan item ke keranjang
+    Route::post('/keranjang', [CartController::class, 'store'])->name('cart.store');
+
+    // Route untuk menghapus item dari keranjang
+    Route::delete('/keranjang/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+
+    Route::put('/keranjang/{id}', [CartController::class, 'update'])->name('cart.update');
+
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+});
