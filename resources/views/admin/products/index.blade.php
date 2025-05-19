@@ -1,3 +1,4 @@
+{{-- resources/views/admin/products/index.blade.php --}}
 @extends('layouts.app')
 
 @section('content')
@@ -19,11 +20,10 @@
             <thead class="bg-pink-100">
                 <tr>
                     <th class="py-3 px-4 border-b text-left">#</th>
-                    <th class="py-3 px-4 border-b text-left">Gambar</th> <!-- Tambahkan ini -->
+                    <th class="py-3 px-4 border-b text-left">Gambar</th>
                     <th class="py-3 px-4 border-b text-left">Nama</th>
                     <th class="py-3 px-4 border-b text-left">Deskripsi</th>
-                    <th class="py-3 px-4 border-b text-left">Harga</th>
-                    <th class="py-3 px-4 border-b text-left">Stok</th>
+                    <th class="py-3 px-4 border-b text-left">Varian</th>
                     <th class="py-3 px-4 border-b text-left">Aksi</th>
                 </tr>
             </thead>
@@ -31,22 +31,23 @@
                 @forelse($products as $product)
                     <tr class="hover:bg-gray-50">
                         <td class="py-2 px-4 border-b">{{ $loop->iteration }}</td>
-            
-                        <!-- Kolom Gambar -->
                         <td class="py-2 px-4 border-b">
                             @if($product->gambar)
-                                <img src="{{ asset('images/' . $product->gambar) }}" alt="{{ $product->nama }}" class="w-16 h-16 object-cover">
+                               <img src="{{ asset('images/' . $product->gambar) }}" alt="{{ $product->nama }}" class="w-16 h-16 object-cover">
                             @else
                                 <span class="text-gray-400 italic">No Image</span>
                             @endif
                         </td>
-            
-                        <!-- Kolom Nama -->
                         <td class="py-2 px-4 border-b">{{ $product->nama }}</td>
-            
                         <td class="py-2 px-4 border-b">{{ $product->deskripsi }}</td>
-                        <td class="py-2 px-4 border-b">Rp {{ number_format($product->harga, 2, ',', '.') }}</td>
-                        <td class="py-2 px-4 border-b">{{ $product->stok }}</td>
+
+                        {{-- Kolom Varian: hanya tombol untuk tampilkan varian --}}
+                        <td class="py-2 px-4 border-b">
+                            <button type="button" class="text-blue-500 hover:underline" onclick="toggleVariants({{ $product->id }})">
+                                Lihat Varian ({{ $product->variants->count() }})
+                            </button>
+                        </td>
+
                         <td class="py-2 px-4 border-b">
                             <div class="flex space-x-2">
                                 <a href="{{ route('admin.products.edit', $product->id) }}"
@@ -65,15 +66,43 @@
                             </div>
                         </td>
                     </tr>
+                    {{-- Baris varians tersembunyi --}}
+                    <tr id="variants-{{ $product->id }}" class="hidden bg-gray-50">
+                        <td colspan="6" class="p-4">
+                            <table class="w-full bg-white border border-gray-200 rounded-lg">
+                                <thead class="bg-gray-100">
+                                    <tr>
+                                        <th class="py-2 px-3 border-b text-left">Ukuran</th>
+                                        <th class="py-2 px-3 border-b text-left">Harga</th>
+                                        <th class="py-2 px-3 border-b text-left">Stok</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($product->variants as $variant)
+                                        <tr>
+                                            <td class="py-2 px-3 border-b">{{ $variant->ukuran ?? 'Default' }}</td>
+                                            <td class="py-2 px-3 border-b">Rp {{ number_format($variant->harga,2,',','.') }}</td>
+                                            <td class="py-2 px-3 border-b">{{ $variant->stok }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="py-4 px-4 text-center text-gray-500">Belum ada produk.</td> <!-- Sesuaikan colspan jadi 7 -->
+                        <td colspan="6" class="py-4 px-4 text-center text-gray-500">Belum ada produk.</td>
                     </tr>
                 @endforelse
             </tbody>
-            
-            
         </table>
     </div>
 </div>
+
+<script>
+    function toggleVariants(id) {
+        const row = document.getElementById(`variants-${id}`);
+        row.classList.toggle('hidden');
+    }
+</script>
 @endsection
