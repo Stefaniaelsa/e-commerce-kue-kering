@@ -24,46 +24,65 @@ class CartController extends Controller
     }
 
     // Menambahkan produk ke keranjang
-    public function store(Request $request)
-    {
-        $request->validate([
-            'id_produk' => 'required|exists:products,id',
-            'jumlah' => 'required|integer|min:1',
-        ]);
+ public function store(Request $request)
+{
+    $request->validate([
+        'id_produk' => 'required|exists:products,id',
+        'jumlah' => 'required|integer|min:1',
+        'id_varian' => 'nullable|exists:product_variants,id',
+    ]);
 
-        $produk = Product::findOrFail($request->id_produk);
-        $subTotal = $produk->harga * $request->jumlah;
+    $produk = Product::findOrFail($request->id_produk);
 
-        // Ambil atau buat keranjang baru untuk user dengan status 'keranjang'
-        $keranjang = Keranjang::firstOrCreate(
-            ['id_pengguna' => Auth::id(), 'status' => 'keranjang'],
-            ['total_harga' => 0]
-        );
-
-        // Cek apakah item sudah ada dalam keranjang
-        $item = Item_Keranjang::where('id_keranjang', $keranjang->id)
-            ->where('id_produk', $request->id_produk)
+    // Cek apakah pakai varian
+    if ($request->filled('id_varian')) {
+        $varian = \App\Models\ProductVariant::findOrFail($request->id_varian);
+        $harga = $varian->harga;
+    } else {
+        // Jika tidak memilih varian, ambil varian default (misalnya ukuran NULL)
+        $varian = \App\Models\ProductVariant::where('product_id', $produk->id)
+            ->whereNull('ukuran')
             ->first();
 
-        if ($item) {
-            $item->jumlah += $request->jumlah;
-            $item->harga += $subTotal;
-            $item->save();
-        } else {
-            Item_Keranjang::create([
-                'id_keranjang' => $keranjang->id,
-                'id_produk' => $request->id_produk,
-                'jumlah' => $request->jumlah,
-                'harga' => $subTotal,
-            ]);
+        if (!$varian) {
+            return back()->with('error', 'Produk tidak memiliki varian default.');
         }
 
-        // Update total harga keranjang
-        $keranjang->total_harga = $keranjang->Item_Keranjang()->sum('harga');
-        $keranjang->save();
-
-        return redirect()->route('cart.index');
+        $harga = $varian->harga;
     }
+
+    $subTotal = $harga * $request->jumlah;
+
+    $keranjang = Keranjang::firstOrCreate(
+        ['id_pengguna' => Auth::id(), 'status' => 'keranjang'],
+        ['total_harga' => 0]
+    );
+
+    $item = Item_Keranjang::where('id_keranjang', $keranjang->id)
+        ->where('id_produk', $request->id_produk)
+        ->where('id_varian', $request->id_varian)
+        ->first();
+
+    if ($item) {
+        $item->jumlah += $request->jumlah;
+        $item->harga += $subTotal;
+        $item->save();
+    } else {
+        Item_Keranjang::create([
+            'id_keranjang' => $keranjang->id,
+            'id_produk' => $request->id_produk,
+            'id_varian' => $request->id_varian,
+            'jumlah' => $request->jumlah,
+            'harga' => $subTotal,
+        ]);
+    }
+
+    $keranjang->total_harga = $keranjang->Item_Keranjang()->sum('harga');
+    $keranjang->save();
+
+    return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang.');
+}
+
 
     // Menghapus item dari keranjang
     public function destroy($id)
@@ -80,26 +99,18 @@ class CartController extends Controller
         return redirect()->route('cart.index');
     }
 
-    public function update(Request $request, $id)
+    // Mengubah jumlah item di keranjang
+ public function update(Request $request, $id)
     {
-        $item = Item_Keranjang::with('produk')->findOrFail($id);
+        $item = Item_Keranjang::findOrFail($id);
+        $item->jumlah = $request->input('jumlah');
+        // Hitung ulang harga subtotal per item (jumlah * harga satuan produk/variant)
+        $hargaSatuan = $item->variant ? $item->variant->harga : $item->produk->harga;
+        $item->harga = $hargaSatuan * $item->jumlah;
+        $item->save();
 
-        if ($request->action == 'increase') {
-            $item->jumlah += 1;
-        } elseif ($request->action == 'decrease' && $item->jumlah > 1) {
-            $item->jumlah -= 1;
-        }
-
-        // Pastikan relasi produk tidak null
-        if ($item->produk) {
-            $item->harga = $item->produk->harga * $item->jumlah;
-            $item->save();
-
-            // Update total harga keranjang
-            $item->keranjang->total_harga = $item->keranjang->Item_Keranjang()->sum('harga');
-            $item->keranjang->save();
-        }
-
-        return redirect()->route('cart.index')->with('success', 'Jumlah diperbarui!');
+        return redirect()->back()->with('success', 'Jumlah item berhasil diperbarui');
     }
+
 }
+

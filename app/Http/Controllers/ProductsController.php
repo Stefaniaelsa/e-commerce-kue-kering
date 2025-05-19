@@ -7,19 +7,25 @@ use App\Models\Product;
 
 class ProductsController extends Controller
 {
-    public function show($id)
+    // Untuk beranda
+    public function beranda()
     {
-        // Mencari produk berdasarkan ID, beserta varian produk yang terkait
-        $produk = Product::with('variants')->findOrFail($id);
-        //die($produk);
-        // Menampilkan halaman detail produk dengan data produk
-        return view('produk-detail', compact('produk'));
+        $bestSellerProduk = Product::where('kategori', 'best_seller')->get();
+        $favoritProduk = Product::where('kategori', 'favorit')->get();
+        return view('beranda', compact('bestSellerProduk', 'favoritProduk'));
     }
 
-
-    public function index(){
+    // Untuk halaman produk
+    public function index()
+    {
         $produks = Product::all();
-        // die($produks);
         return view('produk', compact('produks'));
+    }
+
+    // Menampilkan detail produk
+    public function show($id)
+    {
+        $produk = Product::with('variants')->findOrFail($id);
+        return view('produk-detail', compact('produk'));
     }
 }

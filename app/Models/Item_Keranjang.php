@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\Product;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,6 +12,7 @@ class Item_Keranjang extends Model
     protected $fillable = [
         'id_keranjang',
         'id_produk',
+        'id_varian',
         'jumlah',
         'harga',
     ];
@@ -27,5 +29,10 @@ class Item_Keranjang extends Model
     public function produk()
     {
         return $this->belongsTo(Product::class, 'id_produk');
+    }
+
+    public function variant()
+    {
+        return $this->belongsTo(ProductVariant::class, 'id_varian');
     }
 }

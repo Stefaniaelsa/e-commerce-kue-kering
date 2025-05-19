@@ -14,21 +14,45 @@ class Product extends Model
     protected $fillable = [
         'nama',
         'deskripsi',
-        'harga',
-        'stok',
-        'gambar'
+        'gambar',
+        'is_best_seller',
+        'is_favorit',
     ];
 
     public $timestamps = false;
 
-    // Fungsi relasi ke varian produk
+    /**
+     * Relasi ke semua varian produk
+     */
     public function variants()
     {
         return $this->hasMany(ProductVariant::class);
     }
 
-    public function produk()
-{
-    return $this->belongsTo(Product::class, 'product_id'); 
-}
+    /**
+     * Relasi ke varian default (ukuran NULL)
+     */
+    public function defaultVariant()
+    {
+        return $this->hasOne(ProductVariant::class)->whereNull('ukuran');
+    }
+
+    /**
+     * Accessor untuk harga produk (dari varian default)
+     */
+    public function getHargaAttribute()
+    {
+        return $this->defaultVariant ? $this->defaultVariant->harga : null;
+    }
+
+    /**
+     * Accessor untuk stok produk (dari varian default)
+     */
+    public function getStokAttribute()
+    {
+        return $this->defaultVariant ? $this->defaultVariant->stok : null;
+    }
+
+
+
 }

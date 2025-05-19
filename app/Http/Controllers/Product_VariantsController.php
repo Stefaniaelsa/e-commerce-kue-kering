@@ -16,3 +16,4 @@ class ProductVariantController extends Controller
         return view('produk-detail', compact('produk'));
     }
 }
+

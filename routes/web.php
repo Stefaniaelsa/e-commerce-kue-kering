@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
@@ -9,14 +10,23 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\ProductsController;
 
-
-// Halaman login awal (jika langsung ke "/")
+/*
+|--------------------------------------------------------------------------
+| Public Routes (tanpa login)
+|--------------------------------------------------------------------------
+*/
 Route::get('/', function () {
     return view('login');
 });
 
-// Form login
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.proses');
 
@@ -25,72 +35,65 @@ Route::get('/register', [RegisterController::class, 'showForm'])->name('register
 Route::post('/register', [RegisterController::class, 'register'])->name('register.process');
 
 
-Route::middleware('auth')->group(function () {
+/*
+|--------------------------------------------------------------------------
+| Logout (bisa logout dari user atau admin)
+|--------------------------------------------------------------------------
+*/
+Route::post('/logout', function () {
+    if (Auth::guard('admin')->check()) {
+        Auth::guard('admin')->logout();
+    } else {
+        Auth::logout();
+    }
+    return redirect('/login');
+})->name('logout');
 
-    // Dashboard Admin
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    // Halaman beranda umum (bisa diubah sesuai role juga nanti)
+/*
+|--------------------------------------------------------------------------
+| Routes untuk user biasa (guard 'web')
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth:web'])->group(function () {
     Route::get('/beranda', function () {
-        return view('beranda');
+        $produks = \App\Models\Product::with('defaultVariant')->get();
+        $bestSellerProduk = \App\Models\Product::where('is_best_seller', true)->get();
+        $favoritProduk = \App\Models\Product::where('is_favorit', true)->get();
+
+        return view('beranda', compact('produks', 'bestSellerProduk', 'favoritProduk'));
     })->name('beranda');
 
-    // Halaman produk umum (untuk user)
-    // Route::get('/produk', function () {
-    //     return view('produk');
-    // });
-
+    // Produk user
     Route::get('/produk', [ProductsController::class, 'index'])->name('produk.index');
-
-    // Detail produk (untuk user)
     Route::get('/produk/{id}', [ProductsController::class, 'show'])->name('produk.detail');
 
+    // Keranjang
+    Route::get('/keranjang', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/keranjang', [CartController::class, 'store'])->name('cart.store');
+    Route::delete('/keranjang/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+    Route::put('/keranjang/{id}', [CartController::class, 'update'])->name('cart.update');
 
-    // Detail pesanan (untuk user)
+    // Checkout
+    Route::post('/checkout', [CheckoutController::class, 'proses'])->name('checkout');
+
+    // Pesanan user
     Route::get('/pesanan/{id}', [OrdersController::class, 'show'])->name('pesanan.show');
-
-    // Menyimpan pesanan (untuk user)
     Route::post('/order/store', [OrdersController::class, 'store'])->name('order.store');
-
-    /*
-    |--------------------------------------------------------------------------
-    | Routes Admin - Manajemen Produk (Prefix: /admin)
-    |--------------------------------------------------------------------------
-    */
-    Route::prefix('admin')->group(function () {
-
-        // Menampilkan semua produk (admin)
-        Route::get('/products', [ProductController::class, 'index'])->name('admin.products.index');
-
-        // Form tambah produk (admin)
-        Route::get('/products/create', [ProductController::class, 'create'])->name('admin.products.create');
-
-        // Simpan produk baru (admin)
-        Route::post('/products', [ProductController::class, 'store'])->name('admin.products.store');
-
-        // Form edit produk (admin)
-        Route::get('/products/{id}/edit', [ProductController::class, 'edit'])->name('admin.products.edit');
-
-        // Update produk (admin)
-        Route::put('/products/{id}', [ProductController::class, 'update'])->name('admin.products.update');
-
-        // Hapus produk (admin)
-        Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('admin.products.destroy');
-    });
 });
 
 
-Route::middleware(['auth'])->group(function () {
-    // Route untuk menampilkan keranjang
-    Route::get('/keranjang', [CartController::class, 'index'])->name('cart.index');
+/*
+|--------------------------------------------------------------------------
+| Routes khusus admin (guard 'admin')
+|--------------------------------------------------------------------------
+*/
+Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function () {
+    Route::get('/dashboard_admin', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Route untuk menambahkan item ke keranjang
-    Route::post('/keranjang', [CartController::class, 'store'])->name('cart.store');
+    // Manajemen produk admin
+    Route::resource('products', ProductController::class);
 
-    // Route untuk menghapus item dari keranjang
-    Route::delete('/keranjang/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
-
-    Route::put('/keranjang/{id}', [CartController::class, 'update'])->name('cart.update');
-
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    // Manajemen user oleh admin
+    Route::resource('users', UserController::class);
 });

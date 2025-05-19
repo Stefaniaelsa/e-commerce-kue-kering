@@ -18,7 +18,7 @@ class Keranjang extends Model
     const CREATED_AT = 'dibuat_pada';
     const UPDATED_AT = 'diperbarui_pada';
 
-    public function item_Keranjang()
+    public function item_keranjang()
     {
         return $this->hasMany(Item_Keranjang::class, 'id_keranjang');
     }

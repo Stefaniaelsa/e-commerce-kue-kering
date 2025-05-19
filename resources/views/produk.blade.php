@@ -16,8 +16,8 @@
         <a href="{{ url('/beranda') }}" class="hover:text-pink-700 font-medium">Beranda</a>
         <a href="{{ url('/produk') }}" class="hover:text-pink-700 font-medium">Produk</a>
         <a href="{{ url('/keranjang') }}" class="hover:text-pink-700 font-medium">Keranjang</a>
-      <a href="#" class="hover:text-pink-700 font-medium">Akun</a>
-      <a href="#" class="text-red-500 hover:text-red-700 font-medium"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        <a href="#" class="hover:text-pink-700 font-medium">Akun</a>
+        <a href="#" class="text-red-500 hover:text-red-700 font-medium"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </nav>
   </header>
 
@@ -27,21 +27,23 @@
     <p class="text-sm text-gray-500">Pilih kue favoritmu dan pesan sekarang!</p>
   </section>
 
-  <!--Produk -->
+  <!-- Daftar Produk -->
   <section class="px-6 pb-12">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
-    @foreach ($produks as $produk)
+      @foreach ($produks as $produk)
         <!-- Kartu Produk -->
         <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-4">
-            <img src="https://via.placeholder.com/250" alt="Kue Nastar" class="rounded mb-2 w-full h-40 object-cover" />
-            <h4 class="font-bold text-lg">{{ $produk->nama }}</h4>
-            <p class="text-sm text-gray-500">Rp {{ $produk->harga }}</p>
-            <a href="{{ route('produk.detail', ['id' => $produk->id]) }}" class="mt-2 block text-center bg-pink-500 hover:bg-pink-600 text-white py-1 px-4 rounded text-sm">
-                Lihat Produk
-            </a>
+          <img src="{{ asset('images/' . $produk->gambar) }}" alt="{{ $produk->nama }}" class="rounded mb-2 w-full h-40 object-cover" />
+          <h4 class="font-bold text-lg">{{ $produk->nama }}</h4>
+          {{-- Harga disembunyikan --}}
+          {{-- <p class="text-sm text-gray-500">Rp {{ number_format($produk->harga, 0, ',', '.') }}</p> --}}
+          <a href="{{ route('produk.detail', ['id' => $produk->id]) }}" class="mt-2 block text-center bg-pink-500 hover:bg-pink-600 text-white py-1 px-4 rounded text-sm">
+            Lihat Produk
+          </a>
         </div>
-    @endforeach
+      @endforeach
+
     </div>
   </section>
 
