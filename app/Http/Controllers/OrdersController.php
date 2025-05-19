@@ -44,7 +44,7 @@ class OrderController extends Controller
                 $subtotal = $hargaSatuan * $item->jumlah;
 
                 // Buat order detail
-                Order_DetailC::create([
+                Order_Detail::create([
                     'id_order' => $order->id,
                     'id_produk' => $item->id_produk,
                     'id_varian' => $item->id_varian,
