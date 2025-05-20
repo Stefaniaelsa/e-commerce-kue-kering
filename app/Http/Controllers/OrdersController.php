@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Item_Keranjang;
 use App\Models\Keranjang;
 use App\Models\Order;
-use App\Models\Order_DetailsModel;
+use App\Models\OrderDetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -41,7 +41,7 @@ class OrderController extends Controller
                 $subtotal = $hargaSatuan * $item->jumlah;
 
                 // Buat detail pesanan
-                Order_DetailsModel::create([
+                OrderDetail::create([ // 
                     'order_id' => $order->id,
                     'variant_id' => $item->id_varian,
                     'jumlah' => $item->jumlah,
