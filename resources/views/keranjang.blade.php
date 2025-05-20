@@ -45,6 +45,7 @@
         </nav>
     </header>
 
+
     <!-- Konten Keranjang -->
     <main class="flex-grow">
         <section class="max-w-5xl mx-auto py-10 px-4 sm:px-6">
@@ -69,18 +70,6 @@
                     </a>
                 </div>
             @else
-
-                <!-- Tombol Kosongkan Keranjang -->
-                <div class="flex justify-end mb-6">
-                    <form action="{{ route('cart.clear') }}" method="POST">
-                        @csrf
-                        <button type="submit"
-                            class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-full text-sm font-medium transition">
-                            <i class="fas fa-trash-alt mr-2"></i> Kosongkan Keranjang
-                        </button>
-                    </form>
-                </div>
-
                 <div class="space-y-4">
                     @foreach ($cartItems as $item)
                         <div
@@ -96,10 +85,6 @@
                                             <h3 class="text-xl font-bold text-primary">{{ $item->produk->nama }}</h3>
                                             <p class="text-gray-600 text-sm mt-1">
                                                 {{ $item->produk->deskripsi ?? 'Kue lezat dengan cita rasa istimewa' }}
-                                            </p>
-                                            <!-- Tampilkan varian ukuran -->
-                                            <p class="text-gray-500 text-sm mt-1">
-                                                Ukuran: {{ $item->varian_ukuran ?? '-' }}
                                             </p>
                                         </div>
                                         <div class="text-right">

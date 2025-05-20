@@ -116,6 +116,9 @@ class CartController extends Controller
     {
         $item = Item_Keranjang::findOrFail($id);
 
+        // Simpan stok lama untuk penyesuaian
+        $oldJumlah = $item->jumlah;
+
         if ($request->has('action')) {
             if ($request->action === 'increase') {
                 $item->jumlah += 1;
@@ -126,6 +129,10 @@ class CartController extends Controller
             $item->jumlah = max(1, (int) $request->jumlah);
         }
 
+        // Hitung selisih quantity
+        $diffJumlah = $item->jumlah - $oldJumlah;
+
+        // Update harga
         $hargaSatuan = $item->id_varian
             ? ProductVariant::find($item->id_varian)?->harga
             : $item->produk->harga;
@@ -133,10 +140,21 @@ class CartController extends Controller
         $item->harga = $item->jumlah * $hargaSatuan;
         $item->save();
 
+        // Penyesuaian stok sesuai selisih quantity
+        if ($item->id_varian) {
+            $varian = ProductVariant::find($item->id_varian);
+            $varian->stok -= $diffJumlah;  // kurang atau tambah stok
+            $varian->save();
+        } else {
+            $produk = Product::find($item->id_produk);
+            $produk->stok -= $diffJumlah; // kurang atau tambah stok
+            $produk->save();
+        }
+
         $keranjang = $item->keranjang;
         $keranjang->total_harga = $keranjang->Item_Keranjang()->sum('harga');
         $keranjang->save();
 
-        return back()->with('success', 'Keranjang diperbarui');
+        return back()->with('success', 'Keranjang diperbarui dan stok disesuaikan');
     }
 }
