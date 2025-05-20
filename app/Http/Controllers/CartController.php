@@ -83,6 +83,16 @@ class CartController extends Controller
         $keranjang->total_harga = $keranjang->Item_Keranjang()->sum('harga');
         $keranjang->save();
 
+        // Kurangi stok varian atau produk setelah item berhasil dimasukkan ke keranjang
+        if ($request->filled('id_varian')) {
+            $varian->stok -= $request->jumlah;
+            $varian->save();
+        } else {
+            $produk->stok -= $request->jumlah;
+            $produk->save();
+        }
+
+
         return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang.');
     }
 

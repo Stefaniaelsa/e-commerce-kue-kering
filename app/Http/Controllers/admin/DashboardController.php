@@ -15,7 +15,7 @@ class DashboardController extends Controller
         // Mengambil data yang diperlukan
         $totalProduk = Product::count();
         $totalPesanan = Order::count();
-        $totalPelanggan = User::where('role', 'user')->count();
+        $totalPelanggan = User::count();
 
         // Mengambil pesanan terbaru
         $pesananTerbaru = Order::orderBy('tanggal_pesanan', 'desc')->take(5)->get();

@@ -19,5 +19,9 @@ class CheckoutController extends Controller
         if (!$ids || count($ids) === 0) {
             return redirect()->back()->with('error', 'Tidak ada item yang dipilih.');
         }
+
+        $items = Item_Keranjang::whereIn('id', $ids)->get();
+
+        return view('checkout', compact('items'));
     }
 }

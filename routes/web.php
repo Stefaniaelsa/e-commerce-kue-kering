@@ -74,6 +74,8 @@ Route::middleware(['auth:web'])->group(function () {
     // Pesanan user
     Route::get('/pesanan/{id}', [OrdersController::class, 'show'])->name('pesanan.show');
     Route::post('/order/store', [OrdersController::class, 'store'])->name('order.store');
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'proses'])->name('checkout.proses');
 });
 
 
