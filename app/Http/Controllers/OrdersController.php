@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Item_Keranjang;
 use App\Models\Keranjang;
 use App\Models\Order;
-use App\Models\OrderDetail;
+use App\Models\Order_Details;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -24,13 +24,10 @@ class OrderController extends Controller
 
         DB::beginTransaction();
         try {
-            // Buat order baru
             $order = Order::create([
                 'id_pengguna' => $userId,
                 'status' => 'pending',
-                'total_harga' => 0, // nanti diupdate setelah hitung total
-                'dibuat_pada' => now(),
-                'diperbarui_pada' => now(),
+                'total_harga' => 0,
             ]);
 
             $items = Item_Keranjang::with(['produk', 'variant'])
@@ -43,15 +40,13 @@ class OrderController extends Controller
                 $hargaSatuan = $item->variant ? $item->variant->harga : $item->produk->harga;
                 $subtotal = $hargaSatuan * $item->jumlah;
 
-                // Buat order detail
-                Order_Detail::create([
-                    'id_order' => $order->id,
-                    'id_produk' => $item->id_produk,
-                    'id_varian' => $item->id_varian,
+                // Buat detail pesanan
+                Order_Details::create([
+                    'order_id' => $order->id,
+                    'variant_id' => $item->id_varian,
                     'jumlah' => $item->jumlah,
-                    'harga' => $subtotal,
-                    'dibuat_pada' => now(),
-                    'diperbarui_pada' => now(),
+                    'harga' => $hargaSatuan,
+                    'sub_total' => $subtotal,
                 ]);
 
                 $totalHarga += $subtotal;
@@ -60,7 +55,6 @@ class OrderController extends Controller
                 $item->delete();
             }
 
-            // Update total harga order
             $order->total_harga = $totalHarga;
             $order->save();
 
