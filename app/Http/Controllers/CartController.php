@@ -104,25 +104,21 @@ class CartController extends Controller
     // Mengubah jumlah item di keranjang
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'jumlah' => 'required|integer|min:1',
-        ]);
-
         $item = Item_Keranjang::findOrFail($id);
 
-        $item->jumlah = $request->input('jumlah');
+        if ($request->has('action')) {
+            if ($request->action === 'increase') {
+                $item->jumlah += 1;
+            } elseif ($request->action === 'decrease' && $item->jumlah > 1) {
+                $item->jumlah -= 1;
+            }
+        } elseif ($request->has('jumlah')) {
+            $item->jumlah = max(1, (int) $request->jumlah);
+        }
 
-        // Hitung ulang harga subtotal per item
-        $hargaSatuan = $item->variant ? $item->variant->harga : $item->produk->harga;
-        $item->harga = $hargaSatuan * $item->jumlah;
-
+        $item->harga = $item->jumlah * $item->produk->harga; // pastikan perhitungan benar
         $item->save();
 
-        // Update total harga keranjang setelah perubahan jumlah item
-        $keranjang = $item->keranjang;
-        $keranjang->total_harga = $keranjang->Item_Keranjang()->sum('harga');
-        $keranjang->save();
-
-        return redirect()->back()->with('success', 'Jumlah item berhasil diperbarui.');
+        return back()->with('success', 'Keranjang diperbarui');
     }
 }

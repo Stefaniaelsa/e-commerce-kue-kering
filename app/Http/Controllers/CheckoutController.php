@@ -19,7 +19,5 @@ class CheckoutController extends Controller
         if (!$ids || count($ids) === 0) {
             return redirect()->back()->with('error', 'Tidak ada item yang dipilih.');
         }
-
-        // Lanjutkan proses checkout...
     }
 }

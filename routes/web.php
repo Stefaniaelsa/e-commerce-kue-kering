@@ -17,6 +17,7 @@ use App\Http\Controllers\ProductsController;
 | Public Routes (tanpa login)
 |--------------------------------------------------------------------------
 */
+
 Route::get('/', function () {
     return view('login');
 });
@@ -68,7 +69,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::put('/keranjang/{id}', [CartController::class, 'update'])->name('cart.update');
 
     // Checkout
-    Route::post('/checkout', [CheckoutController::class, 'proses'])->name('checkout');
+    Route::post('/checkout', [CheckoutController::class, 'proses'])->name('checkout.index');
 
     // Pesanan user
     Route::get('/pesanan/{id}', [OrdersController::class, 'show'])->name('pesanan.show');
