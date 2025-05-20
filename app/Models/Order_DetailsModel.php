@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Order_Details extends Model
+class OrderDetail extends Model
 {
     protected $table = 'order_details';
 
@@ -26,3 +26,4 @@ class Order_Details extends Model
         return $this->belongsTo(ProductVariant::class, 'variant_id');
     }
 }
+

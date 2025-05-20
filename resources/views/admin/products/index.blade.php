@@ -30,7 +30,7 @@
             <tbody>
                 @forelse($products as $product)
                     <tr class="hover:bg-gray-50">
-                        <td class="py-2 px-4 border-b">{{ $loop->iteration }}</td>
+                        <td class="py-2 px-4 border-b">{{ $products->firstItem() + $loop->index }}</td>
 
                         <!-- Kolom Gambar -->
                         <td class="py-2 px-4 border-b">
@@ -103,6 +103,8 @@
 
 
         </table>
+        <div class="mt-4">
+        {{ $products->links() }}
     </div>
 </div>
 

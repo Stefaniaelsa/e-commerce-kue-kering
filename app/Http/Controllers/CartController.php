@@ -121,4 +121,14 @@ class CartController extends Controller
 
         return back()->with('success', 'Keranjang diperbarui');
     }
+
+    public function clear()
+{
+    // Contoh hapus semua item keranjang user
+    // Sesuaikan model dan kolom user_id sesuai aplikasi kamu
+    CartItem::where('user_id', auth()->id())->delete();
+
+    return redirect()->route('cart.index')->with('message', 'Keranjang berhasil dikosongkan.');
+}
+
 }

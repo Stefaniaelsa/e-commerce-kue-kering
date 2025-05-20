@@ -11,6 +11,8 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +69,8 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post('/keranjang', [CartController::class, 'store'])->name('cart.store');
     Route::delete('/keranjang/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
     Route::put('/keranjang/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+
 
     // Checkout
     Route::post('/checkout', [CheckoutController::class, 'proses'])->name('checkout.index');
@@ -90,4 +94,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
 
     // Manajemen user oleh admin
     Route::resource('users', UserController::class);
+
+    Route::resource('admins', AdminController::class);
+    Route::resource('orders', OrderController::class); 
 });
