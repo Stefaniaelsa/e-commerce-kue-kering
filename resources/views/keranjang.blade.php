@@ -36,8 +36,12 @@
             <a href="{{ url('/produk') }}" class="hover:text-pink-700 font-medium">Produk</a>
             <a href="{{ url('/keranjang') }}" class="hover:text-pink-700 font-medium">Keranjang</a>
             <a href="#" class="hover:text-pink-700 font-medium">Akun</a>
-            <a href="#" class="text-red-500 hover:text-red-700 font-medium"><i class="fas fa-sign-out-alt"></i>
-                Logout</a>
+            <form method="POST" action="{{ route('logout') }}" class="inline">
+                @csrf
+                <button type="submit" class="text-red-500 hover:text-red-700 font-medium">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </form>
         </nav>
     </header>
 

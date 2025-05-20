@@ -116,8 +116,16 @@ class CartController extends Controller
             $item->jumlah = max(1, (int) $request->jumlah);
         }
 
-        $item->harga = $item->jumlah * $item->produk->harga; // pastikan perhitungan benar
+        $hargaSatuan = $item->id_varian
+            ? ProductVariant::find($item->id_varian)?->harga
+            : $item->produk->harga;
+
+        $item->harga = $item->jumlah * $hargaSatuan;
         $item->save();
+
+        $keranjang = $item->keranjang;
+        $keranjang->total_harga = $keranjang->Item_Keranjang()->sum('harga');
+        $keranjang->save();
 
         return back()->with('success', 'Keranjang diperbarui');
     }
