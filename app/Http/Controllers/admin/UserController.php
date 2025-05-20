@@ -28,7 +28,6 @@ class UserController extends Controller
             'password' => 'required|string|min:6|confirmed',
             'nomor_telepon' => 'nullable|string|max:15',
             'alamat' => 'nullable|string',
-            'role' => 'required|in:admin,user',
         ]);
 
         User::create([
@@ -37,7 +36,6 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
             'nomor_telepon' => $request->nomor_telepon,
             'alamat' => $request->alamat,
-            'role' => $request->role,
         ]);
 
         return redirect()->route('admin.users.index')->with('success', 'User berhasil dibuat.');
@@ -61,7 +59,6 @@ class UserController extends Controller
             'password' => 'nullable|string|min:6|confirmed',
             'nomor_telepon' => 'nullable|string|max:15',
             'alamat' => 'nullable|string',
-            'role' => 'required|in:admin,user',
         ]);
 
         $user->nama = $request->nama;
@@ -71,7 +68,6 @@ class UserController extends Controller
         }
         $user->nomor_telepon = $request->nomor_telepon;
         $user->alamat = $request->alamat;
-        $user->role = $request->role;
         $user->save();
 
         return redirect()->route('admin.users.index')->with('success', 'User berhasil diperbarui.');
