@@ -80,6 +80,13 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post('/order/store', [OrdersController::class, 'store'])->name('order.store');
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'proses'])->name('checkout.proses');
+
+    Route::post('/checkout/proses', [CheckoutController::class, 'showForm'])->name('checkout.proses');
+    Route::post('/checkout/simpan', [CheckoutController::class, 'simpan'])->name('checkout.simpan');
+
+
+    //Route::post('/checkout/proses', [CheckoutController::class, 'proses'])->name('checkout.proses');
+    //Route::post('/checkout/bayar', [CheckoutController::class, 'bayar'])->name('checkout.bayar');
 });
 
 
@@ -98,5 +105,5 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::resource('users', UserController::class);
 
     Route::resource('admins', AdminController::class);
-    Route::resource('orders', OrderController::class); 
+    Route::resource('orders', OrderController::class);
 });

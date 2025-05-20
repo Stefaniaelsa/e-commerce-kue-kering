@@ -7,21 +7,16 @@ use App\Models\Item_Keranjang;
 
 class CheckoutController extends Controller
 {
-    public function index()
+    public function showForm(Request $request)
     {
-        return view('checkout'); // Buat file checkout.blade.php
+        // Validasi dan ambil item berdasarkan input
+        $items = Item_Keranjang::whereIn('id', $request->items)->get();
+        return view('checkout', compact('items'));
     }
 
-    public function proses(Request $request)
+    public function simpan(Request $request)
     {
-        $ids = $request->input('items');
-
-        if (!$ids || count($ids) === 0) {
-            return redirect()->back()->with('error', 'Tidak ada item yang dipilih.');
-        }
-
-        $items = Item_Keranjang::whereIn('id', $ids)->get();
-
-        return view('checkout', compact('items'));
+        // Simpan order ke database
+        // Validasi, hitung total, simpan ke tabel orders dan order_details
     }
 }

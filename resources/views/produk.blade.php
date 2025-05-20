@@ -57,8 +57,10 @@
     </section>
 
     <!-- Footer -->
-    <footer class="text-center py-4 text-sm text-gray-600 bg-pink-100">
-        &copy; 2025 IniKue. Semua Hak Dilindungi.
+    <footer class="bg-gradient-to-r from-pink-500 to-pink-300 text-white py-6 mt-12">
+        <div class="max-w-5xl mx-auto px-4 text-sm text-center opacity-80">
+            &copy; 2025 IniKue. Semua Hak Dilindungi.
+        </div>
     </footer>
 
 </body>

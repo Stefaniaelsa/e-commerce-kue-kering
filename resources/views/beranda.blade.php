@@ -25,7 +25,6 @@
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </button>
             </form>
-
         </nav>
     </header>
 
@@ -37,8 +36,6 @@
             class="absolute inset-0 bg-pink-900 bg-opacity-40 flex flex-col items-center justify-center text-white text-center px-4">
             <h2 class="text-3xl md:text-4xl font-bold mb-2">Selamat Datang di IniKue</h2>
             <p class="text-md mb-4">Temukan berbagai pilihan kue kering favoritmu di sini!</p>
-            <a href="#"
-                class="bg-pink-300 hover:bg-pink-400 text-white px-6 py-2 rounded text-sm font-medium">Lihat Katalog</a>
         </div>
     </section>
 
@@ -121,8 +118,10 @@
     </section>
 
     <!-- Footer -->
-    <footer class="text-center py-4 text-sm text-gray-600 bg-pink-100 mt-8">
-        &copy; 2025 IniKue. Semua Hak Dilindungi.
+    <footer class="bg-gradient-to-r from-pink-500 to-pink-300 text-white py-6 mt-12">
+        <div class="max-w-5xl mx-auto px-4 text-sm text-center opacity-80">
+            &copy; 2025 IniKue. Semua Hak Dilindungi.
+        </div>
     </footer>
 
 </body>

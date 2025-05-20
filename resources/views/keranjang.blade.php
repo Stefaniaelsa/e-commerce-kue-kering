@@ -169,31 +169,9 @@
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gradient-to-r from-primary to-pink-300 text-white py-6">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6">
-            <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <h2 class="text-xl font-bold flex items-center">
-                        <i class="fas fa-cake mr-2"></i> IniKue
-                    </h2>
-                    <p class="text-sm opacity-80 mt-1">Temukan kebahagiaan dalam setiap gigitan</p>
-                </div>
-                <div class="flex space-x-6">
-                    <a href="#" class="hover:text-white/80 transition">
-                        <i class="fab fa-instagram text-lg"></i>
-                    </a>
-                    <a href="#" class="hover:text-white/80 transition">
-                        <i class="fab fa-whatsapp text-lg"></i>
-                    </a>
-                    <a href="#" class="hover:text-white/80 transition">
-                        <i class="fab fa-facebook text-lg"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="border-t border-white/20 mt-6 pt-6 text-sm text-center opacity-80">
-                &copy; 2025 IniKue. Semua Hak Dilindungi.
-            </div>
+    <footer class="bg-gradient-to-r from-primary to-pink-300 text-white py-6 mt-12">
+        <div class="max-w-5xl mx-auto px-4 text-sm text-center opacity-80">
+            &copy; 2025 IniKue. Semua Hak Dilindungi.
         </div>
     </footer>
 </body>
