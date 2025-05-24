@@ -156,7 +156,12 @@
                             class="bg-white border border-primary text-primary hover:bg-secondary py-3 px-6 rounded-full text-sm font-medium text-center transition">
                             <i class="fas fa-arrow-left mr-2"></i> Lanjut Belanja
                         </a>
-                        <form action="{{ route('order.store') }}" method="POST">
+                        <a href="{{ route('order.store') }}"
+                            class="bg-gradient-to-r from-primary to-pink-400 hover:from-accent hover:to-pink-500 text-white py-3 px-6 rounded-full text-sm font-medium text-center shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5">
+                            <i class="fas fa-paper-plane mr-2"></i> Lanjut Pembayaran
+                        </a>
+
+                        {{-- <form action="{{ route('order.store') }}" method="POST">
                             @csrf
                             @foreach ($cartItems as $item)
                                 <input type="hidden" name="items[]" value="{{ $item->id }}">
@@ -165,8 +170,7 @@
                                 class="bg-gradient-to-r from-primary to-pink-400 hover:from-accent hover:to-pink-500 text-white py-3 px-6 rounded-full text-sm font-medium text-center shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5">
                                 <i class="fas fa-paper-plane mr-2"></i> Pesan
                             </button>
-
-                        </form>
+                        </form> --}}
 
                     </div>
                 </div>
