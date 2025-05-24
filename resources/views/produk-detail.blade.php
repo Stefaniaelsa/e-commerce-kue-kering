@@ -50,7 +50,7 @@
             <a href="{{ url('/beranda') }}" class="hover:text-pink-700 font-medium">Beranda</a>
             <a href="{{ url('/produk') }}" class="hover:text-pink-700 font-medium">Produk</a>
             <a href="{{ url('/keranjang') }}" class="hover:text-pink-700 font-medium">Keranjang</a>
-            <a href="#" class="hover:text-pink-700 font-medium">Akun</a>
+            <a href="{{ url('/profil') }}" class="hover:text-pink-700 font-medium">Akun</a>
             <a href="#" class="text-red-500 hover:text-red-700 font-medium"><i class="fas fa-sign-out-alt"></i>
                 Logout</a>
         </nav>
@@ -75,18 +75,24 @@
                     <label class="block text-sm font-medium mb-1">Pilih Ukuran:</label>
                     <select id="ukuran" onchange="updateHarga()" class="w-full border rounded p-2 mb-4">
                         @foreach ($produk->variants as $variant)
-                            <option value="{{ $variant->harga }}" data-id="{{ $variant->id }}">
+                            <option value="{{ $variant->harga }}" data-id="{{ $variant->id }}"
+                                data-stok="{{ $variant->stok }}">
                                 {{ $variant->ukuran }}
                             </option>
                         @endforeach
                     </select>
-                    <p class="text-xl font-semibold text-pink-600 mb-4" id="harga">
+
+                    <p class="text-xl font-semibold text-pink-600 mb-2" id="harga">
                         Rp{{ number_format($produk->variants->first()->harga, 0, ',', '.') }}
                     </p>
+                    <p class="text-sm text-gray-600 mb-4" id="stok">
+                        Sisa stok: {{ $produk->variants->first()->stok }}
+                    </p>
                 @else
-                    <p class="text-xl font-semibold text-pink-600 mb-4" id="harga">
+                    <p class="text-xl font-semibold text-pink-600 mb-2" id="harga">
                         Rp{{ number_format($produk->harga, 0, ',', '.') }}
                     </p>
+                    <p class="text-sm text-gray-600 mb-4">Sisa stok: {{ $produk->stok }}</p>
                 @endif
 
                 <!-- Form Pesanan -->
@@ -121,20 +127,29 @@
         </div>
     </footer>
 
-    <!-- Script untuk update harga dan id varian -->
+    <!-- Script untuk update harga dan stok -->
     <script>
         function updateHarga() {
             const select = document.getElementById('ukuran');
             const harga = parseInt(select.value);
+            const selectedOption = select.options[select.selectedIndex];
+            const variantId = selectedOption.getAttribute('data-id');
+            const stok = selectedOption.getAttribute('data-stok');
+
+            // Update harga
             const hargaEl = document.getElementById('harga');
             hargaEl.textContent = 'Rp' + harga.toLocaleString('id-ID');
 
             // Update ID varian
-            const selectedOption = select.options[select.selectedIndex];
-            const variantId = selectedOption.getAttribute('data-id');
             const idVarianInput = document.getElementById('id_varian');
             if (idVarianInput) {
                 idVarianInput.value = variantId;
+            }
+
+            // Update stok
+            const stokEl = document.getElementById('stok');
+            if (stokEl) {
+                stokEl.textContent = 'Sisa stok: ' + stok;
             }
         }
     </script>
