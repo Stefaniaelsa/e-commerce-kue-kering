@@ -74,12 +74,24 @@ Route::middleware(['auth:web'])->group(function () {
 
 
     //
+    //Route::post('/order', [OrderController::class, 'store'])->name('order.store');
+    //Route::get('/order/success', function () {
+    //  return view('order_success');
+    //})->name('order.success');
+    //Route::get('/order', [OrderController::class, 'index'])->name('orders.index');
+
+
+   // Route::post('/order', [OrderController::class, 'store'])->name('order.store');
+
+    //Route::get('/order/details', [OrderController::class, 'orderDetail'])->name('order.detail');
+
+    //Route::get('/order/{id}', [OrderController::class, 'show'])->name('orders.show');
+
+
+    Route::middleware(['auth'])->group(function () {
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
-    Route::get('/rder/success', function () {
-        return view('order_success');
-    })->name('order.success');
-
-
+    Route::get('/order/{id}', [OrderController::class, 'show'])->name('order.show');
+});
 
 
     // Checkout

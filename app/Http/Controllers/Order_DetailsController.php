@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use App\Models\Order_Details;
+use App\Models\OrderDetail;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 
@@ -33,7 +33,7 @@ class Order_DetailsController extends Controller
         $subTotal = $harga * $validated['jumlah'];
 
         // Simpan detail pesanan
-        Order_Details::create([
+        OrderDetail::create([
             'order_id' => $orderId,
             'variant_id' => $variant->id,
             'jumlah' => $validated['jumlah'],
