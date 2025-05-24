@@ -13,6 +13,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\UserController as WebUserController;
 
 
 /*
@@ -60,8 +61,9 @@ Route::middleware(['auth:web'])->group(function () {
 
         return view('beranda', compact('produks', 'bestSellerProduk', 'favoritProduk'));
     })->name('beranda');
+    
+    Route::get('/profil', [WebUserController::class, 'profil'])->name('profil');
 
-    // Produk user
     Route::get('/produk', [ProductsController::class, 'index'])->name('produk.index');
     Route::get('/produk/{id}', [ProductsController::class, 'show'])->name('produk.detail');
 
@@ -127,5 +129,6 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::resource('users', UserController::class);
 
     Route::resource('admins', adminController::class);
+    Route::resource('orders', OrderController::class);
     // Route::resource('orders', OrderController::class);
 });
