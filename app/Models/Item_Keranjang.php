@@ -20,7 +20,7 @@ class Item_Keranjang extends Model
     public $timestamps = false;
     const CREATED_AT = 'dibuat_pada';
     const UPDATED_AT = 'diperbarui_pada';
-
+    
     public function keranjang()
     {
         return $this->belongsTo(Keranjang::class, 'id_keranjang');
@@ -31,9 +31,9 @@ class Item_Keranjang extends Model
         return $this->belongsTo(Product::class, 'id_produk');
     }
 
-    public function variant()
+    public function varian()
     {
         return $this->belongsTo(ProductVariant::class, 'id_varian');
     }
-    
+
 }

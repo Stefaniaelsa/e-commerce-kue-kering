@@ -86,6 +86,10 @@
                                             <p class="text-gray-600 text-sm mt-1">
                                                 {{ $item->produk->deskripsi ?? 'Kue lezat dengan cita rasa istimewa' }}
                                             </p>
+                                            <p class="text-sm text-gray-500 mt-1">
+                                                Ukuran: <span
+                                                    class="font-semibold">{{ $item->varian->ukuran ?? 'Tidak ada varian' }}</span>
+                                            </p>
                                         </div>
                                         <div class="text-right">
                                             <p class="text-lg font-bold text-primary">
@@ -152,15 +156,16 @@
                             class="bg-white border border-primary text-primary hover:bg-secondary py-3 px-6 rounded-full text-sm font-medium text-center transition">
                             <i class="fas fa-arrow-left mr-2"></i> Lanjut Belanja
                         </a>
-                        <form action="{{ route('checkout.proses') }}" method="POST">
+                        <form action="{{ route('order.store') }}" method="POST">
                             @csrf
                             @foreach ($cartItems as $item)
                                 <input type="hidden" name="items[]" value="{{ $item->id }}">
                             @endforeach
                             <button type="submit"
                                 class="bg-gradient-to-r from-primary to-pink-400 hover:from-accent hover:to-pink-500 text-white py-3 px-6 rounded-full text-sm font-medium text-center shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5">
-                                <i class="fas fa-credit-card mr-2"></i> Lanjut ke Pembayaran
+                                <i class="fas fa-paper-plane mr-2"></i> Pesan
                             </button>
+
                         </form>
 
                     </div>

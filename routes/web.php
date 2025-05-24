@@ -7,12 +7,13 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\adminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductsController;
-use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\OrderController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -72,17 +73,26 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
 
+    //
+    Route::post('/order', [OrderController::class, 'store'])->name('order.store');
+    Route::get('/rder/success', function () {
+        return view('order_success');
+    })->name('order.success');
+
+
+
+
     // Checkout
-    Route::post('/checkout', [CheckoutController::class, 'proses'])->name('checkout.index');
+    //Route::post('/checkout', [CheckoutController::class, 'proses'])->name('checkout.index');
 
     // Pesanan user
-    Route::get('/pesanan/{id}', [OrdersController::class, 'show'])->name('pesanan.show');
-    Route::post('/order/store', [OrdersController::class, 'store'])->name('order.store');
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout', [CheckoutController::class, 'proses'])->name('checkout.proses');
+    //Route::get('/pesanan/{id}', [OrdersController::class, 'show'])->name('pesanan.show');
+    //Route::post('/order/store', [OrdersController::class, 'store'])->name('order.store');
+    //Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    //Route::post('/checkout', [CheckoutController::class, 'proses'])->name('checkout.proses');
 
-    Route::post('/checkout/proses', [CheckoutController::class, 'showForm'])->name('checkout.proses');
-    Route::post('/checkout/simpan', [CheckoutController::class, 'simpan'])->name('checkout.simpan');
+    //Route::post('/checkout/proses', [CheckoutController::class, 'showForm'])->name('checkout.proses');
+    //Route::post('/checkout/simpan', [CheckoutController::class, 'simpan'])->name('checkout.simpan');
 
 
     //Route::post('/checkout/proses', [CheckoutController::class, 'proses'])->name('checkout.proses');
@@ -104,6 +114,6 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     // Manajemen user oleh admin
     Route::resource('users', UserController::class);
 
-    Route::resource('admins', AdminController::class);
-    Route::resource('orders', OrderController::class);
+    Route::resource('admins', adminController::class);
+    // Route::resource('orders', OrderController::class);
 });

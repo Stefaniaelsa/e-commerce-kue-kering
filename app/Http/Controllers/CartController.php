@@ -19,7 +19,8 @@ class CartController extends Controller
             ->first();
 
         // Ambil item keranjang jika ada, atau kosongkan koleksi
-        $cartItems = $keranjang ? $keranjang->Item_Keranjang()->with('produk')->get() : collect();
+        $cartItems = $keranjang ? $keranjang->Item_Keranjang()->with(['produk', 'varian'])->get() : collect();
+
 
         return view('keranjang', compact('cartItems'));
     }
