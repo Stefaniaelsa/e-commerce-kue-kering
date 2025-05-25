@@ -72,7 +72,7 @@
 
             <input type="hidden" name="total_harga" value="{{ $totalHarga }}">
 
-            @foreach ($cartItems as $item)
+            @foreach ($cartItems as $sitem)
                 <input type="hidden" name="items[]" value="{{ $item->id }}">
             @endforeach
 

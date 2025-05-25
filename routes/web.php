@@ -8,10 +8,11 @@ use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\adminController;
-use App\Http\Controllers\admin\OrderController;
+use App\Http\Controllers\admin\OrdersController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\UserController as WebUserController;
 
@@ -61,7 +62,7 @@ Route::middleware(['auth:web'])->group(function () {
 
         return view('beranda', compact('produks', 'bestSellerProduk', 'favoritProduk'));
     })->name('beranda');
-    
+
     Route::get('/profil', [WebUserController::class, 'profil'])->name('profil');
 
     Route::get('/produk', [ProductsController::class, 'index'])->name('produk.index');
@@ -75,43 +76,20 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
 
-    //
-    //Route::post('/order', [OrderController::class, 'store'])->name('order.store');
-    //Route::get('/order/success', function () {
-    //  return view('order_success');
-    //})->name('order.success');
-    //Route::get('/order', [OrderController::class, 'index'])->name('orders.index');
-
-
-   // Route::post('/order', [OrderController::class, 'store'])->name('order.store');
-
-    //Route::get('/order/details', [OrderController::class, 'orderDetail'])->name('order.detail');
-
-    //Route::get('/order/{id}', [OrderController::class, 'show'])->name('orders.show');
-
 
     Route::middleware(['auth'])->group(function () {
-    Route::post('/order', [OrderController::class, 'store'])->name('order.store');
-    Route::get('/order/{id}', [OrderController::class, 'show'])->name('order.show');
+        Route::post('/order', [OrderController::class, 'store'])->name('order.store');
+        Route::get('/order/{id}', [OrderController::class, 'show'])->name('order.show');
+    });
 });
 
+Route::post('/order', [OrderController::class, 'store'])->name('order');
 
-    // Checkout
-    //Route::post('/checkout', [CheckoutController::class, 'proses'])->name('checkout.index');
+// Menampilkan halaman pembayaran
+Route::post('/pembayaran', [PaymentController::class, 'show'])->name('payment.show');
 
-    // Pesanan user
-    //Route::get('/pesanan/{id}', [OrdersController::class, 'show'])->name('pesanan.show');
-    //Route::post('/order/store', [OrdersController::class, 'store'])->name('order.store');
-    //Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    //Route::post('/checkout', [CheckoutController::class, 'proses'])->name('checkout.proses');
-
-    //Route::post('/checkout/proses', [CheckoutController::class, 'showForm'])->name('checkout.proses');
-    //Route::post('/checkout/simpan', [CheckoutController::class, 'simpan'])->name('checkout.simpan');
-
-
-    //Route::post('/checkout/proses', [CheckoutController::class, 'proses'])->name('checkout.proses');
-    //Route::post('/checkout/bayar', [CheckoutController::class, 'bayar'])->name('checkout.bayar');
-});
+// Proses order di halaman pembayaran
+Route::post('/order/process', [OrderController::class, 'process'])->name('order.process');
 
 
 /*
@@ -129,6 +107,5 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::resource('users', UserController::class);
 
     Route::resource('admins', adminController::class);
-    Route::resource('orders', OrderController::class);
-    // Route::resource('orders', OrderController::class);
+    Route::resource('orders', OrdersController::class);
 });
