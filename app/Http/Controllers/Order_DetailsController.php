@@ -2,53 +2,59 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
-use App\Models\OrderDetail;
-use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+use App\Models\OrderDetail;
+use App\Models\Order;
+use App\Models\ProductVariant;
 
 class Order_DetailsController extends Controller
 {
-    /**
-     * Menampilkan semua detail pesanan berdasarkan ID order.
-     */
-    public function show($orderId)
+    // Tampilkan detail dari sebuah order
+    public function index($order_id)
     {
-        $order = Order::with('details.variant')->findOrFail($orderId);
-        return view('orders.details', compact('order'));
+        $orderDetails = OrderDetail::where('order_id', $order_id)->with('variant', 'order')->get();
+
+        return view('order_details.index', compact('orderDetails'));
     }
 
-    /**
-     * Menambahkan detail pesanan ke order yang sudah ada (opsional).
-     */
-    public function store(Request $request, $orderId)
+    // Tampilkan form tambah detail (opsional)
+    public function create()
     {
-        $validated = $request->validate([
+        $orders = Order::all();
+        $variants = ProductVariant::all();
+        return view('order_details.create', compact('orders', 'variants'));
+    }
+
+    // Simpan detail baru (opsional)
+    public function store(Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required|exists:orders,id',
             'variant_id' => 'required|exists:product_variants,id',
             'jumlah' => 'required|integer|min:1',
+            'harga' => 'required|numeric|min:0',
         ]);
 
-        $variant = ProductVariant::findOrFail($validated['variant_id']);
-        $harga = $variant->product->harga + $variant->harga_tambahan;
-        $subTotal = $harga * $validated['jumlah'];
-
-        // Simpan detail pesanan
         OrderDetail::create([
-            'order_id' => $orderId,
-            'variant_id' => $variant->id,
-            'jumlah' => $validated['jumlah'],
-            'harga' => $harga,
-            'sub_total' => $subTotal,
+            'order_id' => $request->order_id,
+            'variant_id' => $request->variant_id,
+            'jumlah' => $request->jumlah,
+            'harga' => $request->harga,
+            'sub_total' => $request->jumlah * $request->harga,
         ]);
 
-        // Update total harga di tabel order
-        $order = Order::findOrFail($orderId);
-        $order->total_harga += $subTotal;
-        $order->save();
-
-        return redirect()->route('order.details', ['orderId' => $orderId])
-                         ->with('success', 'Detail pesanan berhasil ditambahkan.');
+        return redirect()->route('order_details.index', $request->order_id)
+            ->with('success', 'Detail pesanan berhasil ditambahkan.');
     }
 
+    // Hapus detail
+    public function destroy($id)
+    {
+        $orderDetail = OrderDetail::findOrFail($id);
+        $order_id = $orderDetail->order_id;
+        $orderDetail->delete();
 
+        return redirect()->route('order_details.index', $order_id)
+            ->with('success', 'Detail pesanan berhasil dihapus.');
+    }
 }
