@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\Product;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -36,8 +37,9 @@ class ProductVariant extends Model
     /**
      * Relasi ke produk
      */
-    public function product()
-    {
-        return $this->belongsTo(Product::class, 'product_id');
-    }
+   public function produk()
+{
+    return $this->belongsTo(Product::class, 'product_id');
+}
+
 }
