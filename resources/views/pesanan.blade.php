@@ -87,7 +87,7 @@
                             <div
                                 class="flex justify-between items-center text-gray-800 text-base sm:text-lg border-b border-gray-200 pb-2">
                                 <div>
-                                    {{ $item->produk->nama }}
+                                    {{ $item->varian->produk->nama }}
                                     @if ($item->varian)
                                         <span class="text-sm text-gray-500">({{ $item->varian->ukuran }})</span>
                                     @endif

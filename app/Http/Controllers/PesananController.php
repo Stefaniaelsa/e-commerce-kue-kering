@@ -12,9 +12,9 @@ class PesananController extends Controller
     public function show(Request $request)
     {
         $itemIds = $request->input('items', []);
-        $cartItems = Item_Keranjang::with(['produk', 'varian'])
+        $cartItems = Item_Keranjang::with(['varian.produk'])
             ->whereIn('id', $itemIds)
-            ->get();
+            ->get();;
 
         return view('pesanan', compact('cartItems'));
     }
