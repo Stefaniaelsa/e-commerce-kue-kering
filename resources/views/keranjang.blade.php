@@ -76,15 +76,15 @@
                             class="bg-white rounded-xl shadow-sm overflow-hidden border border-pink-100 hover:shadow-md transition">
                             <div class="flex flex-col sm:flex-row">
                                 <div class="sm:w-1/4 bg-secondary flex items-center justify-center p-4">
-                                    <img src="{{ asset('images/' . $item->produk->gambar) }}"
-                                        alt="{{ $item->produk->nama }}" class="w-full h-auto object-cover rounded-lg">
+                                    <img src="{{ asset('images/' . $item->varian->produk->gambar) }}"
+                                        alt="{{ $item->varian->produk->nama }}" class="w-full h-auto object-cover rounded-lg">
                                 </div>
                                 <div class="sm:w-3/4 p-6">
                                     <div class="flex flex-col sm:flex-row sm:items-center justify-between">
                                         <div class="mb-4 sm:mb-0">
-                                            <h3 class="text-xl font-bold text-primary">{{ $item->produk->nama }}</h3>
+                                            <h3 class="text-xl font-bold text-primary">{{ $item->varian->produk->nama }}</h3>
                                             <p class="text-gray-600 text-sm mt-1">
-                                                {{ $item->produk->deskripsi ?? 'Kue lezat dengan cita rasa istimewa' }}
+                                                {{ $item->varian->produk->deskripsi ?? 'Kue lezat dengan cita rasa istimewa' }}
                                             </p>
                                             <p class="text-sm text-gray-500 mt-1">
                                                 Ukuran: <span

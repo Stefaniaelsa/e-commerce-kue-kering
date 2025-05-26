@@ -11,7 +11,6 @@ class Item_Keranjang extends Model
 
     protected $fillable = [
         'id_keranjang',
-        'id_produk',
         'id_varian',
         'jumlah',
         'harga',
@@ -20,20 +19,16 @@ class Item_Keranjang extends Model
     public $timestamps = false;
     const CREATED_AT = 'dibuat_pada';
     const UPDATED_AT = 'diperbarui_pada';
-    
+
     public function keranjang()
     {
         return $this->belongsTo(Keranjang::class, 'id_keranjang');
     }
 
-    public function produk()
-    {
-        return $this->belongsTo(Product::class, 'id_produk');
-    }
+    // Hapus relasi produk() karena sudah gak ada id_produk
 
     public function varian()
     {
         return $this->belongsTo(ProductVariant::class, 'id_varian');
     }
-
 }

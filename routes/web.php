@@ -93,6 +93,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::middleware(['auth'])->group(function () {
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
     Route::get('/order/{id}', [OrderController::class, 'show'])->name('order.show');
+    
 });
 
 
