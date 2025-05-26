@@ -35,7 +35,7 @@
             <a href="{{ url('/beranda') }}" class="hover:text-pink-700 font-medium">Beranda</a>
             <a href="{{ url('/produk') }}" class="hover:text-pink-700 font-medium">Produk</a>
             <a href="{{ url('/keranjang') }}" class="hover:text-pink-700 font-medium">Keranjang</a>
-            <a href="#" class="hover:text-pink-700 font-medium">Akun</a>
+            <a href="{{ url('/profil') }}" class="hover:text-pink-700 font-medium">Akun</a>
             <form method="POST" action="{{ route('logout') }}" class="inline">
                 @csrf
                 <button type="submit" class="text-red-500 hover:text-red-700 font-medium">
@@ -156,7 +156,7 @@
                             class="bg-white border border-primary text-primary hover:bg-secondary py-3 px-6 rounded-full text-sm font-medium text-center transition">
                             <i class="fas fa-arrow-left mr-2"></i> Lanjut Belanja
                         </a>
-                        <form action="{{ route('payment.show') }}" method="POST">
+                        <form action="{{ route('pesanan.show') }}" method="POST">
                             @csrf
                             @foreach ($cartItems as $item)
                                 <input type="hidden" name="items[]" value="{{ $item->id }}">

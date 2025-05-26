@@ -12,7 +12,8 @@ use App\Http\Controllers\admin\OrdersController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PesananController;
+use App\Http\Controllers\KonfirmasiPembayaranController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\UserController as WebUserController;
 
@@ -86,11 +87,21 @@ Route::middleware(['auth:web'])->group(function () {
 Route::post('/order', [OrderController::class, 'store'])->name('order');
 
 // Menampilkan halaman pembayaran
-Route::post('/pembayaran', [PaymentController::class, 'show'])->name('payment.show');
+Route::post('/pesanan', [PesananController::class, 'show'])->name('pesanan.show');
 
 // Proses order di halaman pembayaran
 Route::post('/order/process', [OrderController::class, 'process'])->name('order.process');
 
+Route::get('/konfirmasi', [KonfirmasiPembayaranController::class, 'index'])->name('konfirmasi.index');
+Route::get('/konfirmasi/{id}', [KonfirmasiPembayaranController::class, 'show'])->name('konfirmasi.show');
+Route::post('/konfirmasi/{id}/update', [KonfirmasiPembayaranController::class, 'updateStatus'])->name('konfirmasi.update');
+
+Route::post('/order/process', [OrderController::class, 'store'])->name('order.process');
+
+Route::get('/konfirmasi-pembayaran', function () {
+    // return view konfirmasi pembayaran
+    return view('konfirmasi-pembayaran');
+})->name('konfirmasi.pembayaran');
 
 /*
 |--------------------------------------------------------------------------
