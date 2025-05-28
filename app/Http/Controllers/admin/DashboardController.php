@@ -11,16 +11,18 @@ use Illuminate\Http\Request;
 class DashboardController extends Controller
 {
     public function index()
-    {
-        // Mengambil data yang diperlukan
-        $totalProduk = Product::count();
-        $totalPesanan = Order::count();
-        $totalPelanggan = User::count();
+{
+    $totalProduk = Product::count();
+    $totalPesanan = Order::count();
+    $totalPelanggan = User::count();
 
-        // Mengambil pesanan terbaru
-        $pesananTerbaru = Order::orderBy('tanggal_pesanan', 'desc')->take(5)->get();
+    // Eager load orderItems dan variant
+    $pesananTerbaru = Order::with('orderItems')
+        ->orderBy('tanggal_pesanan', 'desc')
+        ->take(5)
+        ->get();
 
-        return view('admin.dashboard_admin', compact('totalProduk', 'totalPesanan', 'totalPelanggan', 'pesananTerbaru'));
-
-    }
+    return view('admin.dashboard_admin', compact('totalProduk', 'totalPesanan', 'totalPelanggan', 'pesananTerbaru'));
+}
+   
 }

@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
-use App\Models\OrderDetail;
+use App\Models\OrderItem;
 use App\Models\Keranjang;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -18,13 +19,11 @@ class OrderController extends Controller
         $request->validate([
             'alamat'             => 'required|string|max:255',
             'metode_pembayaran'  => 'required|in:transfer,cod',
-            'bank_tujuan'        => 'required_if:metode_pembayaran,transfer',
-        ], [
-            'bank_tujuan.required_if' => 'Silakan pilih bank tujuan jika metode pembayaran adalah transfer.'
+            'metode_pengiriman'  => 'required|in:gojek,ambil',
         ]);
 
-        // Ganti user_id menjadi id_pengguna sesuai kolom di tabel keranjang
-        $cartItems = Keranjang::where('id_pengguna', $user->id)->get();
+        // Ambil data keranjang milik user
+        $cartItems = Keranjang::where('user_id', $user->id)->get();
 
         if ($cartItems->isEmpty()) {
             return redirect()->back()->with('error', 'Keranjang kamu kosong.');
@@ -34,40 +33,42 @@ class OrderController extends Controller
 
         try {
             $subtotal = $cartItems->sum('harga');
-            $ongkir = 10000;
+            // Ongkir hanya berlaku jika pengiriman gojek
+            $ongkir = ($request->input('metode_pengiriman') === 'gojek') ? 10000 : 0;
             $total = $subtotal + $ongkir;
 
+            // Simpan data order baru
             $order = Order::create([
                 'user_id'           => $user->id,
                 'total_harga'       => $total,
                 'status'            => 'Menunggu Pembayaran',
-                'metode_pembayaran' => $request->input('metode_pembayaran'),
                 'alamat_pengiriman' => $request->input('alamat'),
                 'tanggal_pesanan'   => now(),
-                'bank_tujuan'       => $request->input('bank_tujuan') ?? null,
-                'no_rekening'       => '123456', // Atau ambil dari pengaturan toko
-                'pengiriman'        => 'Reguler',
+                'pengiriman'        => $request->input('metode_pengiriman'), // simpan metode pengiriman
                 'catatan'           => $request->input('catatan') ?? null,
             ]);
 
+            // Simpan detail order per item di keranjang
             foreach ($cartItems as $item) {
-                OrderDetail::create([
+                OrderItem::create([
                     'order_id'   => $order->id,
-                    'variant_id' => $item->variant_id,
+                    'variant_id' => $item->variant_id, // Sesuaikan nama kolom jika berbeda
                     'jumlah'     => $item->jumlah,
-                    'harga'      => $item->harga / max(1, $item->jumlah), // Hindari pembagian nol
+                    'harga'      => $item->harga / max(1, $item->jumlah), // Harga per item
                     'sub_total'  => $item->harga,
                 ]);
             }
 
-            Keranjang::where('id_pengguna', $user->id)->delete();
+            // Hapus data keranjang user setelah order sukses
+            Keranjang::where('user_id', $user->id)->delete();
 
             DB::commit();
 
             return redirect()->route('checkout')->with('success', 'Pesanan berhasil dibuat. Silakan lanjut ke pembayaran.');
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat memproses pesanan: ' . $e->getMessage());
+            Log::error('Gagal membuat pesanan: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memproses pesanan.');
         }
     }
 }

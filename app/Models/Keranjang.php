@@ -9,7 +9,7 @@ class Keranjang extends Model
     protected $table = 'keranjang';
 
     protected $fillable = [
-        'id_pengguna',
+        'user_id ',
         'status',
         'total_harga',
     ];
@@ -25,6 +25,6 @@ class Keranjang extends Model
 
     public function pengguna()
     {
-        return $this->belongsTo(User::class, 'id_pengguna');
+        return $this->belongsTo(User::class, 'user_id ');
     }
 }

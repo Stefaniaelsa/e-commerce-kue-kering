@@ -11,15 +11,29 @@ class Order extends Model
 
     protected $table = 'orders';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'user_id',
         'total_harga',
         'status',
-        'metode_pembayaran',
         'alamat_pengiriman',
         'tanggal_pesanan',
-        'bank_tujuan',
-        'no_rekening',
-        'pengiriman'
+        'pengiriman',
+        'catatan',
     ];
+
+    protected $dates = ['tanggal_pesanan'];
+
+    // Relasi ke user (pelanggan)
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // Relasi ke order details
+      public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id');
+    }
 }

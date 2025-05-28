@@ -8,13 +8,15 @@ use App\Models\Keranjang;
 use App\Models\Item_Keranjang;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\Order;
+use App\Models\OrderDetail;
 
 class CartController extends Controller
 {
     // Menampilkan isi keranjang pengguna yang sedang login
  public function index()
 {
-    $keranjang = Keranjang::where('id_pengguna', Auth::id())
+    $keranjang = Keranjang::where('user_id', Auth::id())
         ->where('status', 'keranjang')
         ->first();
 
@@ -37,7 +39,7 @@ class CartController extends Controller
     $subTotal = $harga * $request->jumlah;
 
     $keranjang = Keranjang::firstOrCreate(
-        ['id_pengguna' => Auth::id(), 'status' => 'keranjang'],
+        ['user_id' => Auth::id(), 'status' => 'keranjang'],
         ['total_harga' => 0]
     );
 
@@ -121,5 +123,62 @@ class CartController extends Controller
 
     return back()->with('success', 'Keranjang diperbarui dan stok disesuaikan');
 }
+
+public function checkout(Request $request)
+{
+    $user = Auth::user();
+
+    // Validasi input checkout
+    $request->validate([
+        'alamat' => 'required|string',
+        'pengiriman' => 'required|in:gojek,ambil ditempat',
+        'catatan' => 'nullable|string',
+    ]);
+
+    $keranjang = Keranjang::where('user_id', $user->id)
+        ->where('status', 'keranjang')
+        ->with('Item_Keranjang') // pastikan relasi ini ada di model
+        ->first();
+
+    if (!$keranjang || $keranjang->Item_Keranjang->isEmpty()) {
+        return back()->with('error', 'Keranjang kosong.');
+    }
+
+    DB::beginTransaction();
+
+    try {
+        // Buat pesanan baru
+        $order = Order::create([
+            'user_id' => $user->id,
+            'total_harga' => $keranjang->total_harga,
+            'status' => 'menunggu',
+            'alamat_pengiriman' => $request->alamat,
+            'pengiriman' => $request->pengiriman,
+            'catatan' => $request->catatan,
+        ]);
+
+        // Pindahkan semua item ke order_items
+        foreach ($keranjang->Item_Keranjang as $item) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'varian_id' => $item->id_varian,
+                'jumlah' => $item->jumlah,
+                'harga' => $item->harga,
+            ]);
+        }
+
+        // Tandai keranjang sudah selesai
+        $keranjang->update(['status' => 'selesai']);
+
+        DB::commit();
+
+        return redirect()->route('orders.show', $order->id)
+            ->with('success', 'Pesanan berhasil dibuat.');
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return back()->with('error', 'Gagal membuat pesanan: ' . $e->getMessage());
+    }
+}
+
 
 }

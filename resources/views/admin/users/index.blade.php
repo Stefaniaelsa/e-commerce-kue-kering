@@ -23,7 +23,6 @@
                     <th class="py-3 px-4 border-b text-left">Nama</th>
                     <th class="py-3 px-4 border-b text-left">Email</th>
                     <th class="py-3 px-4 border-b text-left">Nomor Telepon</th>
-                    <th class="py-3 px-4 border-b text-left">Role</th>
                     <th class="py-3 px-4 border-b text-left">Aksi</th>
                 </tr>
             </thead>
@@ -34,7 +33,6 @@
                         <td class="py-2 px-4 border-b">{{ $user->nama }}</td>
                         <td class="py-2 px-4 border-b">{{ $user->email }}</td>
                         <td class="py-2 px-4 border-b">{{ $user->nomor_telepon ?? '-' }}</td>
-                        <td class="py-2 px-4 border-b capitalize">{{ $user->role }}</td>
                         <td class="py-2 px-4 border-b">
                             <div class="flex space-x-2">
                                 <a href="{{ route('admin.users.show', $user->id) }}" 

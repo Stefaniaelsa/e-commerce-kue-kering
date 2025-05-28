@@ -87,8 +87,8 @@
                     @foreach ($pesananTerbaru as $pesanan)
                     <tr>
                       <td class="py-2 border-b">{{ $loop->iteration }}</td>
-                      <td class="py-2 border-b">{{ $pesanan->user->nama }}</td>
-                      <td class="py-2 border-b">{{ $pesanan->orderDetails->pluck('product.name')->join(', ') }}</td>
+                      <td class="py-2 border-b">{{ $pesanan->user?->nama ?? 'User tidak ditemukan' }}</td>
+                      <td class="py-2 border-b">{{ $pesanan->orderItems->pluck('product.name')->join(', ') }}</td>
                       <td class="py-2 border-b">Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}</td>
                       <td class="py-2 border-b text-{{ $pesanan->status == 'delivered' ? 'green' : ($pesanan->status == 'paid' ? 'yellow' : 'red') }}-600">
                         {{ ucfirst($pesanan->status) }}
