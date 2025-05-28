@@ -13,11 +13,15 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('nama', 100); // Nama produk
-            $table->text('deskripsi')->nullable(); // Deskripsi produk
-            $table->decimal('harga', 10, 2); // Harga produk
-            $table->integer('stok'); // Stok produk
-            $table->string('gambar')->nullable(); // Gambar produk
+            $table->string('nama', 100);
+            $table->boolean('is_best_seller')->default(false);
+            $table->boolean('is_favorit')->default(false);
+            $table->text('deskripsi')->nullable();
+            $table->string('gambar')->nullable();
+            $table->unsignedBigInteger('id_admin')->nullable();
+            $table->timestamps();
+
+            $table->foreign('id_admin')->references('id')->on('admins')->onDelete('set null');
         });
     }
 
