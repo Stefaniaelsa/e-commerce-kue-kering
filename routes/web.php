@@ -76,7 +76,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post('/pesanan', [PesananController::class, 'store'])->name('pesanan.store');
 
     // Proses Pembayaran / Order
-    Route::post('/order/process', [OrderController::class, 'process'])->name('order.process');
+    Route::post('/order/process', [OrderController::class, 'store'])->name('order.process');
 
     // Konfirmasi Pembayaran
     Route::get('/konfirmasi', [KonfirmasiPembayaranController::class, 'index'])->name('konfirmasi.index');

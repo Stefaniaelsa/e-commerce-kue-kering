@@ -23,7 +23,10 @@ class OrderController extends Controller
         ]);
 
         // Ambil data keranjang milik user
-        $cartItems = Keranjang::where('user_id', $user->id)->get();
+        $cartItems = Keranjang::with('item_keranjang')
+            ->where('user_id', $user->id)
+            ->get();
+        // die($cartItems);
 
         if ($cartItems->isEmpty()) {
             return redirect()->back()->with('error', 'Keranjang kamu kosong.');
@@ -41,7 +44,7 @@ class OrderController extends Controller
             $order = Order::create([
                 'user_id'           => $user->id,
                 'total_harga'       => $total,
-                'status'            => 'Menunggu Pembayaran',
+                'status'            => 'menunggu',
                 'alamat_pengiriman' => $request->input('alamat'),
                 'tanggal_pesanan'   => now(),
                 'pengiriman'        => $request->input('metode_pengiriman'), // simpan metode pengiriman
@@ -49,14 +52,16 @@ class OrderController extends Controller
             ]);
 
             // Simpan detail order per item di keranjang
-            foreach ($cartItems as $item) {
-                OrderItem::create([
-                    'order_id'   => $order->id,
-                    'variant_id' => $item->variant_id, // Sesuaikan nama kolom jika berbeda
-                    'jumlah'     => $item->jumlah,
-                    'harga'      => $item->harga / max(1, $item->jumlah), // Harga per item
-                    'sub_total'  => $item->harga,
-                ]);
+            foreach ($cartItems as $cart) {
+                foreach ($cart->item_keranjang as $item) {
+                    OrderItem::create([
+                        'order_id'   => $order->id,
+                        'varian_id' => $item->varian_id,
+                        'jumlah'     => $item->jumlah,
+                        'harga'      => $item->harga / max(1, $item->jumlah), // Harga per item
+                        'sub_total'  => $item->harga,
+                    ]);
+                }
             }
 
             // Hapus data keranjang user setelah order sukses

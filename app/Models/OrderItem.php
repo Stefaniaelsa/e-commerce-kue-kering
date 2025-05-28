@@ -10,10 +10,10 @@ class OrderItem extends Model
 
     protected $fillable = [
         'order_id',
-        'variant_id',
+        'varian_id',
         'jumlah',
         'harga',
-        'sub_total',
+        // 'sub_total',
     ];
 
     public function order()

@@ -3,13 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Item_Keranjang;
+use App\Models\User;
 
 class Keranjang extends Model
 {
     protected $table = 'keranjang';
 
     protected $fillable = [
-        'user_id ',
+        'user_id',
         'status',
         'total_harga',
     ];
@@ -25,6 +27,6 @@ class Keranjang extends Model
 
     public function pengguna()
     {
-        return $this->belongsTo(User::class, 'user_id ');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

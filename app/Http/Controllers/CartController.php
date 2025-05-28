@@ -37,10 +37,9 @@ class CartController extends Controller
     $harga = $varian->harga;
 
     $subTotal = $harga * $request->jumlah;
-
+    $userId = Auth::id();
     $keranjang = Keranjang::firstOrCreate(
-        ['user_id' => Auth::id(), 'status' => 'keranjang'],
-        ['total_harga' => 0]
+        ['user_id' => $userId, 'status' => 'keranjang', 'total_harga' => 0]
     );
 
     // Cari item di keranjang berdasar varian
