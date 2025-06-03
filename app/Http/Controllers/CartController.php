@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Keranjang;
 use App\Models\Item_Keranjang;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Order;
-use App\Models\OrderDetail;
+use App\Models\OrderItem;
 
 class CartController extends Controller
 {

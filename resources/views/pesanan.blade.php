@@ -136,7 +136,7 @@
                         class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
                         <option value="" disabled {{ old('metode_pengiriman') ? '' : 'selected' }}>Pilih metode pengiriman</option>
                         <option value="gojek" {{ old('metode_pengiriman') == 'gojek' ? 'selected' : '' }}>Gojek</option>
-                        <option value="ambil" {{ old('metode_pengiriman') == 'ambil' ? 'selected' : '' }}>Ambil di Tempat</option>
+                        <option value="ambil ditempat" {{ old('metode_pengiriman') == 'ambil ditempat' ? 'selected' : '' }}>Ambil di Tempat</option>
                     </select>
 
                     <!-- Ongkos Kirim dengan class untuk JS -->

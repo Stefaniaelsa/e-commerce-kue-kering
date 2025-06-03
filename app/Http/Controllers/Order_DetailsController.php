@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\OrderDetail;
+use App\Models\OrderItem;
 use App\Models\Order;
 use App\Models\ProductVariant;
 
@@ -12,7 +12,7 @@ class Order_DetailsController extends Controller
     // Tampilkan detail dari sebuah order
     public function index($order_id)
     {
-        $orderDetails = OrderDetail::where('order_id', $order_id)->with('variant', 'order')->get();
+        $orderDetails = OrderItem::where('order_id', $order_id)->with('variant', 'order')->get();
 
         return view('order_details.index', compact('orderDetails'));
     }
@@ -35,7 +35,7 @@ class Order_DetailsController extends Controller
             'harga' => 'required|numeric|min:0',
         ]);
 
-        OrderDetail::create([
+        OrderItem::create([
             'order_id' => $request->order_id,
             'variant_id' => $request->variant_id,
             'jumlah' => $request->jumlah,
@@ -50,7 +50,7 @@ class Order_DetailsController extends Controller
     // Hapus detail
     public function destroy($id)
     {
-        $orderDetail = OrderDetail::findOrFail($id);
+        $orderDetail = OrderItem::findOrFail($id);
         $order_id = $orderDetail->order_id;
         $orderDetail->delete();
 

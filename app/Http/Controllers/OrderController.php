@@ -19,7 +19,7 @@ class OrderController extends Controller
         $request->validate([
             'alamat'             => 'required|string|max:255',
             'metode_pembayaran'  => 'required|in:transfer,cod',
-            'metode_pengiriman'  => 'required|in:gojek,ambil',
+            'metode_pengiriman'  => 'required|in:gojek,ambil ditempat',
         ]);
 
         // Ambil data keranjang milik user
@@ -35,7 +35,13 @@ class OrderController extends Controller
         DB::beginTransaction();
 
         try {
-            $subtotal = $cartItems->sum('harga');
+            $subtotal = 0;
+            foreach ($cartItems as $cart) {
+                foreach ($cart->item_keranjang as $item) {
+                    $subtotal += $item->harga;
+                }
+            }
+
             // Ongkir hanya berlaku jika pengiriman gojek
             $ongkir = ($request->input('metode_pengiriman') === 'gojek') ? 10000 : 0;
             $total = $subtotal + $ongkir;
