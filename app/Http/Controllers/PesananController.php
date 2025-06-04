@@ -90,7 +90,6 @@ public function prosesPesanan(Request $request)
         'tanggal_pesanan' => now(),
     ]);
 
-    // Simpan detail item pesanan (opsional: gunakan tabel order_details jika ada)
     foreach ($cart->item_Keranjang as $item) {
         $order->order_details()->create([
             'produk_id' => $item->varian->produk->id,

@@ -20,6 +20,7 @@ class Order extends Model
         'alamat_pengiriman',
         'tanggal_pesanan',
         'pengiriman',
+        'metode_pembayaran',
         'catatan',
     ];
 

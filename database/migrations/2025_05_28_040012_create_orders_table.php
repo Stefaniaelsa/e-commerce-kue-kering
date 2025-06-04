@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('alamat_pengiriman')->nullable();
             $table->timestamp('tanggal_pesanan')->useCurrent();
             $table->enum('pengiriman', ['gojek', 'ambil ditempat']);
+            $table->string('metode_pembayaran');
             $table->text('catatan')->nullable();
             $table->timestamps();
 
