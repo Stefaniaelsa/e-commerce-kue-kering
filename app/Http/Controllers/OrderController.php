@@ -19,7 +19,7 @@ class OrderController extends Controller
         $request->validate([
             'alamat'             => 'required|string|max:255',
             'metode_pembayaran'  => 'required|in:transfer,cod',
-            'metode_pengiriman'  => 'required|in:gojek,ambil',
+            'metode_pengiriman'  => 'required|in:gojek,ambil ditempat',
         ]);
 
         // Ambil data keranjang milik user
