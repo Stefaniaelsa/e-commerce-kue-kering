@@ -50,17 +50,17 @@
             @foreach($sizes as $index => $size)
                 <div class="mb-4 border p-4 rounded-md bg-gray-50">
                     <label class="flex items-center space-x-2 mb-2">
-                        <input type="checkbox" name="variants[{{ $index }}][enabled]" value="1" class="variant-toggle" data-index="{{ $index }}">
+                        <input type="checkbox" name="variants[{{ $index }}][enabled]" value="1" class="variant-toggle" data-index="{{ $index }}" {{ old("variants.$index.enabled") ? 'checked' : '' }}>
                         <span class="font-medium text-lg">Ukuran {{ ucfirst($size) }}</span>
                     </label>
                     <input type="hidden" name="variants[{{ $index }}][ukuran]" value="{{ $size }}">
 
                     <div class="variant-inputs" id="variant-inputs-{{ $index }}" style="display: none;">
                         <label class="block text-sm font-medium mb-1">Harga Ukuran {{ ucfirst($size) }}</label>
-                        <input type="number" name="variants[{{ $index }}][harga]" class="w-full border-gray-300 p-2 rounded-md mb-2" placeholder="Harga">
+                        <input type="number" name="variants[{{ $index }}][harga]" value="{{ old("variants.$index.harga") }}" class="w-full border-gray-300 p-2 rounded-md mb-2" placeholder="Harga">
 
                         <label class="block text-sm font-medium mb-1">Stok Ukuran {{ ucfirst($size) }}</label>
-                        <input type="number" name="variants[{{ $index }}][stok]" class="w-full border-gray-300 p-2 rounded-md" placeholder="Stok">
+                        <input type="number" name="variants[{{ $index }}][stok]" value="{{ old("variants.$index.stok") }}" class="w-full border-gray-300 p-2 rounded-md" placeholder="Stok">
                     </div>
                 </div>
             @endforeach
@@ -70,12 +70,12 @@
         <div id="no_variant_fields">
             <div class="mb-4">
                 <label for="harga" class="block text-lg font-medium mb-2">Harga</label>
-                <input type="number" id="harga" name="harga" class="w-full border-gray-300 p-2 rounded-md">
+                <input type="number" id="harga" name="harga" value="{{ old('harga')}}" class="w-full border-gray-300 p-2 rounded-md">
             </div>
 
             <div class="mb-4">
                 <label for="stok" class="block text-lg font-medium mb-2">Stok</label>
-                <input type="number" id="stok" name="stok" class="w-full border-gray-300 p-2 rounded-md">
+                <input type="number" id="stok" name="stok" value="{{ old('stok')}}"  class="w-full border-gray-300 p-2 rounded-md">
             </div>
         </div>
 

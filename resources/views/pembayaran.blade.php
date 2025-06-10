@@ -48,7 +48,7 @@
     </header>
 
 
-    @if (session('success'))
+    {{-- @if (session('success'))
         <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4" x-data="{ show: true }"
             x-show="show" x-init="setTimeout(() => { show = false;
                 window.location.href = '{{ route('produk.index') }}'; }, 3000)">
@@ -67,7 +67,7 @@
                 </button>
             </div>
         </div>
-    @endif
+    @endif --}}
 
     <!-- Konten Upload Bukti Pembayaran -->
     <main class="flex-grow max-w-4xl mx-auto py-10 px-4 sm:px-6 w-full">
