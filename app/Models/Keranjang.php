@@ -14,11 +14,16 @@ class Keranjang extends Model
         'user_id',
         'status',
         'total_harga',
+        'total_produk',
     ];
 
     public $timestamps = false;
     const CREATED_AT = 'dibuat_pada';
     const UPDATED_AT = 'diperbarui_pada';
+    protected $casts = [
+        'tanggal_pesanan' => 'datetime',
+    ];
+
 
     public function item_keranjang()
     {

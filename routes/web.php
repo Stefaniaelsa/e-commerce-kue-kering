@@ -50,8 +50,8 @@ Route::middleware(['auth:web'])->group(function () {
         $bestSellerProduk = \App\Models\Product::where('is_best_seller', true)->get();
         $favoritProduk = \App\Models\Product::where('is_favorit', true)->get();
         $keranjang = \App\Models\Keranjang::where('user_id', auth()->id())->first();
-        // die($keranjang);
-        session(['total-produk' => $keranjang->total_produk]);
+    session(['total_produk' => $keranjang ? $keranjang->total_produk : 0]);
+
         return view('beranda', compact('produks', 'bestSellerProduk', 'favoritProduk'));
     })->name('beranda');
 
@@ -84,7 +84,7 @@ Route::middleware(['auth:web'])->group(function () {
     // Konfirmasi Pembayaran
     Route::get('/pembayaran', [PembayaranController::class, 'show'])->name('pembayaran');
     Route::post('/konfirmasi', [PembayaranController::class, 'store'])->name('konfirmasi.upload');
-    
+
     // Route::get('/konfirmasi/{id}', [KonfirmasiPembayaranController::class, 'show'])->name('konfirmasi.show');
     // Route::post('/konfirmasi/{id}/update', [KonfirmasiPembayaranController::class, 'updateStatus'])->name('konfirmasi.update');
 

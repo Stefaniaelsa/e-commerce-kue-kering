@@ -1,4 +1,4 @@
-{{-- <header class="bg-pink-200 shadow p-4 flex justify-between items-center mt-16 md:mt-0">
+<header class="bg-pink-200 shadow p-4 flex justify-between items-center mt-16 md:mt-0">
     <h1 class="text-2xl font-bold">IniKue</h1>
     <nav class="space-x-4 text-sm">
         <a href="{{ url('/beranda') }}" class="hover:text-pink-700 font-medium">Beranda</a>
@@ -15,10 +15,10 @@
         <a href="#" class="text-red-500 hover:text-red-700 font-medium"><i class="fas fa-sign-out-alt"></i>
             Logout</a>
     </nav>
-</header> --}}
+</header>
 
 <!-- Navbar -->
-<header class="bg-pink-200 shadow p-4 flex justify-between items-center">
+{{-- <header class="bg-pink-200 shadow p-4 flex justify-between items-center">
     <h1 class="text-2xl font-bold">IniKue</h1>
     <nav class="space-x-4 text-sm flex items-center">
         <a href="{{ url('/beranda') }}" class="hover:text-pink-700 font-medium">Beranda</a>
@@ -32,7 +32,7 @@
                 </span>
             @endif
             {{-- <i class="fas fa-shopping-cart mr-1"></i> --}}
-        </a>
+        {{-- </a>
         <a href="{{ url('/profil') }}" class="hover:text-pink-700 font-medium">Akun</a>
         <form method="POST" action="{{ route('logout') }}" class="inline">
             @csrf
@@ -41,4 +41,4 @@
             </button>
         </form>
     </nav>
-</header>
+</header> --}} 

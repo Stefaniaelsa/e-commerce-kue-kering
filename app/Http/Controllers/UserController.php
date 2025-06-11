@@ -16,6 +16,7 @@ class UserController extends Controller
                             ->orderBy('tanggal_pesanan', 'desc')
                             ->first();
 
+                            // die($latestOrder);
         return view('profil', compact('user', 'latestOrder'));
     }
 }
