@@ -25,23 +25,17 @@ class OrderController extends Controller
         // Ambil data keranjang milik user
         $cartItems = Keranjang::with('item_keranjang')
             ->where('user_id', $user->id)
-            ->get();
+            ->first();
         // die($cartItems);
 
-        if ($cartItems->isEmpty()) {
+        if ($cartItems === null) {
             return redirect()->back()->with('error', 'Keranjang kamu kosong.');
         }
 
         DB::beginTransaction();
 
         try {
-            $subtotal = 0;
-            foreach ($cartItems as $cart) {
-                foreach ($cart->item_keranjang as $item) {
-                    $subtotal += $item->harga;
-                }
-            }
-
+            $subtotal = $cartItems->total_harga;
             // Ongkir hanya berlaku jika pengiriman gojek
             $ongkir = ($request->input('metode_pengiriman') === 'gojek') ? 10000 : 0;
             $total = $subtotal + $ongkir;
@@ -53,13 +47,14 @@ class OrderController extends Controller
                 'status'            => 'menunggu',
                 'alamat_pengiriman' => $request->input('alamat'),
                 'tanggal_pesanan'   => now(),
-                'pengiriman'        => $request->input('metode_pengiriman'), // simpan metode pengiriman
+                'pengiriman'        => $request->input('metode_pengiriman'),
+                'metode_pembayaran' => $request->input('metode_pembayaran'),
                 'catatan'           => $request->input('catatan') ?? null,
             ]);
 
             // Simpan detail order per item di keranjang
-            foreach ($cartItems as $cart) {
-                foreach ($cart->item_keranjang as $item) {
+            // foreach ($cartItems as $cart) {
+                foreach ($cartItems->item_keranjang as $item) {
                     OrderItem::create([
                         'order_id'   => $order->id,
                         'varian_id' => $item->varian_id,
@@ -68,14 +63,14 @@ class OrderController extends Controller
                         'sub_total'  => $item->harga,
                     ]);
                 }
-            }
+            // }
 
             // Hapus data keranjang user setelah order sukses
             Keranjang::where('user_id', $user->id)->delete();
 
             DB::commit();
 
-            return redirect()->route('checkout')->with('success', 'Pesanan berhasil dibuat. Silakan lanjut ke pembayaran.');
+            return redirect()->route('pembayaran')->with('success', 'Pesanan berhasil dibuat. Silakan upload bukti pembayaran.');
         } catch (\Exception $e) {
             DB::rollback();
             Log::error('Gagal membuat pesanan: ' . $e->getMessage());

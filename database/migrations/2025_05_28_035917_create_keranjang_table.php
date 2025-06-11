@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->enum('status', ['keranjang', 'selesai'])->default('keranjang');
             $table->decimal('total_harga', 10, 2)->default(0.00);
+            $table->integer('total_produk')->unsigned()->default(0);
             $table->timestamp('dibuat_pada')->useCurrent();
             $table->timestamp('diperbarui_pada')->useCurrent()->useCurrentOnUpdate();
 

@@ -81,6 +81,17 @@
 
                 <!-- Daftar Produk -->
                 <section>
+                    @if ($errors->any())
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                            role="alert">
+                            <strong class="font-bold">Terjadi kesalahan:</strong>
+                            <ul class="list-disc list-inside">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <h3 class="text-xl font-bold mb-5 text-gray-700 border-b pb-2">Daftar Produk</h3>
                     <div class="space-y-3">
                         @foreach ($cartItems as $item)
@@ -126,10 +137,10 @@
                     <p class="text-base text-gray-800 bg-gray-100 px-4 py-2 rounded-lg">{{ $user->nama }}</p>
                 </div>
 
-               <!-- Alamat Pengiriman -->
-                    <textarea id="alamat" name="alamat" rows="3" required
-                        class="w-full p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary"
-                        placeholder="Masukkan alamat pengiriman...">{{ old('alamat', $user->alamat ?? '') }}</textarea>
+                <!-- Alamat Pengiriman -->
+                <textarea id="alamat" name="alamat" rows="3" required
+                    class="w-full p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Masukkan alamat pengiriman...">{{ old('alamat', $user->alamat ?? '') }}</textarea>
 
                     <!-- Metode Pengiriman -->
                     <select id="metode_pengiriman" name="metode_pengiriman" required
@@ -139,11 +150,11 @@
                         <option value="ambil ditempat" {{ old('metode_pengiriman') == 'ambil ditempat' ? 'selected' : '' }}>Ambil di Tempat</option>
                     </select>
 
-                    <!-- Ongkos Kirim dengan class untuk JS -->
-                    <div class="flex justify-between">
-                        <span>Ongkos Kirim</span>
-                        <span class="ongkos-kirim">Rp 10.000</span>
-                    </div>
+                <!-- Ongkos Kirim dengan class untuk JS -->
+                <div class="flex justify-between">
+                    <span>Ongkos Kirim</span>
+                    <span class="ongkos-kirim">Rp 10.000</span>
+                </div>
 
                 <!-- Metode Pembayaran -->
                 <section>
@@ -165,7 +176,7 @@
 
 
                     <!-- Pilihan Bank -->
-                    <div id="pilihan-bank"
+                    {{-- <div id="pilihan-bank"
                         class="mt-4 rounded-lg border border-gray-300 p-4 bg-white shadow-sm {{ old('metode_pembayaran') == 'transfer' ? '' : 'hidden' }}">
                         <label for="bank_tujuan" class="block text-sm font-semibold text-gray-700 mb-2">Pilih Bank <span
                                 class="text-red-600">*</span></label>
@@ -182,7 +193,7 @@
                         @error('bank_tujuan')
                             <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                         @enderror
-                    </div>
+                    </div> --}}
 
                     <!-- No Rekening Toko -->
                     <div id="no-rekening"
@@ -196,7 +207,8 @@
 
                 <!-- Catatan -->
                 <section>
-                    <label for="catatan" class="block text-sm font-semibold text-gray-700 mb-2">Catatan (Opsional)</label>
+                    <label for="catatan" class="block text-sm font-semibold text-gray-700 mb-2">Catatan
+                        (Opsional)</label>
                     <textarea id="catatan" name="catatan" rows="3"
                         class="w-full p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary"
                         placeholder="Tulis catatan tambahan...">{{ old('catatan') }}</textarea>
@@ -212,19 +224,19 @@
     </main>
 
     <script>
-          const metodeSelect = document.getElementById('metode_pembayaran');
-    const bankSection = document.getElementById('pilihan-bank');
-    const noRekening = document.getElementById('no-rekening');
+        const metodeSelect = document.getElementById('metode_pembayaran');
+        const bankSection = document.getElementById('pilihan-bank');
+        const noRekening = document.getElementById('no-rekening');
 
-    metodeSelect.addEventListener('change', () => {
-        if (metodeSelect.value === 'transfer') {
-            bankSection.classList.remove('hidden');
-            noRekening.classList.remove('hidden');
-        } else {
-            bankSection.classList.add('hidden');
-            noRekening.classList.add('hidden');
-        }
-    });
+        metodeSelect.addEventListener('change', () => {
+            if (metodeSelect.value === 'transfer') {
+                bankSection.classList.remove('hidden');
+                noRekening.classList.remove('hidden');
+            } else {
+                bankSection.classList.add('hidden');
+                noRekening.classList.add('hidden');
+            }
+        });
 
         const metodePengiriman = document.getElementById('metode_pengiriman');
         const ongkosKirimEl = document.querySelector('.ongkos-kirim');
@@ -236,7 +248,6 @@
                 ongkosKirimEl.textContent = 'Rp 10.000';
             }
         });
-
     </script>
 
 </body>

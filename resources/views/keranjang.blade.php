@@ -31,10 +31,18 @@
     <!-- Navbar -->
     <header class="bg-pink-200 shadow p-4 flex justify-between items-center">
         <h1 class="text-2xl font-bold">IniKue</h1>
-        <nav class="space-x-4 text-sm">
+        <nav class="space-x-4 text-sm flex items-center">
             <a href="{{ url('/beranda') }}" class="hover:text-pink-700 font-medium">Beranda</a>
             <a href="{{ url('/produk') }}" class="hover:text-pink-700 font-medium">Produk</a>
-            <a href="{{ url('/keranjang') }}" class="hover:text-pink-700 font-medium">Keranjang</a>
+            <a href="{{ url('/keranjang') }}" class="hover:text-pink-700 font-medium relative flex items-center">
+                Keranjang
+                @if($keranjang->total_produk > 0)
+                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {{ $keranjang->total_produk > 99 ? '99+' : $keranjang->total_produk }}
+                </span>
+                @endif
+                {{-- <i class="fas fa-shopping-cart mr-1"></i> --}}
+            </a>
             <a href="{{ url('/profil') }}" class="hover:text-pink-700 font-medium">Akun</a>
             <form method="POST" action="{{ route('logout') }}" class="inline">
                 @csrf
@@ -45,7 +53,6 @@
         </nav>
     </header>
 
-
     <!-- Konten Keranjang -->
     <main class="flex-grow">
         <section class="max-w-5xl mx-auto py-10 px-4 sm:px-6">
@@ -53,10 +60,6 @@
                 <h2 class="text-3xl font-bold text-primary flex items-center">
                     <i class="fas fa-shopping-cart mr-3"></i> Keranjang Belanja
                 </h2>
-                <div class="bg-secondary px-4 py-2 rounded-full text-primary font-medium">
-                    <i class="fas fa-coins mr-2"></i> Total:
-                    Rp{{ number_format($cartItems->sum('harga'), 0, ',', '.') }}
-                </div>
             </div>
 
             @if ($cartItems->isEmpty())
