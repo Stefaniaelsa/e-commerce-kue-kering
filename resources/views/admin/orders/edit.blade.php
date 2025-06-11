@@ -21,11 +21,13 @@
         <div class="mb-4">
             <label for="status" class="block mb-2 font-medium">Status</label>
             <select name="status" id="status" class="w-full border p-2 rounded">
-                <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                <option value="paid" {{ $order->status == 'paid' ? 'selected' : '' }}>Paid</option>
-                <option value="delivered" {{ $order->status == 'delivered' ? 'selected' : '' }}>Delivered</option>
+                <option value="menunggu" {{ $order->status == 'menunggu' ? 'selected' : '' }}>Menunggu</option>
+                <option value="diproses" {{ $order->status == 'diproses' ? 'selected' : '' }}>Diproses</option>
+                <option value="dikirim" {{ $order->status == 'dikirim' ? 'selected' : '' }}>Dikirim</option>
+                <option value="selesai" {{ $order->status == 'selesai' ? 'selected' : '' }}>Selesai</option>
             </select>
         </div>
+
 
         <div class="mb-4">
             <label for="metode_pembayaran" class="block mb-2 font-medium">Metode Pembayaran</label>

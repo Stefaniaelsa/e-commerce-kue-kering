@@ -10,7 +10,7 @@ class OrdersController extends Controller
 {
     public function index()
     {
-        $orders = Order::with('user')->latest()->paginate(10);
+        $orders = Order::with('user')->orderBy('tanggal_pesanan', 'desc')->paginate(10);
         return view('admin.orders.index', compact('orders'));
     }
 
@@ -29,7 +29,7 @@ class OrdersController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:pending,paid,delivered',
+            'status' => 'required|in:menunggu,diproses,dikirim,selesai',
         ]);
 
         $order = Order::findOrFail($id);
