@@ -1,33 +1,7 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app-user')
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Beranda - IniKue</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet" />
-</head>
-
-<body class="bg-[#fff7f4] text-[#4e3d3a] font-sans">
-
-    <!-- Navbar -->
-    <header class="bg-pink-200 shadow p-4 flex justify-between items-center">
-        <h1 class="text-2xl font-bold">IniKue</h1>
-        <nav class="space-x-4 text-sm">
-            <a href="{{ url('/beranda') }}" class="hover:text-pink-700 font-medium">Beranda</a>
-            <a href="{{ url('/produk') }}" class="hover:text-pink-700 font-medium">Produk</a>
-            <a href="{{ url('/keranjang') }}" class="hover:text-pink-700 font-medium">Keranjang</a>
-            <a href="{{ url('/profil') }}" class="hover:text-pink-700 font-medium">Akun</a>
-            <form method="POST" action="{{ route('logout') }}" class="inline">
-                @csrf
-                <button type="submit" class="text-red-500 hover:text-red-700 font-medium">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
-            </form>
-        </nav>
-    </header>
-
+@section('title', 'Keranjang Belanja')
+@section('content')
     <!-- Hero Banner dengan Slider -->
     <section class="relative overflow-hidden aspect-[16/9] md:aspect-[16/6] bg-pink-100">
         <div id="slider" class="w-full h-full bg-center bg-cover transition-all duration-1000"></div>
@@ -71,8 +45,7 @@
                 <i class="fas fa-heart text-3xl text-pink-400 mb-2"></i>
                 <p class="font-semibold">Favorit</p>
             </a>
-            <a href="{{ url('/produk') }}"
-                class="block bg-white shadow rounded p-4 text-center hover:shadow-lg transition">
+            <a href="{{ url('/produk') }}" class="block bg-white shadow rounded p-4 text-center hover:shadow-lg transition">
                 <i class="fas fa-cookie text-3xl text-pink-400 mb-2"></i>
                 <p class="font-semibold">Semua Kue</p>
             </a>
@@ -123,7 +96,4 @@
             &copy; 2025 IniKue. Semua Hak Dilindungi.
         </div>
     </footer>
-
-</body>
-
-</html>
+@endsection

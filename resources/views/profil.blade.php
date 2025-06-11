@@ -1,33 +1,7 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app-user')
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Beranda - IniKue</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet" />
-</head>
-
-<body class="bg-[#fff7f4] text-[#4e3d3a] font-sans">
-
-    <!-- Navbar -->
-    <header class="bg-pink-200 shadow p-4 flex justify-between items-center">
-        <h1 class="text-2xl font-bold">IniKue</h1>
-        <nav class="space-x-4 text-sm">
-            <a href="{{ url('/beranda') }}" class="hover:text-pink-700 font-medium">Beranda</a>
-            <a href="{{ url('/produk') }}" class="hover:text-pink-700 font-medium">Produk</a>
-            <a href="{{ url('/keranjang') }}" class="hover:text-pink-700 font-medium">Keranjang</a>
-            <a href="{{ url('/profil') }}" class="hover:text-pink-700 font-medium">Akun</a>
-            <form method="POST" action="{{ route('logout') }}" class="inline">
-                @csrf
-                <button type="submit" class="text-red-500 hover:text-red-700 font-medium">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
-            </form>
-        </nav>
-    </header>
-
+@section('title', 'Keranjang Belanja')
+@section('content')
     <main class="max-w-xl mx-auto bg-white p-8 rounded-lg shadow-lg mt-12">
         <h1 class="text-3xl font-extrabold mb-6 text-pink-600 border-b-4 border-pink-300 pb-2">
             Profil Saya
@@ -71,7 +45,7 @@
                     <p class="mb-2"><strong>Status:</strong> 
                         <span class="font-semibold text-pink-700">{{ ucfirst($latestOrder->status) }}</span>
                     </p>
-                    <p class="mb-4"><strong>Tanggal Pesanan:</strong> {{ $latestOrder->created_at->format('d M Y') }}</p>
+                    <p class="mb-4"><strong>Tanggal Pesanan:</strong> {{ $latestOrder->created_at ? $latestOrder->created_at->format('d M Y') : '-' }}</p>
                     <a href="{{ route('pesanan.show', $latestOrder->id) }}" 
                        class="inline-block px-5 py-2 bg-pink-500 text-white rounded hover:bg-pink-600 transition">
                        Detail Pesanan
@@ -84,5 +58,4 @@
 
     </main>
 
-</body>
-</html>
+@endsection

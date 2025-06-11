@@ -49,6 +49,9 @@ Route::middleware(['auth:web'])->group(function () {
         $produks = \App\Models\Product::with('defaultVariant')->get();
         $bestSellerProduk = \App\Models\Product::where('is_best_seller', true)->get();
         $favoritProduk = \App\Models\Product::where('is_favorit', true)->get();
+        $keranjang = \App\Models\Keranjang::where('user_id', auth()->id())->first();
+        // die($keranjang);
+        session(['total-produk' => $keranjang->total_produk]);
         return view('beranda', compact('produks', 'bestSellerProduk', 'favoritProduk'));
     })->name('beranda');
 

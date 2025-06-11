@@ -1,40 +1,7 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app-user')
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Detail Produk - {{ $produk->nama }}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet" />
-
-    <style>
-        @keyframes fadeInOut {
-            0% {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-
-            10%,
-            90% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-            100% {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-        }
-
-        .animate-fade-in-out {
-            animation: fadeInOut 3s ease-in-out forwards;
-        }
-    </style>
-</head>
-
-<body class="bg-[#fff7f4] text-[#4e3d3a] font-sans">
-
+@section('title', 'Keranjang Belanja')
+@section('content')
     <!-- Notifikasi -->
     @if (session('success'))
         <div id="notif-success"
@@ -42,19 +9,6 @@
             <i class="fas fa-check-circle mr-2"></i>{{ session('success') }}
         </div>
     @endif
-
-    <!-- Navbar -->
-    <header class="bg-pink-200 shadow p-4 flex justify-between items-center mt-16 md:mt-0">
-        <h1 class="text-2xl font-bold">IniKue</h1>
-        <nav class="space-x-4 text-sm">
-            <a href="{{ url('/beranda') }}" class="hover:text-pink-700 font-medium">Beranda</a>
-            <a href="{{ url('/produk') }}" class="hover:text-pink-700 font-medium">Produk</a>
-            <a href="{{ url('/keranjang') }}" class="hover:text-pink-700 font-medium">Keranjang</a>
-            <a href="{{ url('/profil') }}" class="hover:text-pink-700 font-medium">Akun</a>
-            <a href="#" class="text-red-500 hover:text-red-700 font-medium"><i class="fas fa-sign-out-alt"></i>
-                Logout</a>
-        </nav>
-    </header>
 
     <!-- Detail Produk -->
     <section class="px-6 py-10 max-w-6xl mx-auto">
@@ -153,7 +107,4 @@
             }
         }
     </script>
-
-</body>
-
-</html>
+@endsection

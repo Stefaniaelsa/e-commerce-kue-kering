@@ -1,28 +1,7 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app-user')
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Formulir Pemesanan</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#fb7185',
-                        secondary: '#fecdd3',
-                        accent: '#e11d48',
-                    }
-                }
-            }
-        }
-    </script>
-</head>
-
-<body class="bg-[#fff7f4] text-[#4e3d3a] font-sans">
-
+@section('title', 'Keranjang Belanja')
+@section('content')
     <!-- Navbar -->
     <header class="bg-pink-200 shadow p-4 flex justify-between items-center">
         <h1 class="text-2xl font-bold">IniKue</h1>
@@ -90,6 +69,4 @@
             &copy; 2025 IniKue. Semua Hak Dilindungi.
         </div>
     </footer>
-</body>
-
-</html>
+@endsection

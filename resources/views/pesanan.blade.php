@@ -1,52 +1,7 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app-user')
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Pesanan - IniKue</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#fb7185',
-                        secondary: '#fecdd3',
-                        accent: '#e11d48',
-                    },
-                    animation: {
-                        'bounce-slow': 'bounce 1.5s infinite',
-                        'pulse-slow': 'pulse 2s infinite',
-                    }
-                }
-            }
-        }
-    </script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet" />
-</head>
-
-<body class="bg-[#fff7f4] text-[#4e3d3a] font-sans min-h-screen flex flex-col">
-
-    <!-- Navbar -->
-    <header class="bg-pink-200 shadow p-4 flex justify-between items-center">
-        <h1 class="text-2xl font-bold select-none">IniKue</h1>
-        <nav class="space-x-6 text-sm flex items-center">
-            <a href="{{ url('/beranda') }}" class="hover:text-pink-700 font-medium transition">Beranda</a>
-            <a href="{{ url('/produk') }}" class="hover:text-pink-700 font-medium transition">Produk</a>
-            <a href="{{ url('/keranjang') }}" class="hover:text-pink-700 font-medium transition">Keranjang</a>
-            <a href="#" class="hover:text-pink-700 font-medium transition">Akun</a>
-            <form method="POST" action="{{ route('logout') }}" class="inline ml-4">
-                @csrf
-                <button type="submit"
-                    class="text-red-600 hover:text-red-800 font-medium flex items-center space-x-1 transition">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>
-                </button>
-            </form>
-        </nav>
-    </header>
-
+@section('title', 'Keranjang Belanja')
+@section('content')
     <!-- Konten Pembayaran -->
     <main class="flex-grow max-w-5xl mx-auto py-10 px-4 sm:px-6 w-full">
         <div class="flex flex-col sm:flex-row items-center justify-between mb-10 gap-4">
@@ -250,6 +205,4 @@
         });
     </script>
 
-</body>
-
-</html>
+@endsection

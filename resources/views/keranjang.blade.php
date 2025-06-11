@@ -1,58 +1,7 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app-user')
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Keranjang Belanja</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#fb7185',
-                        secondary: '#fecdd3',
-                        accent: '#e11d48',
-                    },
-                    animation: {
-                        'bounce-slow': 'bounce 1.5s infinite',
-                        'pulse-slow': 'pulse 2s infinite',
-                    }
-                }
-            }
-        }
-    </script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet" />
-</head>
-
-<body class="bg-[#fff7f4] text-[#4e3d3a] font-sans">
-
-    <!-- Navbar -->
-    <header class="bg-pink-200 shadow p-4 flex justify-between items-center">
-        <h1 class="text-2xl font-bold">IniKue</h1>
-        <nav class="space-x-4 text-sm flex items-center">
-            <a href="{{ url('/beranda') }}" class="hover:text-pink-700 font-medium">Beranda</a>
-            <a href="{{ url('/produk') }}" class="hover:text-pink-700 font-medium">Produk</a>
-            <a href="{{ url('/keranjang') }}" class="hover:text-pink-700 font-medium relative flex items-center">
-                Keranjang
-                @if($keranjang->total_produk > 0)
-                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {{ $keranjang->total_produk > 99 ? '99+' : $keranjang->total_produk }}
-                </span>
-                @endif
-                {{-- <i class="fas fa-shopping-cart mr-1"></i> --}}
-            </a>
-            <a href="{{ url('/profil') }}" class="hover:text-pink-700 font-medium">Akun</a>
-            <form method="POST" action="{{ route('logout') }}" class="inline">
-                @csrf
-                <button type="submit" class="text-red-500 hover:text-red-700 font-medium">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </button>
-            </form>
-        </nav>
-    </header>
-
+@section('title', 'Keranjang Belanja')
+@section('content')
     <!-- Konten Keranjang -->
     <main class="flex-grow">
         <section class="max-w-5xl mx-auto py-10 px-4 sm:px-6">
@@ -80,12 +29,14 @@
                             <div class="flex flex-col sm:flex-row">
                                 <div class="sm:w-1/4 bg-secondary flex items-center justify-center p-4">
                                     <img src="{{ asset('images/' . $item->varian->produk->gambar) }}"
-                                        alt="{{ $item->varian->produk->nama }}" class="w-full h-auto object-cover rounded-lg">
+                                        alt="{{ $item->varian->produk->nama }}"
+                                        class="w-full h-auto object-cover rounded-lg">
                                 </div>
                                 <div class="sm:w-3/4 p-6">
                                     <div class="flex flex-col sm:flex-row sm:items-center justify-between">
                                         <div class="mb-4 sm:mb-0">
-                                            <h3 class="text-xl font-bold text-primary">{{ $item->varian->produk->nama }}</h3>
+                                            <h3 class="text-xl font-bold text-primary">{{ $item->varian->produk->nama }}
+                                            </h3>
                                             <p class="text-gray-600 text-sm mt-1">
                                                 {{ $item->varian->produk->deskripsi ?? 'Kue lezat dengan cita rasa istimewa' }}
                                             </p>
@@ -160,14 +111,14 @@
                             <i class="fas fa-arrow-left mr-2"></i> Lanjut Belanja
                         </a>
                         <form action="{{ route('pesanan.index') }}" method="GET">
-                        @foreach ($cartItems as $item)
-                            <input type="hidden" name="items[]" value="{{ $item->id }}">
-                        @endforeach
-                        <button type="submit"
-                            class="bg-gradient-to-r from-primary to-pink-400 hover:from-accent hover:to-pink-500 text-white py-3 px-6 rounded-full text-sm font-medium text-center shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5">
-                            <i class="fas fa-paper-plane mr-2"></i> Pesan
-                        </button>
-                    </form>
+                            @foreach ($cartItems as $item)
+                                <input type="hidden" name="items[]" value="{{ $item->id }}">
+                            @endforeach
+                            <button type="submit"
+                                class="bg-gradient-to-r from-primary to-pink-400 hover:from-accent hover:to-pink-500 text-white py-3 px-6 rounded-full text-sm font-medium text-center shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5">
+                                <i class="fas fa-paper-plane mr-2"></i> Pesan
+                            </button>
+                        </form>
 
                     </div>
                 </div>
@@ -180,6 +131,5 @@
             &copy; 2025 IniKue. Semua Hak Dilindungi.
         </div>
     </footer>
-</body>
 
-</html>
+@endsection
