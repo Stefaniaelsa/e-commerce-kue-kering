@@ -23,7 +23,7 @@ class ProductVariant extends Model
      */
     protected $casts = [
         'harga' => 'decimal:2',
-        'stok'  => 'integer',
+        'stok' => 'integer',
     ];
 
     /**
@@ -37,9 +37,21 @@ class ProductVariant extends Model
     /**
      * Relasi ke produk
      */
-   public function produk()
-{
-    return $this->belongsTo(Product::class, 'product_id');
-}
+    public function produk()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
+
+        // Relasi ke product
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    // Relasi ke order items
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'varian_id');
+    }
 
 }
