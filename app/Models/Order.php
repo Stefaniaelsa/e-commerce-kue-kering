@@ -49,4 +49,10 @@ class Order extends Model
     {
         return $this->hasManyThrough(ProductVariant::class, OrderItem::class, 'order_id', 'id', 'id', 'varian_id');
     }
+
+    public function details()
+{
+    return $this->hasMany(OrderItem::class, 'order_id');
+}
+
 }

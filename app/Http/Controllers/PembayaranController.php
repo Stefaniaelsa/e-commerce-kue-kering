@@ -32,25 +32,26 @@ class PembayaranController extends Controller
         ]);
 
         try {
-            if ($request->hasFile('bukti_transfer')) {
-                $user = Auth::user();
-                $order = Order::where('user_id', $user->id)->firstOrFail();
+           if ($request->hasFile('bukti_transfer')) {
+            $user = Auth::user();
+            $order = Order::where('user_id', $user->id)->firstOrFail();
 
-                $buktiTransfer = $request->file('bukti_transfer');
-                $namaBuktiTransfer = time() . '_' . $buktiTransfer->getClientOriginalName();
+            // Upload dan ambil path penyimpanan
+            $buktiTransfer = $request->file('bukti_transfer');
+            $path = $this->fileUploadService->uploadBuktiTransfer($buktiTransfer); // sudah hasil 'bukti_transfer/2025/06/14/namafile.png'
 
-                // Proses upload file
-                $path = $this->fileUploadService->uploadBuktiTransfer($buktiTransfer);
+            // Simpan path lengkap ke database
+            Pembayarans::create([
+                'order_id' => $order->id,
+                'bank_asal' => $request->input('bank_asal'),
+                'bukti_transfer' => $path, // simpan path lengkap
+        ]);
 
-                // Simpan ke database
-                Pembayarans::create([
-                    'order_id' => $order->id,
-                    'bank_asal' => $request->input('bank_asal'),
-                    'bukti_transfer' => $namaBuktiTransfer,
-                ]);
+            return redirect()->route('pembayaran')->with('success', 'Pembayaran berhasil dilakukan. Silahkan tunggu konfirmasi dari admin.');
 
-                return redirect()->route('pembayaran')->with('success', 'Pembayaran berhasil dilakukan. Silahkan tunggu konfirmasi dari admin.');
-            }
+
+        }
+        
         } catch (\Exception $e) {
             \Log::error('Error proses pembayaran: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Terjadi kesalahan sistem. Silakan coba lagi atau hubungi admin.');

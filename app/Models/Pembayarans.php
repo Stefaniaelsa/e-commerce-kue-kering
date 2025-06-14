@@ -16,4 +16,10 @@ class Pembayarans extends Model
         'bukti_transfer',
         'status',
     ];
+
+    public function order()
+        {
+            return $this->belongsTo(Order::class, 'order_id');
+        }
+
 }

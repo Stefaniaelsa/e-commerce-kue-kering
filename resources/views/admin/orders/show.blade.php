@@ -11,8 +11,8 @@
         <strong>Total Harga:</strong> Rp {{ number_format($order->total_harga, 0, ',', '.') }}<br>
         <strong>Alamat Pengiriman:</strong> {{ $order->alamat_pengiriman }}<br>
         <strong>Metode Pembayaran:</strong> {{ $order->metode_pembayaran }}<br>
-        <strong>Bank Tujuan:</strong> {{ $order->bank_tujuan }}<br>
-        <strong>No Rekening:</strong> {{ $order->no_rekening }}<br>
+        {{-- <strong>Bank Tujuan:</strong> {{ $order->bank_tujuan }}<br>
+        <strong>No Rekening:</strong> {{ $order->no_rekening }}<br> --}}
         <strong>Pengiriman:</strong> {{ $order->pengiriman }}<br>
         <strong>Tanggal:</strong> {{ $order->tanggal_pesanan }}
     </div>
@@ -25,7 +25,7 @@
                 <th class="p-2 border">Ukuran</th>
                 <th class="p-2 border">Jumlah</th>
                 <th class="p-2 border">Harga</th>
-                <th class="p-2 border">Subtotal</th>
+                {{-- <th class="p-2 border">Subtotal</th> --}}
             </tr>
         </thead>
         <tbody>
@@ -35,7 +35,7 @@
                     <td class="p-2 border">{{ $detail->variant->ukuran ?? '-' }}</td>
                     <td class="p-2 border">{{ $detail->jumlah }}</td>
                     <td class="p-2 border">Rp {{ number_format($detail->harga, 0, ',', '.') }}</td>
-                    <td class="p-2 border">Rp {{ number_format($detail->sub_total, 0, ',', '.') }}</td>
+                    {{-- <td class="p-2 border">Rp {{ number_format($detail->sub_total, 0, ',', '.') }}</td> --}}
                 </tr>
             @endforeach
         </tbody>

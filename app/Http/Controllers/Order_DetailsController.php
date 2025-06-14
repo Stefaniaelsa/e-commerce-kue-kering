@@ -37,7 +37,7 @@ class Order_DetailsController extends Controller
 
         OrderItem::create([
             'order_id' => $request->order_id,
-            'variant_id' => $request->variant_id,
+            'varian_id' => $request->variant_id,
             'jumlah' => $request->jumlah,
             'harga' => $request->harga,
             'sub_total' => $request->jumlah * $request->harga,
