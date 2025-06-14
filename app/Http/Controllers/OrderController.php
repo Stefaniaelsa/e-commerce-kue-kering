@@ -9,6 +9,8 @@ use App\Models\Keranjang;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
+
 
 class OrderController extends Controller
 {
@@ -26,7 +28,6 @@ class OrderController extends Controller
         $cartItems = Keranjang::with('item_keranjang')
             ->where('user_id', $user->id)
             ->first();
-        // die($cartItems);
 
         if ($cartItems === null) {
             return redirect()->back()->with('error', 'Keranjang kamu kosong.');
@@ -36,7 +37,6 @@ class OrderController extends Controller
 
         try {
             $subtotal = $cartItems->total_harga;
-            // Ongkir hanya berlaku jika pengiriman gojek
             $ongkir = ($request->input('metode_pengiriman') === 'gojek') ? 10000 : 0;
             $total = $subtotal + $ongkir;
 
@@ -53,20 +53,19 @@ class OrderController extends Controller
             ]);
 
             // Simpan detail order per item di keranjang
-            // foreach ($cartItems as $cart) {
-                foreach ($cartItems->item_keranjang as $item) {
-                    OrderItem::create([
-                        'order_id'   => $order->id,
-                        'varian_id'  => $item->id_varian,
-                        'jumlah'     => $item->jumlah,
-                        'harga'      => $item->harga / max(1, $item->jumlah), // Harga per item
-                        'sub_total'  => $item->harga,
-                    ]);
-                }
-            // }
+            foreach ($cartItems->item_keranjang as $item) {
+                OrderItem::create([
+                    'order_id'   => $order->id,
+                    'varian_id'  => $item->id_varian,
+                    'jumlah'     => $item->jumlah,
+                    'harga'      => $item->harga / max(1, $item->jumlah), // Harga per item
+                    'sub_total'  => $item->harga,
+                ]);
+            }
 
             // Hapus data keranjang user setelah order sukses
             Keranjang::where('user_id', $user->id)->delete();
+            Session::forget('total-produk');
 
             DB::commit();
 
