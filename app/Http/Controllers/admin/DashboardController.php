@@ -22,7 +22,7 @@ class DashboardController extends Controller
             'products.variants',
         ])->latest('tanggal_pesanan')->limit(10)->get()->map(function ($order) {
             return (object) [
-                'nama_user' => $order->user->nama,
+                'nama_user' => $order->user?->nama,
                 'total_harga' => $order->total_harga,
                 'status' => $order->status,
                 'tanggal_pesanan' => $order->tanggal_pesanan,
@@ -37,7 +37,7 @@ class DashboardController extends Controller
                 }),
             ];
         });
-        
+
         // Debug: tampilkan hasil dalam bentuk pretty JSON
         // return response()->json([
         //     'totalProduk' => $totalProduk,
@@ -45,7 +45,7 @@ class DashboardController extends Controller
         //     'totalPelanggan' => $totalPelanggan,
         //     'pesananTerbaru' => $pesananTerbaru
         // ], 200, [], JSON_PRETTY_PRINT);
-        
+
         return view('admin.dashboard_admin', compact('totalProduk', 'totalPesanan', 'totalPelanggan', 'pesananTerbaru'));
     }
 
