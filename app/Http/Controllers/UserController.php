@@ -12,11 +12,11 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        $latestOrder = Order::where('user_id', $user->id)
-                            ->orderBy('tanggal_pesanan', 'desc')
-                            ->first();
+        // Mengambil semua pesanan user, diurutkan dari yang terbaru
+        $orders = Order::where('user_id', $user->id)
+                      ->orderBy('tanggal_pesanan', 'desc')
+                      ->get();
 
-                            // die($latestOrder);
-        return view('profil', compact('user', 'latestOrder'));
+        return view('profil', compact('user', 'orders'));
     }
 }

@@ -20,7 +20,20 @@ class PembayaranController extends Controller
 
     public function show()
     {
-        $order = Order::where('user_id', Auth::id())->orderBy('id', 'desc')->first();
+        $order = Order::where('user_id', Auth::id())
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if (!$order) {
+            return redirect()->route('beranda')->with('error', 'Tidak ada pesanan yang perlu dibayar.');
+        }
+
+        // Cek apakah pesanan sudah expired
+        if ($order->checkAndUpdateExpired()) {
+            return redirect()->route('profil')
+                ->with('error', 'Pesanan telah dibatalkan karena melewati batas waktu pembayaran (24 jam).');
+        }
+
         return view('pembayaran', compact('order'));
     }
 
@@ -32,28 +45,36 @@ class PembayaranController extends Controller
         ]);
 
         try {
+            $user = Auth::user();
+            $order = Order::where('user_id', $user->id)
+                ->orderBy('id', 'desc')
+                ->firstOrFail();
+
+            // Cek apakah pesanan sudah expired
+            if ($order->checkAndUpdateExpired()) {
+                return redirect()->route('profil')
+                    ->with('error', 'Pesanan telah dibatalkan karena melewati batas waktu pembayaran (24 jam).');
+            }
+
+            return response()->json($order->checkAndUpdateExpired());
+
             if ($request->hasFile('bukti_transfer')) {
-                $user = Auth::user();
-                $order = Order::where('user_id', $user->id)->firstOrFail();
-
                 $buktiTransfer = $request->file('bukti_transfer');
-                $namaBuktiTransfer = time() . '_' . $buktiTransfer->getClientOriginalName();
-
-                // Proses upload file
                 $path = $this->fileUploadService->uploadBuktiTransfer($buktiTransfer);
 
-                // Simpan ke database
                 Pembayarans::create([
                     'order_id' => $order->id,
                     'bank_asal' => $request->input('bank_asal'),
-                    'bukti_transfer' => $namaBuktiTransfer,
+                    'bukti_transfer' => $path,
                 ]);
 
-                return redirect()->route('pembayaran')->with('success', 'Pembayaran berhasil dilakukan. Silahkan tunggu konfirmasi dari admin.');
+                return redirect()->route('pembayaran')
+                    ->with('success', 'Pembayaran berhasil dilakukan. Silakan tunggu konfirmasi dari admin.');
             }
         } catch (\Exception $e) {
             \Log::error('Error proses pembayaran: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Terjadi kesalahan sistem. Silakan coba lagi atau hubungi admin.');
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan sistem. Silakan coba lagi atau hubungi admin.');
         }
     }
 }

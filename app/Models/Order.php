@@ -49,4 +49,54 @@ class Order extends Model
     {
         return $this->hasManyThrough(ProductVariant::class, OrderItem::class, 'order_id', 'id', 'id', 'varian_id');
     }
+
+    public function isExpired()
+    {
+        if ($this->status !== 'menunggu' || $this->metode_pembayaran !== 'transfer') {
+            return false;
+        }
+
+        return now()->diffInHours($this->tanggal_pesanan) >= 24;
+    }
+
+    public function checkAndUpdateExpired()
+    {
+        if ($this->isExpired()) {
+            // Update status menjadi dibatalkan
+            $this->update(['status' => 'dibatalkan']);
+
+            // Kembalikan stok
+            foreach ($this->orderItems as $orderItem) {
+                $variant = $orderItem->variant;
+                if ($variant) {
+                    $variant->increment('stok', $orderItem->jumlah);
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getDeadlineTime()
+    {
+        return $this->tanggal_pesanan->addHours(24);
+    }
+
+    public function getRemainingTime()
+    {
+        if ($this->status !== 'menunggu' || $this->metode_pembayaran !== 'transfer') {
+            return null;
+        }
+
+        $deadline = $this->getDeadlineTime();
+        $now = now();
+
+        if ($now->gt($deadline)) {
+            return 'Waktu pembayaran telah habis';
+        }
+
+        return $now->diffForHumans($deadline, ['parts' => 2]);
+    }
 }
