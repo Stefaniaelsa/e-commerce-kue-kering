@@ -108,8 +108,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::resource('users', UserController::class);
     Route::resource('admins', adminController::class);
     Route::resource('orders', OrdersController::class);
-    Route::put('/pembayarans/{id}', [AdminPembayaranController::class, 'update'])->name('admin.pembayarans.update');
-
+    
     Route::resource('pembayarans', App\Http\Controllers\Admin\PembayaranController::class)->only(['index', 'update']);
 });
 

@@ -50,7 +50,7 @@
                             <td class="p-2 border">{{ \Carbon\Carbon::parse($pembayaran->created_at)->format('d/m/Y H:i') }}</td>
                             <td class="p-2 border space-x-2">
                                 <div class="inline-block relative">
-                                    <select onchange="updateStatus({{ $pembayaran->id }}, this.value)"
+                                    <select onchange="updateStatus({{ $pembayaran->id }}, this)"
                                         class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm cursor-pointer">
                                         <option value="">Update Status</option>
                                         @if ($pembayaran->status == 'menunggu')
@@ -86,16 +86,19 @@
         </div>
     </div>
 
-    <script>
-        function updateStatus(pembayaranId, newStatus) {
-            if (newStatus === '') return;
+    
+   <script>
+    function updateStatus(pembayaranId, selectElement) {
+        const newStatus = selectElement.value;
+        if (newStatus === '') return;
 
-            if (confirm('Yakin ingin mengubah status pembayaran ini?')) {
-                document.getElementById('status-input-' + pembayaranId).value = newStatus;
-                document.getElementById('update-status-form-' + pembayaranId).submit();
-            } else {
-                event.target.selectedIndex = 0;
-            }
+        if (confirm('Yakin ingin mengubah status pembayaran ini?')) {
+            document.getElementById('status-input-' + pembayaranId).value = newStatus;
+            document.getElementById('update-status-form-' + pembayaranId).submit();
+        } else {
+            selectElement.selectedIndex = 0;
         }
-    </script>
+    }
+</script>
+
 @endsection

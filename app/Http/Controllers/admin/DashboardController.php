@@ -22,7 +22,7 @@ class DashboardController extends Controller
             'products.variants',
         ])->latest('tanggal_pesanan')->limit(10)->get()->map(function ($order) {
             return (object) [
-                'nama_user' => $order->user->nama,
+                'nama_user' => $order->user?->nama,
                 'total_harga' => $order->total_harga,
                 'status' => $order->status,
                 'tanggal_pesanan' => $order->tanggal_pesanan,

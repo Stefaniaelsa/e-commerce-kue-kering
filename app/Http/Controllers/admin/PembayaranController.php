@@ -15,7 +15,7 @@ class PembayaranController extends Controller
 
    public function update(Request $request, $id)
     {
-        $pembayaran = \App\Models\Pembayaran::findOrFail($id);
+        $pembayaran = \App\Models\Pembayarans::findOrFail($id);
 
         $request->validate([
             'status' => 'required|in:menunggu,diterima,ditolak',
@@ -24,7 +24,7 @@ class PembayaranController extends Controller
         $pembayaran->status = $request->status;
         $pembayaran->save();
 
-        return redirect()->route('admin.pembayaran.index')->with('success', 'Status pembayaran berhasil diperbarui.');
+        return redirect()->route('admin.pembayarans.index')->with('success', 'Status pembayaran berhasil diperbarui.');
     }
 
 }
