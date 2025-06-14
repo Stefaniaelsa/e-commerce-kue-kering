@@ -37,7 +37,7 @@ class DashboardController extends Controller
                 }),
             ];
         });
-        
+
         // Debug: tampilkan hasil dalam bentuk pretty JSON
         // return response()->json([
         //     'totalProduk' => $totalProduk,
@@ -45,7 +45,7 @@ class DashboardController extends Controller
         //     'totalPelanggan' => $totalPelanggan,
         //     'pesananTerbaru' => $pesananTerbaru
         // ], 200, [], JSON_PRETTY_PRINT);
-        
+
         return view('admin.dashboard_admin', compact('totalProduk', 'totalPesanan', 'totalPelanggan', 'pesananTerbaru'));
     }
 
