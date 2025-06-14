@@ -8,9 +8,32 @@
         <p class="text-sm text-gray-500">Pilih kue favoritmu dan pesan sekarang!</p>
     </section>
 
+    <!-- Form Pencarian -->
+    <section class="px-6 pb-4">
+        <form method="GET" action="{{ route('produk.search') }}"
+            class="flex flex-col sm:flex-row items-center justify-center gap-2">
+            <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari produk kue..."
+                class="w-full sm:w-1/2 px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400" />
+            <button type="submit" class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded">
+                Cari
+            </button>
+        </form>
+    </section>
+
+
     <!-- Daftar Produk -->
     <section class="px-6 pb-12">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+            @if ($produks->isEmpty())
+                <div class="col-span-full text-center text-gray-500">
+                    Produk tidak ditemukan.<br>
+                    <a href="{{ route('produk.index') }}" class="text-pink-500 underline hover:text-pink-700">
+                        Kembali ke semua produk
+                    </a>
+                </div>
+            @endif
+
 
             @foreach ($produks as $produk)
                 <!-- Kartu Produk -->

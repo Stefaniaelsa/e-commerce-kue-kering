@@ -18,14 +18,27 @@ class ProductsController extends Controller
     // Untuk halaman produk
     public function index()
     {
-        $produks = Product::all();
+        $produks = Product::orderBy('nama', 'asc')->get();
         return view('produk', compact('produks'));
     }
+
 
     // Menampilkan detail produk
     public function show($id)
     {
         $produk = Product::with('variants')->findOrFail($id);
         return view('produk-detail', compact('produk'));
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('q');
+
+        $produks = Product::where('nama', 'LIKE', '%' . $query . '%')
+            ->orWhere('deskripsi', 'LIKE', '%' . $query . '%')
+            ->orderBy('nama', 'asc')
+            ->get();
+
+        return view('produk', compact('produks'));
     }
 }

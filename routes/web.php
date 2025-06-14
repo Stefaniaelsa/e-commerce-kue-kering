@@ -22,7 +22,8 @@ use App\Http\Controllers\UserController as WebUserController;
 | Public Routes (Tanpa Login)
 |--------------------------------------------------------------------------
 */
-Route::get('/', fn() => view('login'));
+
+Route::get('/', fn () => view('login'));
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.proses');
 Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
@@ -50,7 +51,7 @@ Route::middleware(['auth:web'])->group(function () {
         $bestSellerProduk = \App\Models\Product::where('is_best_seller', true)->get();
         $favoritProduk = \App\Models\Product::where('is_favorit', true)->get();
         $keranjang = \App\Models\Keranjang::where('user_id', auth()->id())->first();
-    session(['total_produk' => $keranjang ? $keranjang->total_produk : 0]);
+        session(['total_produk' => $keranjang ? $keranjang->total_produk : 0]);
 
         return view('beranda', compact('produks', 'bestSellerProduk', 'favoritProduk'));
     })->name('beranda');
@@ -60,6 +61,7 @@ Route::middleware(['auth:web'])->group(function () {
 
     // Produk
     Route::get('/produk', [ProductsController::class, 'index'])->name('produk.index');
+    Route::get('/produk/search', [ProductsController::class, 'search'])->name('produk.search');
     Route::get('/produk/{id}', [ProductsController::class, 'show'])->name('produk.detail');
 
     // Keranjang
@@ -71,7 +73,7 @@ Route::middleware(['auth:web'])->group(function () {
 
     // Order
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
-   // Route::get('/order/{id}', [OrderController::class, 'show'])->name('order.show');
+    // Route::get('/order/{id}', [OrderController::class, 'show'])->name('order.show');
 
     // Pesanan
     Route::get('/pesanan', [PesananController::class, 'index'])->name('pesanan.index');
@@ -88,7 +90,7 @@ Route::middleware(['auth:web'])->group(function () {
     // Route::get('/konfirmasi/{id}', [KonfirmasiPembayaranController::class, 'show'])->name('konfirmasi.show');
     // Route::post('/konfirmasi/{id}/update', [KonfirmasiPembayaranController::class, 'updateStatus'])->name('konfirmasi.update');
 
-    Route::get('/konfirmasi-pembayaran', fn() => view('konfirmasi-pembayaran'))->name('konfirmasi.pembayaran');
+    Route::get('/konfirmasi-pembayaran', fn () => view('konfirmasi-pembayaran'))->name('konfirmasi.pembayaran');
 });
 
 /*

@@ -9,12 +9,6 @@
                 <i class="fas fa-money-check-alt text-primary"></i>
                 Pesanan
             </h2>
-            <div
-                class="bg-secondary px-5 py-2 rounded-full text-primary font-semibold flex items-center gap-2 select-none shadow-md">
-                <i class="fas fa-coins"></i>
-                <span>Total:</span>
-                <span>Rp{{ number_format($cartItems->sum('harga') + 10000, 0, ',', '.') }}</span>
-            </div>
         </div>
 
         @if ($cartItems->isEmpty())

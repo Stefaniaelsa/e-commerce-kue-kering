@@ -14,7 +14,6 @@ use App\Models\OrderItem;
 
 class CartController extends Controller
 {
-    // Menampilkan isi keranjang pengguna yang sedang login
     public function index()
     {
         $keranjang = Keranjang::where('user_id', Auth::id())
@@ -26,76 +25,85 @@ class CartController extends Controller
         return view('keranjang', compact('cartItems', 'keranjang'));
     }
 
-    // Menambahkan produk ke keranjang
-public function store(Request $request)
-{
-    $request->validate([
-        'id_varian' => 'required|exists:product_variants,id',
-        'jumlah' => 'required|integer|min:1',
-    ]);
-
-    $varian = ProductVariant::findOrFail($request->id_varian);
-    $harga = $varian->harga;
-
-    $subTotal = $harga * $request->jumlah;
-    $userId = Auth::id();
-    $keranjang = Keranjang::firstOrCreate(
-        ['user_id' => $userId, 'status' => 'keranjang'],
-        ['total_harga' => 0, 'total_produk' => 0]
-    );
-
-    // Cari item di keranjang berdasar varian
-    $item = Item_Keranjang::where('id_keranjang', $keranjang->id)
-        ->where('id_varian', $request->id_varian)
-        ->first();
-
-    if ($item) {
-        $item->jumlah += $request->jumlah;
-        $item->harga += $subTotal;
-        $item->save();
-    } else {
-        Item_Keranjang::create([
-            'id_keranjang' => $keranjang->id,
-            'id_varian' => $request->id_varian,
-            'jumlah' => $request->jumlah,
-            'harga' => $subTotal,
+    public function store(Request $request)
+    {
+        $request->validate([
+            'id_varian' => 'required|exists:product_variants,id',
+            'jumlah' => 'required|integer|min:1',
         ]);
+
+        $varian = ProductVariant::findOrFail($request->id_varian);
+
+        // ✅ Cek stok cukup
+        if ($request->jumlah > $varian->stok) {
+            return redirect()->back()->with('error', 'Stok tidak mencukupi untuk jumlah yang diminta.');
+        }
+
+        $harga = $varian->harga;
+        $subTotal = $harga * $request->jumlah;
+        $userId = Auth::id();
+
+        $keranjang = Keranjang::firstOrCreate(
+            ['user_id' => $userId, 'status' => 'keranjang'],
+            ['total_harga' => 0, 'total_produk' => 0]
+        );
+
+        $item = Item_Keranjang::where('id_keranjang', $keranjang->id)
+            ->where('id_varian', $request->id_varian)
+            ->first();
+
+        if ($item) {
+            $totalJumlahBaru = $item->jumlah + $request->jumlah;
+            if ($totalJumlahBaru > $varian->stok) {
+                return redirect()->back()->with('error', 'Stok tidak cukup untuk menambahkan item sebanyak itu.');
+            }
+
+            $item->jumlah = $totalJumlahBaru;
+            $item->harga = $totalJumlahBaru * $harga;
+            $item->save();
+        } else {
+            Item_Keranjang::create([
+                'id_keranjang' => $keranjang->id,
+                'id_varian' => $request->id_varian,
+                'jumlah' => $request->jumlah,
+                'harga' => $subTotal,
+            ]);
+        }
+
+        $keranjang->total_harga = $keranjang->Item_Keranjang()->sum('harga');
+        $keranjang->total_produk = $keranjang->Item_Keranjang()->count('id_varian');
+        session(['total-produk' => $keranjang->total_produk]);
+        $keranjang->save();
+
+        $varian->stok -= $request->jumlah;
+        $varian->save();
+
+        return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang.');
     }
 
-    // Update total harga dan total produk keranjang
-    $keranjang->total_harga = $keranjang->Item_Keranjang()->sum('harga');
-    $keranjang->total_produk = $keranjang->Item_Keranjang()->count('id_varian');
-    session(['total_produk' => $keranjang->total_produk]);
-    $keranjang->save();
-
-    // Kurangi stok varian setelah dimasukkan ke keranjang
-    $varian->stok -= $request->jumlah;
-    $varian->save();
-
-    return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang.');
-}
-
-
-    // Menghapus item dari keranjang
     public function destroy($id)
     {
         $item = Item_Keranjang::findOrFail($id);
         $keranjang = $item->keranjang;
 
+        // ✅ Kembalikan stok
+        $varian = ProductVariant::findOrFail($item->id_varian);
+        $varian->stok += $item->jumlah;
+        $varian->save();
+
         $item->delete();
 
-        // Update total harga keranjang
         $keranjang->total_harga = $keranjang->Item_Keranjang()->sum('harga');
+        $keranjang->total_produk = $keranjang->Item_Keranjang()->count('id_varian');
+        session(['total-produk' => $keranjang->total_produk]);
         $keranjang->save();
 
-        return redirect()->route('cart.index')->with('success', 'Item berhasil dihapus dari keranjang.');
+        return redirect()->route('cart.index')->with('success', 'Item berhasil dihapus dan stok dikembalikan.');
     }
 
-    // Mengubah jumlah item di keranjang
     public function update(Request $request, $id)
     {
         $item = Item_Keranjang::findOrFail($id);
-
         $oldJumlah = $item->jumlah;
 
         if ($request->has('action')) {
@@ -111,17 +119,23 @@ public function store(Request $request)
         $diffJumlah = $item->jumlah - $oldJumlah;
 
         $varian = ProductVariant::findOrFail($item->id_varian);
-        $hargaSatuan = $varian->harga;
 
-        $item->harga = $item->jumlah * $hargaSatuan;
+        // ✅ Cek jika stok cukup saat update naik
+        if ($diffJumlah > 0 && $diffJumlah > $varian->stok) {
+            return back()->with('error', 'Stok tidak mencukupi untuk update jumlah item.');
+        }
+
+        $item->harga = $item->jumlah * $varian->harga;
         $item->save();
 
-        // Penyesuaian stok varian
+        // ✅ Update stok
         $varian->stok -= $diffJumlah;
         $varian->save();
 
         $keranjang = $item->keranjang;
         $keranjang->total_harga = $keranjang->Item_Keranjang()->sum('harga');
+        $keranjang->total_produk = $keranjang->Item_Keranjang()->count('id_varian');
+        session(['total-produk' => $keranjang->total_produk]);
         $keranjang->save();
 
         return back()->with('success', 'Keranjang diperbarui dan stok disesuaikan');
@@ -131,7 +145,6 @@ public function store(Request $request)
     {
         $user = Auth::user();
 
-        // Validasi input checkout
         $request->validate([
             'alamat' => 'required|string',
             'pengiriman' => 'required|in:gojek,ambil ditempat',
@@ -140,7 +153,7 @@ public function store(Request $request)
 
         $keranjang = Keranjang::where('user_id', $user->id)
             ->where('status', 'keranjang')
-            ->with('Item_Keranjang') // pastikan relasi ini ada di model
+            ->with('Item_Keranjang')
             ->first();
 
         if (!$keranjang || $keranjang->Item_Keranjang->isEmpty()) {
@@ -150,7 +163,6 @@ public function store(Request $request)
         DB::beginTransaction();
 
         try {
-            // Buat pesanan baru
             $order = Order::create([
                 'user_id' => $user->id,
                 'total_harga' => $keranjang->total_harga,
@@ -160,7 +172,6 @@ public function store(Request $request)
                 'catatan' => $request->catatan,
             ]);
 
-            // Pindahkan semua item ke order_items
             foreach ($keranjang->Item_Keranjang as $item) {
                 OrderItem::create([
                     'order_id' => $order->id,
@@ -170,8 +181,8 @@ public function store(Request $request)
                 ]);
             }
 
-            // Tandai keranjang sudah selesai
             $keranjang->update(['status' => 'selesai']);
+            session(['total-produk' => 0]);
 
             DB::commit();
 
@@ -182,6 +193,4 @@ public function store(Request $request)
             return back()->with('error', 'Gagal membuat pesanan: ' . $e->getMessage());
         }
     }
-
-
 }
