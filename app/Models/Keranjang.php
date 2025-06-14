@@ -14,6 +14,7 @@ class Keranjang extends Model
         'user_id',
         'status',
         'total_harga',
+        'total_produk'
     ];
 
     public $timestamps = false;
