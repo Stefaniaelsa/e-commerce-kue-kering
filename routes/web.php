@@ -102,6 +102,7 @@ Route::middleware(['auth:web'])->group(function () {
 */
 Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function () {
     Route::get('/dashboard_admin', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/export', [DashboardController::class, 'exportPDF'])->name('dashboard.export');
 
     // Manajemen Produk, User, Admin, dan Pesanan
     Route::resource('products', ProductController::class);
