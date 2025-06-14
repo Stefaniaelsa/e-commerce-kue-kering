@@ -2,47 +2,6 @@
 
 @section('title', 'Keranjang Belanja')
 @section('content')
-    <!-- Navbar -->
-    <header class="bg-pink-200 shadow p-4 flex justify-between items-center">
-        <h1 class="text-2xl font-bold select-none">IniKue</h1>
-        <nav class="space-x-6 text-sm flex items-center">
-            <a href="{{ url('/beranda') }}" class="hover:text-pink-700 font-medium transition">Beranda</a>
-            <a href="{{ url('/produk') }}" class="hover:text-pink-700 font-medium transition">Produk</a>
-            <a href="{{ url('/pesanan') }}" class="hover:text-pink-700 font-medium transition">Pesanan Saya</a>
-            <a href="#" class="hover:text-pink-700 font-medium transition">Akun</a>
-            <form method="POST" action="{{ route('logout') }}" class="inline ml-4">
-                @csrf
-                <button type="submit"
-                    class="text-red-600 hover:text-red-800 font-medium flex items-center space-x-1 transition">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>
-                </button>
-            </form>
-        </nav>
-    </header>
-
-
-    {{-- @if (session('success'))
-        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4" x-data="{ show: true }"
-            x-show="show" x-init="setTimeout(() => { show = false;
-                window.location.href = '{{ route('produk.index') }}'; }, 3000)">
-            <div class="bg-white rounded-xl p-6 max-w-md w-full animate-fade-in">
-                <div class="flex justify-end">
-                    <button @click="show = false; window.location.href = '{{ route('produk.index') }}'"
-                        class="text-gray-500 hover:text-gray-700">
-                        ✕
-                    </button>
-                </div>
-                <h3 class="text-lg font-semibold text-gray-800 mb-2">Pembayaran Berhasil!</h3>
-                <p class="text-gray-600 mb-4">{{ session('success') }}</p>
-                <button @click="show = false; window.location.href = '{{ route('produk.index') }}'"
-                    class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-accent transition-colors">
-                    Lanjut Belanja
-                </button>
-            </div>
-        </div>
-    @endif --}}
-
     <!-- Konten Upload Bukti Pembayaran -->
     <main class="flex-grow max-w-4xl mx-auto py-10 px-4 sm:px-6 w-full">
         <!-- Header dengan Back Button -->

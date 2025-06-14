@@ -1,5 +1,5 @@
 <!-- Navbar -->
-<header class="bg-pink-200 shadow p-4 flex justify-between items-center">
+{{-- <header class="bg-pink-200 shadow p-4 flex justify-between items-center">
     <h1 class="text-2xl font-bold">IniKue</h1>
     <nav class="space-x-4 text-sm flex items-center">
         <a href="{{ url('/beranda') }}" class="hover:text-pink-700 font-medium text-base">Beranda</a>
