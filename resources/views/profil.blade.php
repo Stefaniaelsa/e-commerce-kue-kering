@@ -77,7 +77,7 @@
                                             @if($order->status == 'selesai') bg-green-100 text-green-800
                                             @elseif($order->status == 'diproses') bg-blue-100 text-blue-800
                                             @elseif($order->status == 'menunggu') bg-yellow-100 text-yellow-800
-                                            @else bg-gray-100 text-gray-800 @endif">
+                                            @else bg-red-100 text-red-600 @endif">
                                             {{ ucfirst($order->status) }}
                                         </span>
                                     </div>
