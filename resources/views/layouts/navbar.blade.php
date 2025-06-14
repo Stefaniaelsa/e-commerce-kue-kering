@@ -10,11 +10,12 @@
             <i class="fas fa-shopping-cart text-base"></i>
             @if (session('total-produk') > 0)
                 <span
-                    class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    class="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-xs leading-tight rounded-full h-5 min-w-[1.25rem] px-1 flex items-center justify-center">
                     {{ session('total-produk') > 99 ? '99+' : session('total-produk') }}
                 </span>
             @endif
         </a>
+
 
         <!-- Akun dengan Dropdown -->
         <div class="relative group">

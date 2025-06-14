@@ -57,11 +57,11 @@ class OrderController extends Controller
             // Simpan detail order per item di keranjang
             foreach ($cartItems->item_keranjang as $item) {
                 OrderItem::create([
-                    'order_id' => $order->id,
-                    'varian_id' => $item->id_varian,
-                    'jumlah' => $item->jumlah,
-                    'harga' => $item->harga / max(1, $item->jumlah), // Harga per item
-                    'sub_total' => $item->harga,
+                    'order_id'   => $order->id,
+                    'varian_id'  => $item->id_varian,
+                    'jumlah'     => $item->jumlah,
+                    'harga'      => $item->harga / max(1, $item->jumlah), // Harga per item
+                    'sub_total'  => $item->harga,
                 ]);
             }
 

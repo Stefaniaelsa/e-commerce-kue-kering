@@ -87,6 +87,8 @@ Route::middleware(['auth:web'])->group(function () {
     Route::get('/pembayaran', [PembayaranController::class, 'show'])->name('pembayaran');
     Route::post('/konfirmasi', [PembayaranController::class, 'store'])->name('konfirmasi.upload');
 
+    
+
     // Route::get('/konfirmasi/{id}', [KonfirmasiPembayaranController::class, 'show'])->name('konfirmasi.show');
     // Route::post('/konfirmasi/{id}/update', [KonfirmasiPembayaranController::class, 'updateStatus'])->name('konfirmasi.update');
 
@@ -106,4 +108,7 @@ Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function
     Route::resource('users', UserController::class);
     Route::resource('admins', adminController::class);
     Route::resource('orders', OrdersController::class);
+    
+    Route::resource('pembayarans', App\Http\Controllers\Admin\PembayaranController::class)->only(['index', 'update']);
 });
+

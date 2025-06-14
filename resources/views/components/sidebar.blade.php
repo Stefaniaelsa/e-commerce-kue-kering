@@ -17,10 +17,12 @@
     <a href="{{ route('admin.orders.index') }}" class="flex items-center text-[#4e3d3a] hover:text-pink-700">
       <i class="fas fa-shopping-cart mr-2"></i> Pesanan
     </a>
+    <a href="{{ route('admin.pembayarans.index') }}" class="flex items-center text-[#4e3d3a] hover:text-pink-700">
+      <i class="fas fa-money-check-alt mr-2"></i> Pembayaran
+    </a>
     <a href="{{ route('admin.users.index') }}" class="flex items-center text-[#4e3d3a] hover:text-pink-700">
       <i class="fas fa-users mr-2"></i> Pelanggan
     </a>
-    <!-- Tambah menu Admin di sini -->
     <a href="{{ route('admin.admins.index') }}" class="flex items-center text-[#4e3d3a] hover:text-pink-700">
       <i class="fas fa-user-shield mr-2"></i> Admin
     </a>
