@@ -1,6 +1,7 @@
 @extends('layouts.app-user')
 
 @section('title', 'Keranjang Belanja')
+
 @section('content')
     <!-- Judul Halaman -->
     <section class="text-center py-8 px-4">
@@ -38,12 +39,11 @@
             @foreach ($produks as $produk)
                 <!-- Kartu Produk -->
                 <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-all p-4 flex flex-col">
-                    <div class="aspect-[4/3] w-full mb-3">
+                    <div class="w-full h-48 mb-3 overflow-hidden rounded">
                         <img src="{{ asset('images/' . $produk->gambar) }}" alt="{{ $produk->nama }}"
-                            class="rounded w-full h-full object-cover" />
+                            class="w-full h-full object-cover object-center" />
                     </div>
                     <h4 class="font-bold text-base sm:text-lg mb-1">{{ $produk->nama }}</h4>
-                    {{-- <p class="text-sm text-gray-500">Rp {{ number_format($produk->harga, 0, ',', '.') }}</p> --}}
                     <a href="{{ route('produk.detail', ['id' => $produk->id]) }}"
                         class="mt-auto block text-center bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded text-sm">
                         Lihat Produk
