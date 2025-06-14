@@ -34,7 +34,7 @@ class PembayaranController extends Controller
         try {
            if ($request->hasFile('bukti_transfer')) {
             $user = Auth::user();
-            $order = Order::where('user_id', $user->id)->firstOrFail();
+            $order = Order::where('user_id', $user->id)->orderBy('id', 'desc')->firstOrFail();
 
             // Upload dan ambil path penyimpanan
             $buktiTransfer = $request->file('bukti_transfer');
@@ -51,7 +51,7 @@ class PembayaranController extends Controller
 
 
         }
-        
+
         } catch (\Exception $e) {
             \Log::error('Error proses pembayaran: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Terjadi kesalahan sistem. Silakan coba lagi atau hubungi admin.');
