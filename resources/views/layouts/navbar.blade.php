@@ -43,13 +43,3 @@
         </div>
     </nav>
 </header>
-
-<!-- Alert Error -->
-@if (session('error'))
-    <div class="max-w-5xl mx-auto px-4 mt-4">
-        <div class="bg-pink-100 border border-pink-400 text-pink-700 px-4 py-3 rounded relative" role="alert">
-            <strong class="font-bold">Maaf!</strong>
-            <span class="block sm:inline">Jumlah produk yang ingin kamu tambahkan melebihi stok yang tersedia.</span>
-        </div>
-    </div>
-@endif

@@ -61,7 +61,7 @@ class Order extends Model
 
     public function checkAndUpdateExpired()
     {
-        if ($this->isExpired()) {
+        if ($this->getDeadlineTime() < now()) {
             // Update status menjadi dibatalkan
             $this->update(['status' => 'dibatalkan']);
 
@@ -72,16 +72,23 @@ class Order extends Model
                     $variant->increment('stok', $orderItem->jumlah);
                 }
             }
+            \Log::info('Pesanan dengan ID ' . $this->id . ' telah dibatalkan karena melewati batas waktu pembayaran.');
 
             return true;
         }
+
+        \Log::info("Pesanan dengan ID {$this->id} belum melewati batas waktu pembayaran." . now()->diffInHours($this->tanggal_pesanan) . ' jam.');
 
         return false;
     }
 
     public function getDeadlineTime()
     {
-        return $this->tanggal_pesanan->addHours(24);
+        $tanggalPesanan = $this->tanggal_pesanan instanceof \Carbon\Carbon
+            ? $this->tanggal_pesanan
+            : \Carbon\Carbon::parse($this->tanggal_pesanan);
+
+        return $tanggalPesanan->addHours(24);
     }
 
     public function getRemainingTime()

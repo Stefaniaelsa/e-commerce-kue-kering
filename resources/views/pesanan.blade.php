@@ -91,19 +91,20 @@
                     class="w-full p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary"
                     placeholder="Masukkan alamat pengiriman...">{{ old('alamat', $user->alamat ?? '') }}</textarea>
 
-                    <!-- Metode Pengiriman -->
+                <!-- Metode Pengiriman -->
+                <section>
+                    <label for="metode_pengiriman" class="block text-sm font-semibold text-gray-700 mb-2">Metode
+                        Pengiriman <span class="text-red-600">*</span></label>
                     <select id="metode_pengiriman" name="metode_pengiriman" required
                         class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
-                        <option value="" disabled {{ old('metode_pengiriman') ? '' : 'selected' }}>Pilih metode pengiriman</option>
-                        <option value="gojek" {{ old('metode_pengiriman') == 'gojek' ? 'selected' : '' }}>Gojek</option>
-                        <option value="ambil ditempat" {{ old('metode_pengiriman') == 'ambil ditempat' ? 'selected' : '' }}>Ambil di Tempat</option>
+                        <option value="" disabled {{ old('metode_pengiriman') ? '' : 'selected' }}>Pilih metode pengiriman
+                        </option>
+                        <option value="gojek" {{ old('metode_pengiriman') == 'gojek' ? 'selected' : '' }}>Gojek
+                        </option>
+                        <option value="ambil ditempat" {{ old('metode_pengiriman') == 'ambil ditempat' ? 'selected' : '' }}>
+                            Ambil di Tempat</option>
                     </select>
-
-                <!-- Ongkos Kirim dengan class untuk JS -->
-                <div class="flex justify-between">
-                    <span>Ongkos Kirim</span>
-                    <span class="ongkos-kirim">Rp 10.000</span>
-                </div>
+                </section>
 
                 <!-- Metode Pembayaran -->
                 <section>
@@ -112,45 +113,29 @@
                     <select id="metode_pembayaran" name="metode_pembayaran" required
                         class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
                         <option value="" disabled {{ old('metode_pembayaran') ? '' : 'selected' }}>Pilih metode
-                        </option>
+                            pembayaran</option>
                         <option value="transfer" {{ old('metode_pembayaran') == 'transfer' ? 'selected' : '' }}>
                             Transfer Bank</option>
                         <option value="cod" {{ old('metode_pembayaran') == 'cod' ? 'selected' : '' }}>Bayar di
-                            Tempat
-                        </option>
+                            Tempat (COD)</option>
                     </select>
                     @error('metode_pembayaran')
                         <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
                     @enderror
+                </section>
 
-
-                    <!-- Pilihan Bank -->
-                    {{-- <div id="pilihan-bank"
-                        class="mt-4 rounded-lg border border-gray-300 p-4 bg-white shadow-sm {{ old('metode_pembayaran') == 'transfer' ? '' : 'hidden' }}">
-                        <label for="bank_tujuan" class="block text-sm font-semibold text-gray-700 mb-2">Pilih Bank <span
-                                class="text-red-600">*</span></label>
-                        <select id="bank_tujuan" name="bank_tujuan"
-                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
-                            <option value="" disabled {{ old('bank_tujuan') ? '' : 'selected' }}>Pilih Bank
-                                Tujuan
-                            </option>
-                            <option value="BCA" {{ old('bank_tujuan') == 'BCA' ? 'selected' : '' }}>BCA</option>
-                            <option value="BNI" {{ old('bank_tujuan') == 'BNI' ? 'selected' : '' }}>BNI</option>
-                            <option value="Mandiri" {{ old('bank_tujuan') == 'Mandiri' ? 'selected' : '' }}>Mandiri
-                            </option>
-                        </select>
-                        @error('bank_tujuan')
-                            <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div> --}}
-
-                    <!-- No Rekening Toko -->
-                    <div id="no-rekening"
-                        class="mt-4 bg-green-50 p-5 rounded-xl border border-green-400 text-green-900 shadow-md select-none {{ old('metode_pembayaran') == 'transfer' ? '' : 'hidden' }}">
-                        <p class="text-sm text-gray-800 mb-2 italic">Silakan transfer ke rekening tujuan berikut:</p>
-                        <p class="font-medium"><span class="font-semibold">Bank:</span> BCA</p>
-                        <p class="font-medium"><span class="font-semibold">No. Rekening:</span> 123456</p>
-                        <p class="font-medium"><span class="font-semibold">Atas Nama:</span> Toko IniKue</p>
+                <!-- Info Bank (hanya muncul jika memilih transfer) -->
+                <section id="info-bank" class="hidden">
+                    <div class="bg-green-50 border border-green-200 p-4 rounded-lg">
+                        <h4 class="font-semibold text-green-800 mb-2 flex items-center gap-2">
+                            <i class="fas fa-university"></i>
+                            Informasi Transfer
+                        </h4>
+                        <div class="space-y-1 text-sm text-green-700">
+                            <p><span class="font-semibold">Bank:</span> BCA</p>
+                            <p><span class="font-semibold">No. Rekening:</span> 123456</p>
+                            <p><span class="font-semibold">Atas Nama:</span> Toko IniKue</p>
+                        </div>
                     </div>
                 </section>
 
@@ -173,28 +158,39 @@
     </main>
 
     <script>
-        const metodeSelect = document.getElementById('metode_pembayaran');
-        const bankSection = document.getElementById('pilihan-bank');
-        const noRekening = document.getElementById('no-rekening');
+        document.addEventListener('DOMContentLoaded', function() {
+            const metodePembayaran = document.getElementById('metode_pembayaran');
+            const infoBank = document.getElementById('info-bank');
+            const metodePengiriman = document.getElementById('metode_pengiriman');
+            const ongkosKirimEl = document.querySelector('.ongkos-kirim');
 
-        metodeSelect.addEventListener('change', () => {
-            if (metodeSelect.value === 'transfer') {
-                bankSection.classList.remove('hidden');
-                noRekening.classList.remove('hidden');
-            } else {
-                bankSection.classList.add('hidden');
-                noRekening.classList.add('hidden');
+            // Handle metode pembayaran change
+            metodePembayaran.addEventListener('change', function() {
+                if (this.value === 'transfer') {
+                    infoBank.classList.remove('hidden');
+                } else {
+                    infoBank.classList.add('hidden');
+                }
+            });
+
+            // Handle metode pengiriman change
+            metodePengiriman.addEventListener('change', function() {
+                const hargaOngkir = this.value === 'gojek' ? 10000 : 0;
+                ongkosKirimEl.textContent = 'Rp ' + hargaOngkir.toLocaleString('id-ID');
+                updateTotal();
+            });
+
+            // Fungsi untuk mengupdate total
+            function updateTotal() {
+                const subtotal = parseFloat(document.querySelector('[data-subtotal]').dataset.subtotal) || 0;
+                const ongkir = metodePengiriman.value === 'gojek' ? 10000 : 0;
+                const total = subtotal + ongkir;
+                document.querySelector('.total-harga').textContent = 'Rp ' + total.toLocaleString('id-ID');
             }
-        });
 
-        const metodePengiriman = document.getElementById('metode_pengiriman');
-        const ongkosKirimEl = document.querySelector('.ongkos-kirim');
-
-        metodePengiriman.addEventListener('change', () => {
-            if (metodePengiriman.value === 'ambil') {
-                ongkosKirimEl.textContent = 'Rp 0 (Ambil di Tempat)';
-            } else {
-                ongkosKirimEl.textContent = 'Rp 10.000';
+            // Set initial state
+            if (metodePembayaran.value === 'transfer') {
+                infoBank.classList.remove('hidden');
             }
         });
     </script>

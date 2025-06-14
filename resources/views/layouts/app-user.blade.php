@@ -63,6 +63,13 @@
         </div>
     @endif
 
+    @if (session('error'))
+        <div id="notif-error"
+            class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-400 text-white px-6 py-3 rounded shadow-lg z-50 text-center animate-fade-in-out">
+            <i class="fas fa-exclamation-triangle mr-2"></i>{{ session('error') }}
+        </div>
+    @endif
+
     <main class="flex-1 p-8 overflow-y-auto">
         @yield('content')
     </main>
