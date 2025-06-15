@@ -149,4 +149,18 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index')
             ->with('success', 'Produk berhasil dihapus!');
     }
+
+    public function search(Request $request)
+{
+    $keyword = $request->query('q');
+    $products = Product::with('variants')
+        ->where('nama', 'like', "%$keyword%")
+        ->orWhere('deskripsi', 'like', "%$keyword%")
+        ->get();
+
+    return response()->json([
+        'html' => view('admin.products.product_table', compact('products'))->render()
+    ]);
+}
+
 }

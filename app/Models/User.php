@@ -12,7 +12,6 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    // Menonaktifkan timestamps
     public $timestamps = false;
 
     /**
@@ -56,5 +55,11 @@ class User extends Authenticatable
 {
     return $this->role === 'admin';
 }
+
+public function alamat()
+{
+    return $this->hasOne(Alamat::class);
+}
+
 
 }

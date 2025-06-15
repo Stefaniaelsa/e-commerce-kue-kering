@@ -102,13 +102,15 @@ Route::middleware(['auth:web'])->group(function () {
 */
 Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function () {
     Route::get('/dashboard_admin', [DashboardController::class, 'index'])->name('dashboard');
+     Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
+
 
     // Manajemen Produk, User, Admin, dan Pesanan
     Route::resource('products', ProductController::class);
     Route::resource('users', UserController::class);
     Route::resource('admins', adminController::class);
     Route::resource('orders', OrdersController::class);
-    
+   
     Route::resource('pembayarans', App\Http\Controllers\Admin\PembayaranController::class)->only(['index', 'update']);
 });
 
