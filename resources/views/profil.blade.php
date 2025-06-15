@@ -1,6 +1,7 @@
 @extends('layouts.app-user')
 
 @section('title', 'Profil Saya')
+
 @section('content')
     <main class="max-w-6xl mx-auto py-8 px-4">
         <!-- Informasi Profil -->
@@ -31,10 +32,15 @@
                         <span class="text-gray-700">: {{ $user->nomor_telepon ?? '-' }}</span>
                     </div>
 
+                    @php
+                        $alamat = json_decode($user->alamat);
+                    @endphp
                     <div class="flex items-center">
                         <i class="fas fa-map-marker-alt text-pink-500 w-6"></i>
                         <span class="ml-3 font-semibold w-32">Alamat</span>
-                        <span class="text-gray-700">: {{ $user->alamat ?? '-' }}</span>
+                        <span class="text-gray-700">
+                            : {{ $alamat->jalan ?? '-' }}, {{ $alamat->kota ?? '-' }}, {{ $alamat->provinsi ?? '-' }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -73,8 +79,9 @@
                                 <div class="flex justify-between items-center mb-4">
                                     <div class="flex items-center gap-2">
                                         <span class="text-gray-600">Status:</span>
-                                        <span class="px-3 py-1 rounded-full text-sm font-medium
-                                            @if($order->status == 'selesai') bg-green-100 text-green-800
+                                        <span
+                                            class="px-3 py-1 rounded-full text-sm font-medium
+                                            @if ($order->status == 'selesai') bg-green-100 text-green-800
                                             @elseif($order->status == 'diproses') bg-blue-100 text-blue-800
                                             @elseif($order->status == 'menunggu') bg-yellow-100 text-yellow-800
                                             @else bg-red-100 text-red-600 @endif">
@@ -106,7 +113,7 @@
                                         Detail
                                     </a>
 
-                                    @if($order->status == 'menunggu' && $order->metode_pembayaran == 'transfer')
+                                    @if ($order->status == 'menunggu' && $order->metode_pembayaran == 'transfer')
                                         <a href="{{ route('pembayaran') }}"
                                             class="inline-flex items-center px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg transition">
                                             <i class="fas fa-credit-card mr-2"></i>

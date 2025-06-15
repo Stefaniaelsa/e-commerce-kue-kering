@@ -32,13 +32,14 @@ class ProductsController extends Controller
 
     public function search(Request $request)
     {
-        $query = $request->input('q');
+        $query = $request->input('query');
 
         $produks = Product::where('nama', 'LIKE', '%' . $query . '%')
             ->orWhere('deskripsi', 'LIKE', '%' . $query . '%')
             ->orderBy('nama', 'asc')
+            ->limit(10)
             ->get();
 
-        return view('produk', compact('produks'));
+        return response()->json($produks);
     }
 }
