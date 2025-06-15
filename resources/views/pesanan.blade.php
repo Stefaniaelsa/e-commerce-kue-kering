@@ -87,9 +87,16 @@
                 </div>
 
                 <!-- Alamat Pengiriman -->
-                <textarea id="alamat" name="alamat" rows="3" required
-                    class="w-full p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="Masukkan alamat pengiriman...">{{ old('alamat', $user->alamat ?? '') }}</textarea>
+                <div class="mb-6">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Alamat Pengiriman
+                    </label>
+                    <p class="text-base text-gray-800 bg-gray-100 px-4 py-2 rounded-lg">
+                        {{ $user->alamat ? $user->alamat->jalan . ', ' . $user->alamat->kota . ', ' . $user->alamat->provinsi : '-' }}
+                    </p>
+                    <input type="hidden" name="alamat"
+                        value="{{ $user->alamat ? $user->alamat->jalan . ', ' . $user->alamat->kota . ', ' . $user->alamat->provinsi : '' }}">
+                </div>
 
                 <!-- Metode Pengiriman -->
                 <section>
@@ -97,11 +104,13 @@
                         Pengiriman <span class="text-red-600">*</span></label>
                     <select id="metode_pengiriman" name="metode_pengiriman" required
                         class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
-                        <option value="" disabled {{ old('metode_pengiriman') ? '' : 'selected' }}>Pilih metode pengiriman
+                        <option value="" disabled {{ old('metode_pengiriman') ? '' : 'selected' }}>Pilih metode
+                            pengiriman
                         </option>
                         <option value="gojek" {{ old('metode_pengiriman') == 'gojek' ? 'selected' : '' }}>Gojek
                         </option>
-                        <option value="ambil ditempat" {{ old('metode_pengiriman') == 'ambil ditempat' ? 'selected' : '' }}>
+                        <option value="ambil ditempat"
+                            {{ old('metode_pengiriman') == 'ambil ditempat' ? 'selected' : '' }}>
                             Ambil di Tempat</option>
                     </select>
                 </section>
@@ -124,7 +133,7 @@
                     @enderror
                 </section>
 
-                <!-- Info Bank (hanya muncul jika memilih transfer) -->
+                {{-- <!-- Info Bank (hanya muncul jika memilih transfer) -->
                 <section id="info-bank" class="hidden">
                     <div class="bg-green-50 border border-green-200 p-4 rounded-lg">
                         <h4 class="font-semibold text-green-800 mb-2 flex items-center gap-2">
@@ -137,7 +146,7 @@
                             <p><span class="font-semibold">Atas Nama:</span> Toko IniKue</p>
                         </div>
                     </div>
-                </section>
+                </section> --}}
 
                 <!-- Catatan -->
                 <section>
