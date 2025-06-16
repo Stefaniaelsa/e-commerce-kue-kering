@@ -106,4 +106,10 @@ class Order extends Model
 
         return $now->diffForHumans($deadline, ['parts' => 2]);
     }
+
+    public function details()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
 }

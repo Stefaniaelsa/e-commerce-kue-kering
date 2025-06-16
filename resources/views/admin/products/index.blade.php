@@ -1,4 +1,3 @@
-{{-- resources/views/admin/products/index.blade.php --}}
 @extends('layouts.app')
 
 @section('content')
@@ -15,6 +14,12 @@
         </div>
     @endif
 
+    {{-- Search --}}
+    <div class="mb-4">
+        <input type="text" id="search" placeholder="Cari produk..." 
+               class="w-full md:w-1/3 px-4 py-2 border border-gray-300 rounded" />
+    </div>
+
     <div class="overflow-x-auto">
         <table class="min-w-full bg-white border border-gray-200 rounded-lg">
             <thead class="bg-pink-100">
@@ -27,26 +32,22 @@
                     <th class="py-3 px-4 border-b text-left">Aksi</th>
                 </tr>
             </thead>
-            <tbody>
-                @forelse($products as $product)
+            <tbody id="product-table-body">
+                @foreach($products as $product)
                     <tr class="hover:bg-gray-50">
                         <td class="py-2 px-4 border-b">{{ $products->firstItem() + $loop->index }}</td>
 
-                        <!-- Kolom Gambar -->
                         <td class="py-2 px-4 border-b">
                             @if($product->gambar)
-                               <img src="{{ asset('images/' . $product->gambar) }}" alt="{{ $product->nama }}" class="w-16 h-16 object-cover">
+                                <img src="{{ asset('images/' . $product->gambar) }}" alt="{{ $product->nama }}" class="w-16 h-16 object-cover">
                             @else
                                 <span class="text-gray-400 italic">No Image</span>
                             @endif
                         </td>
 
-                        <!-- Kolom Nama -->
                         <td class="py-2 px-4 border-b">{{ $product->nama }}</td>
-
                         <td class="py-2 px-4 border-b">{{ $product->deskripsi }}</td>
 
-                        {{-- Kolom Varian: hanya tombol untuk tampilkan varian --}}
                         <td class="py-2 px-4 border-b">
                             <button type="button" class="text-blue-500 hover:underline" onclick="toggleVariants({{ $product->id }})">
                                 Lihat Varian ({{ $product->variants->count() }})
@@ -71,7 +72,8 @@
                             </div>
                         </td>
                     </tr>
-                    {{-- Baris varians tersembunyi --}}
+
+                    {{-- Baris varian tersembunyi --}}
                     <tr id="variants-{{ $product->id }}" class="hidden bg-gray-50">
                         <td colspan="6" class="p-4">
                             <table class="w-full bg-white border border-gray-200 rounded-lg">
@@ -94,24 +96,29 @@
                             </table>
                         </td>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="py-4 px-4 text-center text-gray-500">Belum ada produk.</td>
-                    </tr>
-                @endforelse
+                @endforeach
             </tbody>
-
-
         </table>
-        <div class="mt-4">
-        {{ $products->links() }}
+
+        <div class="mt-4" id="pagination-links">
+            {{ $products->links() }}
+        </div>
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function toggleVariants(id) {
         const row = document.getElementById(`variants-${id}`);
         row.classList.toggle('hidden');
     }
+
+    $('#search').on('keyup', function () {
+        const keyword = $(this).val();
+        $.get('{{ route('admin.products.search') }}', { q: keyword }, function (data) {
+            $('#product-table-body').html(data.html);
+            $('#pagination-links').html(''); // hilangkan pagination saat search
+        });
+    });
 </script>
 @endsection

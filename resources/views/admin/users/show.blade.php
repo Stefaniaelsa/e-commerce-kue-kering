@@ -16,11 +16,16 @@
                 </tr>
                 <tr class="bg-gray-100">
                     <th class="border border-gray-300 px-4 py-2 text-left">Nomor Telepon</th>
-                    <td class="border border-gray-300 px-4 py-2">{{ $user->nomor_telepon }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ $user->nomor_telepon ?? '-' }}</td>
                 </tr>
                 <tr>
                     <th class="border border-gray-300 px-4 py-2 text-left">Alamat</th>
-                    <td class="border border-gray-300 px-4 py-2">{{ $user->alamat }}</td>
+                    <td class="border border-gray-300 px-4 py-2">
+                        @php
+                            $alamat = json_decode($user->alamat);
+                        @endphp
+                        {{ $alamat->jalan ?? '-' }}, {{ $alamat->kota ?? '-' }}, {{ $alamat->provinsi ?? '-' }}
+                    </td>
                 </tr>
             </tbody>
         </table>

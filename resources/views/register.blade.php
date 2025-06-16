@@ -65,26 +65,41 @@
                         <label class="block mb-1 font-medium">Nomor Telepon</label>
                         <div class="flex items-center border border-gray-300 rounded-lg px-3 py-2">
                             <i class="fas fa-phone mr-2 text-gray-400"></i>
-                            <input type="text" name="phone" class="w-full outline-none" placeholder="08XXXXXXXXXX"
+                            <input type="text" name="nomor_telepon" class="w-full outline-none" placeholder="08XXXXXXXXXX"
                                 required>
                         </div>
-                        @error('phone')
+                        @error('nomor_telepon')
                             <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
                         @enderror
                     </div>
 
-                    <!-- Alamat -->
+                    <!-- Jalan -->
                     <div>
-                        <label class="block mb-1 font-medium">Alamat</label>
+                        <label class="block mb-1 font-medium">Alamat Jalan</label>
                         <div class="flex items-center border border-gray-300 rounded-lg px-3 py-2">
-                            <i class="fas fa-map-marker-alt mr-2 text-gray-400"></i>
-                            <input type="text" name="alamat" class="w-full outline-none"
-                                placeholder="Alamat lengkap" required>
+                            <i class="fas fa-road mr-2 text-gray-400"></i>
+                            <input type="text" name="jalan" class="w-full outline-none" placeholder="Contoh: Jl. Mawar No. 21" required>
                         </div>
-                        @error('alamat')
-                            <div class="text-red-500 text-sm mt-1">{{ $message }}</div>
-                        @enderror
                     </div>
+
+                    <!-- Kota -->
+                    <div>
+                        <label class="block mb-1 font-medium">Kota</label>
+                        <div class="flex items-center border border-gray-300 rounded-lg px-3 py-2">
+                            <i class="fas fa-city mr-2 text-gray-400"></i>
+                            <input type="text" name="kota" class="w-full outline-none" placeholder="Contoh: Surabaya" required>
+                        </div>
+                    </div>
+
+                    <!-- Provinsi -->
+                    <div>
+                        <label class="block mb-1 font-medium">Provinsi</label>
+                        <div class="flex items-center border border-gray-300 rounded-lg px-3 py-2">
+                            <i class="fas fa-map mr-2 text-gray-400"></i>
+                            <input type="text" name="provinsi" class="w-full outline-none" placeholder="Contoh: Jawa Timur">
+                        </div>
+                    </div>
+
 
                     <!-- Password -->
                     <div>
