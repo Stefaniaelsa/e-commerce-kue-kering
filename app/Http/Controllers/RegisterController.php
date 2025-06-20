@@ -23,8 +23,8 @@ class RegisterController extends Controller
             'password'     => 'required|min:6|confirmed',
             'nomor_telepon'=> 'nullable|string|max:15',
             'jalan'        => 'required|string|max:150',
-            'kota'         => 'required|string|max:100',
-            'provinsi'     => 'nullable|string|max:100',
+            'kelurahan'   => 'required|string|max:100',
+            'kecamatan'   => 'required|string|max:100',
         ]);
 
         // Simpan data user ke tabel users
@@ -40,8 +40,8 @@ class RegisterController extends Controller
         Alamat::create([
             'user_id'  => $user->id,
             'jalan'    => $request->jalan,
-            'kota'     => $request->kota,
-            'provinsi' => $request->provinsi,
+            'kelurahan' => $request->kelurahan,
+            'kecamatan' => $request->kecamatan,
         ]);
 
         // Redirect ke halaman login

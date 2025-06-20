@@ -75,7 +75,7 @@
                         <label class="flex items-center">
                             <input type="checkbox" class="mr-2" name="remember"> Ingat saya
                         </label>
-                        <a href="#" class="text-pink-500 hover:underline">Lupa Password?</a>
+                        <a href="{{ route('password.request') }}" class="text-pink-500 hover:underline">Lupa Password?</a>
                     </div>
 
                     <button type="submit"

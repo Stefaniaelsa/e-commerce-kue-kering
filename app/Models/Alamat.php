@@ -10,7 +10,7 @@ class Alamat extends Model
     protected $table = 'alamat';
 
     protected $fillable = [
-        'user_id', 'jalan', 'kota', 'provinsi'
+        'user_id', 'jalan', 'kelurahan', 'kecamatan'
     ];
 
     public function user()

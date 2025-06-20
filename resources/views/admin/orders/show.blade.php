@@ -17,11 +17,11 @@
                     {{ ucfirst($order->status) }}
                 </span>
             </div>
-            <div><strong>Total Harga:</strong> Rp {{ number_format($order->total_harga, 0, ',', '.') }}</div>
             <div><strong>Alamat Pengiriman:</strong> {{ $order->alamat_pengiriman }}</div>
             <div><strong>Metode Pembayaran:</strong> {{ $order->metode_pembayaran }}</div>
             <div><strong>Pengiriman:</strong> {{ $order->pengiriman }}</div>
-            <div><strong>Tanggal:</strong> {{ $order->tanggal_pesanan }}</div>
+            <div><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($order->tanggal_pesanan)->format('d M Y') }}</div>
+            <div><strong>Jam:</strong> {{ \Carbon\Carbon::parse($order->tanggal_pesanan)->format('H:i') }}</div>
         </div>
     </div>
 
@@ -47,6 +47,12 @@
                         </tr>
                     @endforeach
                 </tbody>
+                <tfoot class="bg-gray-50 font-semibold">
+                    <tr>
+                        <td colspan="3" class="p-3 border text-right">Total Harga:</td>
+                        <td class="p-3 border">Rp {{ number_format($order->total_harga, 0, ',', '.') }}</td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

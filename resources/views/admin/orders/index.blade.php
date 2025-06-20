@@ -14,7 +14,7 @@
             <table class="w-full border border-gray-200 bg-white">
                 <thead class="bg-pink-100">
                     <tr>
-                        <th class="p-2 border">#</th>
+                        <th class="p-2 border">No</th>
                         <th class="p-2 border">Nama Pembeli</th>
                         <th class="p-2 border">Total Harga</th>
                         <th class="p-2 border">Status</th>
@@ -57,13 +57,13 @@
                                         <option value="">Update Status</option>
                                         @if ($order->status == 'menunggu')
                                             <option value="diproses">Proses Pesanan</option>
-                                            <option value="dibatalkan">Batalkan</option>
+                                            <option value="batalkan">Batalkan</option>
                                         @elseif($order->status == 'diproses')
                                             <option value="selesai">Selesaikan</option>
-                                            <option value="dibatalkan">Batalkan</option>
+                                            <option value="batalkan">Batalkan</option>
                                         @elseif($order->status == 'selesai')
                                             <option value="diproses">Kembalikan ke Diproses</option>
-                                        @elseif($order->status == 'dibatalkan')
+                                        @elseif($order->status == ' dibatalkan')
                                             <option value="menunggu">Kembalikan ke Menunggu</option>
                                         @endif
                                     </select>

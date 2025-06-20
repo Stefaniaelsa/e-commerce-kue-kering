@@ -16,6 +16,8 @@ use App\Http\Controllers\PesananController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\UserController as WebUserController;
+use App\Http\Controllers\ResetPasswordController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +30,11 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.proses');
 Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register'])->name('register.process');
+Route::get('/forgot-password', [AuthController::class, 'showForgotForm'])->name('password.request');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+// Reset Password
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 /*
 |--------------------------------------------------------------------------

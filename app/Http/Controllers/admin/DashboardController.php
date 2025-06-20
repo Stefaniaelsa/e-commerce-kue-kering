@@ -50,26 +50,23 @@ class DashboardController extends Controller
             ->get();
 
         $pesananTerbaru = Order::with([
-            'user',
-            'orderItems',
-            'products.variants',
-        ])->latest('tanggal_pesanan')->limit(10)->get()->map(function ($order) {
-            return (object) [
-                'nama_user' => $order->user?->nama,
-                'total_harga' => $order->total_harga,
-                'status' => $order->status,
-                'tanggal_pesanan' => $order->tanggal_pesanan,
-                'produk' => $order->products->map(function ($product) use ($order) {
-                    $orderItem = $order->orderItems->where('varian_id', $product->variants->first()?->id)->first();
-
-                    return (object) [
-                        'nama_produk' => $product->nama,
-                        'ukuran' => $product->variants->first()?->ukuran,
-                        'jumlah' => $orderItem ? $orderItem->jumlah : 0,
-                    ];
-                }),
-            ];
-        });
+    'user',
+    'orderItems.variant.product', // tambahkan relasi berantai ini
+    ])->latest('tanggal_pesanan')->limit(10)->get()->map(function ($order) {
+        return (object) [
+            'nama_user' => $order->user?->nama,
+            'total_harga' => $order->total_harga,
+            'status' => $order->status,
+            'tanggal_pesanan' => $order->tanggal_pesanan,
+            'produk' => $order->orderItems->map(function ($item) {
+                return (object) [
+                    'nama_produk' => $item->variant?->product?->nama,
+                    'ukuran' => $item->variant?->ukuran,
+                    'jumlah' => $item->jumlah,
+                ];
+            }),
+        ];
+    });
 
         return view('admin.dashboard_admin', compact(
             'totalProduk', 

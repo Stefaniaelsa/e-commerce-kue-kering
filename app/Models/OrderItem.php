@@ -21,6 +21,11 @@ class OrderItem extends Model
         return $this->belongsTo(Order::class);
     }
 
+    public function product()
+    {
+        return $this->variant ? $this->variant->product : null;
+    }
+
     public function variant()
     {
         return $this->belongsTo(ProductVariant::class, 'varian_id');

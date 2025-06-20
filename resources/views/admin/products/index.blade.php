@@ -24,7 +24,7 @@
         <table class="min-w-full bg-white border border-gray-200 rounded-lg">
             <thead class="bg-pink-100">
                 <tr>
-                    <th class="py-3 px-4 border-b text-left">#</th>
+                    <th class="py-3 px-4 border-b text-left">No</th>
                     <th class="py-3 px-4 border-b text-left">Gambar</th>
                     <th class="py-3 px-4 border-b text-left">Nama</th>
                     <th class="py-3 px-4 border-b text-left">Deskripsi</th>
@@ -88,7 +88,7 @@
                                     @foreach($product->variants as $variant)
                                         <tr>
                                             <td class="py-2 px-3 border-b">{{ $variant->ukuran ?? 'Default' }}</td>
-                                            <td class="py-2 px-3 border-b">Rp {{ number_format($variant->harga,2,',','.') }}</td>
+                                            <td class="py-2 px-3 border-b">{{ number_format($variant->harga, 0, ',', '.') }}</td>
                                             <td class="py-2 px-3 border-b">{{ $variant->stok }}</td>
                                         </tr>
                                     @endforeach

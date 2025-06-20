@@ -82,23 +82,24 @@
                         </div>
                     </div>
 
-                    <!-- Kota -->
+                   <!-- Kelurahan -->
                     <div>
-                        <label class="block mb-1 font-medium">Kota</label>
+                        <label class="block mb-1 font-medium">Kelurahan</label>
                         <div class="flex items-center border border-gray-300 rounded-lg px-3 py-2">
                             <i class="fas fa-city mr-2 text-gray-400"></i>
-                            <input type="text" name="kota" class="w-full outline-none" placeholder="Contoh: Surabaya" required>
+                            <input type="text" name="kelurahan" class="w-full outline-none" placeholder="Contoh: Ketintang" required>
                         </div>
                     </div>
 
-                    <!-- Provinsi -->
+                    <!-- Kecamatan -->
                     <div>
-                        <label class="block mb-1 font-medium">Provinsi</label>
+                        <label class="block mb-1 font-medium">Kecamatan</label>
                         <div class="flex items-center border border-gray-300 rounded-lg px-3 py-2">
                             <i class="fas fa-map mr-2 text-gray-400"></i>
-                            <input type="text" name="provinsi" class="w-full outline-none" placeholder="Contoh: Jawa Timur">
+                            <input type="text" name="kecamatan" class="w-full outline-none" placeholder="Contoh: Gayungan" required>
                         </div>
                     </div>
+
 
 
                     <!-- Password -->

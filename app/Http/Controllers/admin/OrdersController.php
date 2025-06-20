@@ -29,7 +29,7 @@ class OrdersController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:menunggu,diproses,dikirim,selesai',
+            'status' => 'required|in:menunggu,diproses,dikirim,selesai,batalkan',
         ]);
 
         $order = Order::findOrFail($id);

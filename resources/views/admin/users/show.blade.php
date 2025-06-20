@@ -24,7 +24,7 @@
                         @php
                             $alamat = json_decode($user->alamat);
                         @endphp
-                        {{ $alamat->jalan ?? '-' }}, {{ $alamat->kota ?? '-' }}, {{ $alamat->provinsi ?? '-' }}
+                        {{ $alamat->jalan ?? '-' }}, {{ $alamat->kelurahan ?? '-' }}, {{ $alamat->kecamatan ?? '-' }}
                     </td>
                 </tr>
             </tbody>

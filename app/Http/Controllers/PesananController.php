@@ -105,12 +105,13 @@ class PesananController extends Controller
         return redirect('/beranda')->with('success', 'Pesanan berhasil dibuat!');
     }
 
-    public function show($id)
-    {
-        $order = Order::with(['orderItems.variant.produk'])
-            ->where('user_id', auth()->id())
-            ->findOrFail($id);
+   public function show($id)
+{
+    $order = Order::with(['orderItems.variant.produk', 'alamat'])
+        ->where('user_id', auth()->id())
+        ->findOrFail($id);
 
-        return view('pesanan.detail', compact('order'));
-    }
+    return view('pesanan.detail', compact('order'));
+}
+
 }

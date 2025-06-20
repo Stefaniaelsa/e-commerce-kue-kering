@@ -32,8 +32,17 @@
                     <p class="font-medium">{{ ucfirst($order->pengiriman) }}</p>
                 </div>
                 <div>
-                    <p class="text-gray-600 mb-1">Alamat Pengiriman</p>
-                    <p class="font-medium">{{ $order->alamat_pengiriman }}</p>
+                    <p class="font-medium">
+                        @if($order->pengiriman === 'kurir')
+                            @if($order->alamat)
+                                {{ $order->alamat->jalan ?? '-' }}, {{ $order->alamat->kelurahan ?? '-' }}, {{ $order->alamat->kecamatan ?? '-' }}
+                            @else
+                                <span class="text-red-600">Alamat tidak tersedia</span>
+                            @endif
+                        @else
+                            Diambil di Toko
+                        @endif
+                    </p>
                 </div>
             </div>
 

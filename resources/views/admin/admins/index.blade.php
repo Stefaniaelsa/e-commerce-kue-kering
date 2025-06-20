@@ -18,7 +18,7 @@
         <table class="min-w-full bg-white border border-gray-200 rounded-lg">
             <thead class="bg-pink-100">
                 <tr>
-                    <th class="py-3 px-4 border-b text-left">#</th>
+                    <th class="py-3 px-4 border-b text-left">No</th>
                     <th class="py-3 px-4 border-b text-left">Nama</th>
                     <th class="py-3 px-4 border-b text-left">Email</th>
                     <th class="py-3 px-4 border-b text-left">Nomor Telepon</th>

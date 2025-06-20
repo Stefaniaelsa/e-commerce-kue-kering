@@ -83,20 +83,32 @@
                     <label class="block text-sm font-semibold text-gray-700 mb-2">
                         Nama Penerima
                     </label>
-                    <p class="text-base text-gray-800 bg-gray-100 px-4 py-2 rounded-lg">{{ $user->nama }}</p>
+                    <input type="text" name="nama" class="w-full border border-gray-300 px-4 py-2 rounded-lg"
+                        placeholder="Nama Penerima"
+                        value="{{ old('nama', $user->nama) }}">
                 </div>
+
 
                 <!-- Alamat Pengiriman -->
                 <div class="mb-6">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">
-                        Alamat Pengiriman
-                    </label>
-                    <p class="text-base text-gray-800 bg-gray-100 px-4 py-2 rounded-lg">
-                        {{ $user->alamat ? $user->alamat->jalan . ', ' . $user->alamat->kota . ', ' . $user->alamat->provinsi : '-' }}
-                    </p>
-                    <input type="hidden" name="alamat"
-                        value="{{ $user->alamat ? $user->alamat->jalan . ', ' . $user->alamat->kota . ', ' . $user->alamat->provinsi : '' }}">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Alamat Pengiriman</label>
+
+                    <!-- Jalan -->
+                    <input type="text" name="jalan" class="w-full border border-gray-300 px-4 py-2 rounded-lg mb-2"
+                        placeholder="Nama Jalan"
+                        value="{{ old('jalan', $user->alamat->jalan ?? '') }}">
+
+                    <!-- Kelurahan -->
+                    <input type="text" name="kelurahan" class="w-full border border-gray-300 px-4 py-2 rounded-lg mb-2"
+                        placeholder="Kelurahan"
+                        value="{{ old('kelurahan', $user->alamat->kelurahan ?? '') }}">
+
+                    <!-- Kecamatan -->
+                    <input type="text" name="kecamatan" class="w-full border border-gray-300 px-4 py-2 rounded-lg"
+                        placeholder="Kecamatan"
+                        value="{{ old('kecamatan', $user->alamat->kecamatan ?? '') }}">
                 </div>
+
 
                 <!-- Metode Pengiriman -->
                 <section>
@@ -107,7 +119,7 @@
                         <option value="" disabled {{ old('metode_pengiriman') ? '' : 'selected' }}>Pilih metode
                             pengiriman
                         </option>
-                        <option value="gojek" {{ old('metode_pengiriman') == 'gojek' ? 'selected' : '' }}>Gojek
+                        <option value="kurir" {{ old('metode_pengiriman') == 'kurir' ? 'selected' : '' }}>Kurir
                         </option>
                         <option value="ambil ditempat"
                             {{ old('metode_pengiriman') == 'ambil ditempat' ? 'selected' : '' }}>
@@ -125,7 +137,7 @@
                             pembayaran</option>
                         <option value="transfer" {{ old('metode_pembayaran') == 'transfer' ? 'selected' : '' }}>
                             Transfer Bank</option>
-                        <option value="cod" {{ old('metode_pembayaran') == 'cod' ? 'selected' : '' }}>Bayar di
+                        <option value="bayar ditempat" {{ old('metode_pembayaran') == 'bayar ditempat' ? 'selected' : '' }}>Bayar di
                             Tempat (COD)</option>
                     </select>
                     @error('metode_pembayaran')
@@ -167,41 +179,60 @@
     </main>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const metodePembayaran = document.getElementById('metode_pembayaran');
-            const infoBank = document.getElementById('info-bank');
-            const metodePengiriman = document.getElementById('metode_pengiriman');
-            const ongkosKirimEl = document.querySelector('.ongkos-kirim');
+document.addEventListener('DOMContentLoaded', function () {
+    const metodePengiriman = document.getElementById('metode_pengiriman');
+    const metodePembayaran = document.getElementById('metode_pembayaran');
+    const infoBank = document.getElementById('info-bank');
 
-            // Handle metode pembayaran change
-            metodePembayaran.addEventListener('change', function() {
-                if (this.value === 'transfer') {
-                    infoBank.classList.remove('hidden');
-                } else {
-                    infoBank.classList.add('hidden');
-                }
-            });
+    const optionCODValue = 'bayar ditempat';
 
-            // Handle metode pengiriman change
-            metodePengiriman.addEventListener('change', function() {
-                const hargaOngkir = this.value === 'gojek' ? 10000 : 0;
-                ongkosKirimEl.textContent = 'Rp ' + hargaOngkir.toLocaleString('id-ID');
-                updateTotal();
-            });
+    function updateMetodePembayaran() {
+        const selectedPengiriman = metodePengiriman.value;
 
-            // Fungsi untuk mengupdate total
-            function updateTotal() {
-                const subtotal = parseFloat(document.querySelector('[data-subtotal]').dataset.subtotal) || 0;
-                const ongkir = metodePengiriman.value === 'gojek' ? 10000 : 0;
-                const total = subtotal + ongkir;
-                document.querySelector('.total-harga').textContent = 'Rp ' + total.toLocaleString('id-ID');
+        // Cek apakah opsi COD sudah ada
+        let optionCOD = Array.from(metodePembayaran.options).find(opt => opt.value === optionCODValue);
+
+        if (selectedPengiriman === 'kurir') {
+            // Hapus opsi bayar di tempat
+            if (optionCOD) {
+                optionCOD.remove();
             }
 
-            // Set initial state
-            if (metodePembayaran.value === 'transfer') {
-                infoBank.classList.remove('hidden');
+            // Jika yang sedang terpilih adalah "bayar ditempat", ubah ke transfer
+            if (metodePembayaran.value === optionCODValue) {
+                metodePembayaran.value = 'transfer';
             }
-        });
-    </script>
+        } else {
+            // Tambahkan kembali opsi bayar di tempat jika belum ada
+            const exists = Array.from(metodePembayaran.options).some(opt => opt.value === optionCODValue);
+            if (!exists) {
+                const newOption = new Option("Bayar di Tempat", optionCODValue);
+                metodePembayaran.add(newOption);
+            }
+        }
+    }
+
+    function toggleInfoBank() {
+        if (metodePembayaran.value === 'transfer') {
+            infoBank?.classList.remove('hidden');
+        } else {
+            infoBank?.classList.add('hidden');
+        }
+    }
+
+    // Event listeners
+    metodePengiriman.addEventListener('change', () => {
+        updateMetodePembayaran();
+    });
+
+    metodePembayaran.addEventListener('change', () => {
+        toggleInfoBank();
+    });
+
+    // Jalankan saat awal
+    updateMetodePembayaran();
+    toggleInfoBank();
+});
+</script>
 
 @endsection

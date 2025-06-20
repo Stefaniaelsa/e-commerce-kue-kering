@@ -12,9 +12,9 @@
 
         <div class="overflow-x-auto">
             <table class="w-full border border-gray-200 bg-white">
-                <thead class="bg-blue-100">
+                <thead class="bg-pink-100">
                     <tr>
-                        <th class="p-2 border">#</th>
+                        <th class="p-2 border">No</th>
                         <th class="p-2 border">Order ID</th>
                         <th class="p-2 border">Bank Asal</th>
                         <th class="p-2 border">Bukti Transfer</th>

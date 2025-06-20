@@ -105,6 +105,7 @@
                             <option value="CIMB">Bank CIMB Niaga</option>
                             <option value="Permata">Bank Permata</option>
                             <option value="BSI">Bank Syariah Indonesia</option>
+                            <option value="lainnya">Lainnya</option>
                         </select>
                         @error('bank_asal')
                             <p class="text-red-600 text-sm mt-1">{{ $message }}</p>

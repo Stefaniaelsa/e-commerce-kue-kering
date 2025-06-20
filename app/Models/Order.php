@@ -18,6 +18,7 @@ class Order extends Model
         'total_harga',
         'status',
         'alamat_pengiriman',
+        'alamat_id',
         'tanggal_pesanan',
         'pengiriman',
         'metode_pembayaran',
@@ -111,5 +112,14 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+ // app/Models/Order.php
+// app/Models/Order.php
+public function alamat()
+{
+    return $this->belongsTo(\App\Models\Alamat::class, 'alamat_id');
+}
+
+
 
 }

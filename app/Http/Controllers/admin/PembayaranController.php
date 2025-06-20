@@ -13,18 +13,34 @@ class PembayaranController extends Controller
         return view('admin.pembayaran.index', compact('pembayarans'));
     }
 
-   public function update(Request $request, $id)
-    {
-        $pembayaran = \App\Models\Pembayarans::findOrFail($id);
+   // Admin\PembayaranController.php
+    public function update(Request $request, $id)
+{
+    $pembayaran = Pembayarans::findOrFail($id);
+    $pembayaran->status = $request->status;
+    $pembayaran->save();
 
-        $request->validate([
-            'status' => 'required|in:menunggu,diterima,ditolak',
-        ]);
+    $order = $pembayaran->order;
 
-        $pembayaran->status = $request->status;
-        $pembayaran->save();
-
-        return redirect()->route('admin.pembayarans.index')->with('success', 'Status pembayaran berhasil diperbarui.');
+    if ($request->status === 'diterima') {
+        if ($order->status === 'menunggu') {
+            $order->status = 'diproses';
+            $order->save();
+        }
+    } elseif ($request->status === 'ditolak') {
+        if ($order->status === 'menunggu') {
+            $order->status = 'batalkan';
+            $order->save();
+        }
     }
+
+    return redirect()->back()->with('success', 'Status pembayaran berhasil diperbarui.');
+}
+
+public function show($id)
+{
+    abort(405, 'Method Not Allowed');
+}
+
 
 }

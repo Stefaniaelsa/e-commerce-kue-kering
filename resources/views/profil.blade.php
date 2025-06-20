@@ -31,7 +31,6 @@
                         <span class="ml-3 font-semibold w-32">Nomor Telepon</span>
                         <span class="text-gray-700">: {{ $user->nomor_telepon ?? '-' }}</span>
                     </div>
-
                     @php
                         $alamat = json_decode($user->alamat);
                     @endphp
@@ -39,7 +38,7 @@
                         <i class="fas fa-map-marker-alt text-pink-500 w-6"></i>
                         <span class="ml-3 font-semibold w-32">Alamat</span>
                         <span class="text-gray-700">
-                            : {{ $alamat->jalan ?? '-' }}, {{ $alamat->kota ?? '-' }}, {{ $alamat->provinsi ?? '-' }}
+                            : {{ $alamat->jalan ?? '-' }}, {{ $alamat->kelurahan ?? '-' }}, {{ $alamat->kecamatan ?? '-' }}
                         </span>
                     </div>
                 </div>
@@ -113,13 +112,32 @@
                                         Detail
                                     </a>
 
-                                    @if ($order->status == 'menunggu' && $order->metode_pembayaran == 'transfer')
+                                    @php
+                                        $pembayaran = $order->pembayaran;
+                                    @endphp
+
+                                    @if (
+                                        $order->status == 'menunggu' &&
+                                        $order->metode_pembayaran == 'transfer' &&
+                                        (!$pembayaran || ($pembayaran->status != 'diterima' && $pembayaran->status != 'ditolak'))
+                                    )
                                         <a href="{{ route('pembayaran') }}"
                                             class="inline-flex items-center px-4 py-2 bg-pink-500 hover:bg-pink-600 text-white rounded-lg transition">
                                             <i class="fas fa-credit-card mr-2"></i>
                                             Bayar Sekarang
                                         </a>
+                                    @elseif ($pembayaran && $pembayaran->status == 'diterima')
+                                        <span class="inline-flex items-center px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-medium">
+                                            <i class="fas fa-check-circle mr-2"></i>
+                                            Pembayaran Dikonfirmasi
+                                        </span>
+                                    @elseif ($pembayaran && $pembayaran->status == 'ditolak')
+                                        <span class="inline-flex items-center px-4 py-2 bg-red-100 text-red-600 rounded-lg text-sm font-medium">
+                                            <i class="fas fa-times-circle mr-2"></i>
+                                            Pembayaran Ditolak
+                                        </span>
                                     @endif
+
                                 </div>
                             </div>
                         </div>

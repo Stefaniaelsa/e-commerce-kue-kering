@@ -20,3 +20,5 @@
     </div>
 </body>
 </html>
+<script src="https://unpkg.com/alpinejs" defer></script>
+
