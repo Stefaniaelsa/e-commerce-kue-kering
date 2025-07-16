@@ -17,7 +17,7 @@ class Keranjang extends Model
         'total_produk',
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
     const CREATED_AT = 'dibuat_pada';
     const UPDATED_AT = 'diperbarui_pada';
     protected $casts = [

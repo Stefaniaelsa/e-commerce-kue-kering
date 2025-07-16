@@ -119,11 +119,11 @@
         </div>
     </div>
 
-    <!-- Chart Section -->
+    {{-- <!-- Chart Section -->
     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
         <h2 class="text-xl font-semibold text-gray-700 mb-4">Grafik Penjualan 7 Hari Terakhir</h2>
         <canvas id="salesChart" class="w-full" style="height: 300px;"></canvas>
-    </div>
+    </div> --}}
 
     <!-- Table Section -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">

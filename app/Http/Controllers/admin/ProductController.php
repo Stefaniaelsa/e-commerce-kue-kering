@@ -56,8 +56,6 @@ class ProductController extends Controller
             'nama' => $request->nama,
             'deskripsi' => $request->deskripsi,
             'gambar' => $filename,
-            'is_best_seller' => $request->has('is_best_seller') ? 1 : 0,
-            'is_favorit' => $request->has('is_favorit') ? 1 : 0,
         ]);
 
         if ($request->has_variants) {
@@ -112,9 +110,6 @@ class ProductController extends Controller
             $file->move(public_path('images'), $filename);
             $product->gambar = $filename;
         }
-
-        $product->is_best_seller = $request->has('is_best_seller') ? 1 : 0;
-        $product->is_favorit = $request->has('is_favorit') ? 1 : 0;
 
         $product->save();
 

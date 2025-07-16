@@ -62,7 +62,7 @@ public function store(Request $request)
     DB::beginTransaction();
 
     try {
-        $subtotal = $cartItems->total_harga;
+        $subtotal = $cartItems->item_keranjang->sum('harga');
         $ongkir = ($request->input('metode_pengiriman') === 'kurir') ? 10000 : 0;
         $total = $subtotal + $ongkir;
 
@@ -90,6 +90,17 @@ public function store(Request $request)
                 'harga'      => $item->harga / max(1, $item->jumlah),
                 'sub_total'  => $item->harga,
             ]);
+
+             $varian = \App\Models\ProductVariant::find($item->id_varian);
+            if ($varian) {
+                if ($item->jumlah > $varian->stok) {
+                    DB::rollBack();
+                    return redirect()->back()->with('error', "Stok produk {$varian->ukuran} tidak mencukupi.");
+                }
+
+                $varian->stok -= $item->jumlah;
+                $varian->save();
+            }
         }
 
         Keranjang::where('user_id', $user->id)->delete();

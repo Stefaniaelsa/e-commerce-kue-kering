@@ -16,7 +16,6 @@ class Product extends Model
         'deskripsi',
         'gambar',
         'is_best_seller',
-        'is_favorit',
     ];
 
     public $timestamps = false;

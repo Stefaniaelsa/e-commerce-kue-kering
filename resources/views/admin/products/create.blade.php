@@ -78,21 +78,6 @@
                 <input type="number" id="stok" name="stok" value="{{ old('stok')}}"  class="w-full border-gray-300 p-2 rounded-md">
             </div>
         </div>
-
-        <!-- Checkbox Best Seller dan Favorit -->
-        <div class="mb-4">
-            <label class="inline-flex items-center">
-                <input type="checkbox" name="is_best_seller" value="1" {{ old('is_best_seller') ? 'checked' : '' }} class="form-checkbox">
-                <span class="ml-2 text-lg font-medium">Best Seller</span>
-            </label>
-        </div>
-
-        <div class="mb-4">
-            <label class="inline-flex items-center">
-                <input type="checkbox" name="is_favorit" value="1" {{ old('is_favorit') ? 'checked' : '' }} class="form-checkbox">
-                <span class="ml-2 text-lg font-medium">Favorit</span>
-            </label>
-        </div>
         <button type="submit" class="bg-pink-500 text-white px-4 py-2 rounded-md hover:bg-pink-600">Simpan Produk</button>
     </form>
 </div>

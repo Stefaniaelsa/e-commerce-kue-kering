@@ -53,15 +53,10 @@ Route::post('/logout', function () {
 */
 Route::middleware(['auth:web'])->group(function () {
     // Beranda
-    Route::get('/beranda', function () {
-        $produks = \App\Models\Product::with('defaultVariant')->get();
-        $bestSellerProduk = \App\Models\Product::where('is_best_seller', true)->get();
-        $favoritProduk = \App\Models\Product::where('is_favorit', true)->get();
-        $keranjang = \App\Models\Keranjang::where('user_id', auth()->id())->first();
-        session(['total_produk' => $keranjang ? $keranjang->total_produk : 0]);
+  
+    Route::get('/beranda', [ProductsController::class, 'beranda'])->name('beranda');
 
-        return view('beranda', compact('produks', 'bestSellerProduk', 'favoritProduk'));
-    })->name('beranda');
+
 
     // Profil
     Route::get('/profil', [WebUserController::class, 'profil'])->name('profil');

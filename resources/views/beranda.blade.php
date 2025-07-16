@@ -41,10 +41,6 @@
                 <i class="fas fa-fire text-3xl text-pink-400 mb-2"></i>
                 <p class="font-semibold">Best Seller</p>
             </a>
-            <a href="#favorit" class="block bg-white shadow rounded p-4 text-center hover:shadow-lg transition">
-                <i class="fas fa-heart text-3xl text-pink-400 mb-2"></i>
-                <p class="font-semibold">Favorit</p>
-            </a>
             <a href="{{ url('/produk') }}" class="block bg-white shadow rounded p-4 text-center hover:shadow-lg transition">
                 <i class="fas fa-cookie text-3xl text-pink-400 mb-2"></i>
                 <p class="font-semibold">Semua Kue</p>
@@ -53,43 +49,30 @@
     </section>
 
     <!-- Best Seller Section -->
-    <section id="best-seller" class="mb-8 px-6">
-        <h2 class="text-xl font-semibold mb-4">Best Seller</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            @forelse ($bestSellerProduk as $produk)
-                <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-4">
-                    <img src="{{ asset('images/' . $produk->gambar) }}" alt="{{ $produk->nama }}"
-                        class="w-full h-40 object-cover rounded mb-2" />
-                    <h4 class="font-bold text-lg">{{ $produk->nama }}</h4>
-                    <a href="{{ route('produk.detail', ['id' => $produk->id]) }}"
-                        class="mt-2 block text-center bg-pink-500 hover:bg-pink-600 text-white py-1 px-4 rounded text-sm">Lihat
-                        Produk</a>
-                </div>
-            @empty
-                <p>Belum ada produk Best Seller.</p>
-            @endforelse
-        </div>
-    </section>
-
-    <!-- Favorit Section -->
-    <section id="favorit" class="mb-8 px-6">
-        <h2 class="text-xl font-semibold mb-4">Favorit</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            @forelse ($favoritProduk as $produk)
-                <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-4">
-                    <img src="{{ asset('images/' . $produk->gambar) }}" alt="{{ $produk->nama }}"
-                        class="w-full h-40 object-cover rounded mb-2" />
-                    <h4 class="font-bold text-lg">{{ $produk->nama }}</h4>
-                    <a href="{{ route('produk.detail', ['id' => $produk->id]) }}"
-                        class="mt-2 block text-center bg-pink-500 hover:bg-pink-600 text-white py-1 px-4 rounded text-sm">Lihat
-                        Produk</a>
-                </div>
-            @empty
-                <p>Belum ada produk Favorit.</p>
-            @endforelse
-        </div>
-    </section>
-
+   <!-- Best Seller Section -->
+<section id="best-seller" class="mb-8 px-6">
+    <h2 class="text-xl font-semibold mb-4">Best Seller</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        @forelse ($bestSellerProduk as $produk)
+            <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-4">
+                <img src="{{ asset('images/' . $produk->gambar) }}" alt="{{ $produk->nama }}"
+                    class="w-full h-40 object-cover rounded mb-2" />
+                <h4 class="font-bold text-lg">{{ $produk->nama }}</h4>
+                @if($produk->total_terjual > 0)
+                    <p class="text-sm text-gray-600">Terjual {{ $produk->total_terjual }} pcs</p>
+                @else
+                    <p class="text-sm text-gray-400 italic">Belum ada penjualan</p>
+                @endif
+                <a href="{{ route('produk.detail', ['id' => $produk->id]) }}"
+                    class="mt-2 block text-center bg-pink-500 hover:bg-pink-600 text-white py-1 px-4 rounded text-sm">
+                    Lihat Produk
+                </a>
+            </div>
+        @empty
+            <p>Belum ada produk Best Seller.</p>
+        @endforelse
+    </div>
+</section>
     <!-- Footer -->
     <footer class="bg-gradient-to-r from-pink-500 to-pink-300 text-white py-6 mt-12">
         <div class="max-w-5xl mx-auto px-4 text-sm text-center opacity-80">

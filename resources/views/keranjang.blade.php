@@ -2,7 +2,6 @@
 
 @section('title', 'Keranjang Belanja')
 @section('content')
-    <!-- Konten Keranjang -->
     <main class="flex-grow">
         <section class="max-w-5xl mx-auto py-10 px-4 sm:px-6">
             <div class="flex items-center justify-between mb-8">
@@ -22,10 +21,21 @@
                     </a>
                 </div>
             @else
+
+                {{-- Periksa apakah semua stok cukup --}}
+                @php
+                    $stokCukup = true;
+                    foreach ($cartItems as $item) {
+                        if ($item->jumlah > $item->varian->stok) {
+                            $stokCukup = false;
+                            break;
+                        }
+                    }
+                @endphp
+
                 <div class="space-y-4">
                     @foreach ($cartItems as $item)
-                        <div
-                            class="bg-white rounded-xl shadow-sm overflow-hidden border border-pink-100 hover:shadow-md transition">
+                        <div class="bg-white rounded-xl shadow-sm overflow-hidden border border-pink-100 hover:shadow-md transition">
                             <div class="flex flex-col sm:flex-row">
                                 <div class="sm:w-1/4 bg-secondary flex items-center justify-center p-4">
                                     <img src="{{ asset('images/' . $item->varian->produk->gambar) }}"
@@ -35,21 +45,27 @@
                                 <div class="sm:w-3/4 p-6">
                                     <div class="flex flex-col sm:flex-row sm:items-center justify-between">
                                         <div class="mb-4 sm:mb-0">
-                                            <h3 class="text-xl font-bold text-primary">{{ $item->varian->produk->nama }}
-                                            </h3>
+                                            <h3 class="text-xl font-bold text-primary">{{ $item->varian->produk->nama }}</h3>
                                             <p class="text-gray-600 text-sm mt-1">
                                                 {{ $item->varian->produk->deskripsi ?? 'Kue lezat dengan cita rasa istimewa' }}
                                             </p>
                                             <p class="text-sm text-gray-500 mt-1">
-                                                Ukuran: <span
-                                                    class="font-semibold">{{ $item->varian->ukuran ?? 'Tidak ada varian' }}</span>
+                                                Ukuran:
+                                                <span class="font-semibold">{{ $item->varian->ukuran ?? 'Tidak ada varian' }}</span>
                                             </p>
+
+                                            @if ($item->varian->stok < $item->jumlah)
+                                                <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-3 mt-2 rounded">
+                                                    ⚠️ Stok tersisa {{ $item->varian->stok }}. Kurangi jumlah atau hapus produk ini untuk melanjutkan.
+                                                </div>
+                                            @endif
                                         </div>
                                         <div class="text-right">
                                             <p class="text-lg font-bold text-primary">
-                                                Rp{{ number_format($item->harga, 0, ',', '.') }}</p>
-                                            <p class="text-sm text-gray-500">@
-                                                Rp{{ number_format($item->harga / $item->jumlah, 0, ',', '.') }}/pcs
+                                                Rp{{ number_format($item->harga, 0, ',', '.') }}
+                                            </p>
+                                            <p class="text-sm text-gray-500">
+                                                @ Rp{{ number_format($item->harga / $item->jumlah, 0, ',', '.') }}/pcs
                                             </p>
                                         </div>
                                     </div>
@@ -67,7 +83,8 @@
                                                 <span
                                                     class="px-4 py-1 bg-secondary rounded-full font-medium">{{ $item->jumlah }}</span>
                                                 <button name="action" value="increase"
-                                                    class="w-8 h-8 flex items-center justify-center bg-primary hover:bg-accent text-white rounded-full transition">
+                                                    class="w-8 h-8 flex items-center justify-center bg-primary hover:bg-accent text-white rounded-full transition"
+                                                    @if ($item->jumlah >= $item->varian->stok) disabled class="opacity-50 cursor-not-allowed" @endif>
                                                     <i class="fas fa-plus text-xs"></i>
                                                 </button>
                                             </form>
@@ -110,17 +127,24 @@
                             class="bg-white border border-primary text-primary hover:bg-secondary py-3 px-6 rounded-full text-sm font-medium text-center transition">
                             <i class="fas fa-arrow-left mr-2"></i> Lanjut Belanja
                         </a>
+
                         <form action="{{ route('pesanan.index') }}" method="GET">
                             @foreach ($cartItems as $item)
                                 <input type="hidden" name="items[]" value="{{ $item->id }}">
                             @endforeach
                             <button type="submit"
-                                class="bg-gradient-to-r from-primary to-pink-400 hover:from-accent hover:to-pink-500 text-white py-3 px-6 rounded-full text-sm font-medium text-center shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5">
+                                @if (!$stokCukup) disabled @endif
+                                class="bg-gradient-to-r from-primary to-pink-400 hover:from-accent hover:to-pink-500 text-white py-3 px-6 rounded-full text-sm font-medium text-center shadow-md hover:shadow-lg transition transform hover:-translate-y-0.5
+                                @if (!$stokCukup) opacity-50 cursor-not-allowed @endif"
+                                title="@if (!$stokCukup) Stok tidak mencukupi untuk beberapa produk @endif">
                                 <i class="fas fa-paper-plane mr-2"></i> Pesan
                             </button>
                         </form>
-
                     </div>
+
+                    @if (!$stokCukup)
+                        <p class="text-sm text-red-500 mt-3">⚠️ Beberapa produk memiliki jumlah melebihi stok yang tersedia. Silakan kurangi jumlah sebelum checkout.</p>
+                    @endif
                 </div>
             @endif
         </section>
@@ -131,5 +155,4 @@
             &copy; 2025 IniKue. Semua Hak Dilindungi.
         </div>
     </footer>
-
 @endsection
